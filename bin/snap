@@ -7,26 +7,18 @@ function git-last-tag() {
 }
 
 
-function usage(){
-cat >&2 <<EOF
-usage: ${0##*/} [+-upb} [--] ARGS...
-    -b  ... ignore branch
-    -b  ... ignore branch
-EOF
-}
+# xx/version
+# --debian-tag=xx/%(version)s
 
 DCH_FLAGS=""
 GBP_OPTIONS=""
-while getopts :upbh OPT; do
+while getopts :upb OPT; do
     case $OPT in
-	h)
-	    usage
-	    exit 0;
 	b)
 	    # ignore-branch
 	    DCH_FLAGS="--ignore-branch"
 	    GBP_OPTIONS+="--git-ignore-branch"
-	    ;;
+
 	u|+u)
 	    # fixme: should use arrays
 	    # append!
@@ -37,7 +29,7 @@ while getopts :upbh OPT; do
 	    GBP_OPTIONS+=" --git-builder=git-pbuilder"
 	    ;;
 	*)
-	    usage
+	    echo "usage: ${0##*/} [+-up} [--] ARGS..."
 	    exit 2
     esac
 done

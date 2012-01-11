@@ -1,0 +1,18 @@
+#! /bin/bash -eu
+
+
+# work-around for git-dch not being able to write to a specific file
+
+local_dir=$(pwd)
+
+cecho red "$local_dir -> $GBP_GIT_DIR"
+
+cd $GBP_GIT_DIR/..
+
+# cp debian/changelog debian/changelog.save
+# git-dch --auto --snapshot
+
+# I need to keep it there, to have increasing
+# version number!
+cp debian/changelog $local_dir/debian/changelog
+# mv debian/changelog.save debian/changelog

@@ -1,0 +1,6 @@
+#! /bin/bash -eux
+
+
+cecho red "$GBP_CHANGES_FILE in $GBP_BUILD_DIR"
+# mini-dinstall
+dput local $GBP_CHANGES_FILE
