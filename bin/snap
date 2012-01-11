@@ -1,13 +1,90 @@
-#! /bin/bash -xeu
+#! /bin/zsh -xeu
 
-git-dch --auto --snapshot
-git add debian/changelog; git commit -m snapshot-build
 
+function git-last-tag() {
+    git describe $(git rev-list --tags --max-count=1) |\
+    sed -e 's|^\(.*\)/.*$|\1|g'
+}
+
+
+function usage(){
+cat >&2 <<EOF
+usage: ${0##*/} [+-upb} [--] ARGS...
+    -b  ... ignore branch
+    -b  ... ignore branch
+EOF
+}
+
+DCH_FLAGS=""
+GBP_OPTIONS=""
+while getopts :upbh OPT; do
+    case $OPT in
+	h)
+	    usage
+	    exit 0;
+	b)
+	    # ignore-branch
+	    DCH_FLAGS="--ignore-branch"
+	    GBP_OPTIONS+="--git-ignore-branch"
+	    ;;
+	u|+u)
+	    # fixme: should use arrays
+	    # append!
+	    GBP_OPTIONS="-u $GBP_OPTIONS"
+	    ;;
+	p|+p)
+	    # /usr/bin/
+	    GBP_OPTIONS+=" --git-builder=git-pbuilder"
+	    ;;
+	*)
+	    usage
+	    exit 2
+    esac
+done
+shift $(( OPTIND - 1 ))
+OPTIND=1
+
+
+last_tag=$(git-last-tag)
+cecho green "tag $last_tag"
+
+# todo: in-place if "git status" says clean
+
+
+# keep changelog out:
+# create it in a hook!
+
+# for release: --git-builder /usr/bin/git-pbuilder
+# dubious:
+if git status --porcelain debian/changelog |grep --silent '^ M';
+then
+    cp debian/changelog debian/changelog.save
+fi
+
+
+git-dch --auto --snapshot "--debian-tag=$last_tag/%(version)s"
+
+if false;
+then
+    git-dch --auto --snapshot
+# exit 0
+    git add debian/changelog; git commit -m snapshot-build
+fi
+
+
+cecho red "Starting!"
 #
-mygit-buildpackage -i && debi --debs-dir ../build-area/
-
-#  --git-posttag="git push && git push --tags"
-# only certain tags, though.
+# DIST=oneiric  ARCH=amd64
+# --git-sign-tags
 
 
+# --color=auto
+mygit-buildpackage -i --git-prebuild=~/generate-snapshot-changelog --git-dist=oneiric --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) $GBP_OPTIONS --git-postbuild=~/install-snapshot
 
+#&& debi --debs-dir ../build-area/
+
+# snap     fast, without any cow. Doesn't verify dependencies
+#          but still  control.in ?
+# psnap... using cow-builder
+# release
+#
