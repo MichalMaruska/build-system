@@ -1,0 +1,7 @@
+#! /bin/bash
+
+echo "====== generating debian/control" >&2
+
+DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
+
+echo "====== DONE generating debian/control" >&2

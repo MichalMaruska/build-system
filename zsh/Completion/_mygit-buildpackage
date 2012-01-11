@@ -1,0 +1,6 @@
+#compdef mygit-buildpackage
+
+_arguments \
+  '-i[--git-ignore-new]' \
+  '-u[skip signing]' \
+  '*:Other options:_git-buildpackage'

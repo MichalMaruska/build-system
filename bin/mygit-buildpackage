@@ -1,0 +1,67 @@
+#! /usr/bin/zsh -fe
+
+# Features:
+# * invoke with --git-prebuild=./auto only
+#
+
+# scan $@ and drop -i
+# -i -> --git-ignore-new
+args=()
+
+
+function debian_control_automatic() {
+    count1=$(git ls-files debian/control.in|wc -c)
+
+    count2=$(git ls-files debian/control|wc -c)
+    test \( $count1 != 0 -a $count2 = 0 \)
+}
+
+
+if [ -e auto ]
+then
+    args+="--git-prebuild=./auto"
+fi
+
+
+if debian_control_automatic;
+then
+
+    # ./auto
+    # generate-debian-control
+    args+="--git-prebuild=generate-debian-control"
+#    exit 1
+fi
+
+# DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
+
+
+while getopts :iu OPT; do
+    case $OPT in
+	i|+i)
+	    args+="--git-ignore-new"
+	    ;;
+	u|+u)
+	    args+="-uc -us "
+	    ;;
+	?)
+	    # I need to break out of this while.
+
+	    # OPTIND is pointing at THE current broken arg.
+	    # so we can break out of here.
+	    # no need to save the $OPTARG
+	    # args+=$OPTARG
+	    # echo "found alien: $@"
+	    break
+	    ;;
+	*)
+	    args+=$OPT
+	    print "usage: ${0##*/} [+-iu} [--] ARGS..."
+	    exit 2
+    esac
+done
+
+# what is this?
+shift OPTIND-1
+OPTIND=1
+# echo $args
+git-buildpackage $args "$@"
