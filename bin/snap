@@ -1,0 +1,13 @@
+#! /bin/bash -xeu
+
+git-dch --auto --snapshot
+git add debian/changelog; git commit -m snapshot-build
+
+#
+mygit-buildpackage -i && debi --debs-dir ../build-area/
+
+#  --git-posttag="git push && git push --tags"
+# only certain tags, though.
+
+
+
