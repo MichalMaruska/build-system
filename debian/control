@@ -1,0 +1,11 @@
+Source: mmc-build-system
+Section: misc
+Priority: extra
+Maintainer: Michal Maruska <mmaruska@gmail.com>
+Build-Depends: cdbs, debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: mmc-build-system
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, git-buildpackage
+Description: collection of shell scripts
