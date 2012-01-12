@@ -79,7 +79,7 @@ cecho red "Starting!"
 
 
 # --color=auto
-mygit-buildpackage -i --git-prebuild=~/generate-snapshot-changelog --git-dist=oneiric --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) $GBP_OPTIONS --git-postbuild=~/install-snapshot
+mygit-buildpackage -i --git-prebuild=generate-snapshot-changelog --git-dist=oneiric --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) $GBP_OPTIONS --git-postbuild=install-snapshot
 
 #&& debi --debs-dir ../build-area/
 
