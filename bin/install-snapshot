@@ -1,6 +1,43 @@
 #! /bin/bash -eux
 
 
+function usage(){
+cat <<EOF
+usage: ${0##*/} [+-uf} [--] ARGS...
+dput(1) options basically
+-u don't check the signaure
+-f force RE-upload
+EOF
+}
+
+# make it invokable ...
+SINK=local
+DPUT_OPTIONS=""
+while getopts :uf OPT; do
+    case $OPT in
+	u|+u)
+	    DPUT_OPTIONS+="--unchecked "
+	    ;;
+	f)
+	    DPUT_OPTIONS+="--force "
+	    ;;
+
+	*)
+	    usage
+	    exit 2
+    esac
+done
+shift $(( OPTIND - 1 ))
+OPTIND=1
+
+if [ $# -gt 0 ]
+then
+    GBP_CHANGES_FILE=$1
+    GBP_BUILD_DIR="/"
+fi
+
+
+
 cecho red "$GBP_CHANGES_FILE in $GBP_BUILD_DIR"
 # mini-dinstall
-dput local $GBP_CHANGES_FILE
+dput $DPUT_OPTIONS $SINK $GBP_CHANGES_FILE
