@@ -16,7 +16,7 @@ EOF
 }
 
 DCH_FLAGS=""
-GBP_OPTIONS=""
+typeset -a GBP_OPTIONS=""
 while getopts :upbh OPT; do
     case $OPT in
 	h)
@@ -30,11 +30,11 @@ while getopts :upbh OPT; do
 	u|+u)
 	    # fixme: should use arrays
 	    # prepend!
-	    GBP_OPTIONS="-u $GBP_OPTIONS"
+	    GBP_OPTIONS=(-u ${GBP_OPTIONS})
 	    ;;
 	p|+p)
 	    # /usr/bin/
-	    GBP_OPTIONS+=" --git-builder=git-pbuilder"
+	    GBP_OPTIONS+="--git-builder=git-pbuilder"
 	    ;;
 	*)
 	    usage
