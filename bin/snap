@@ -16,7 +16,8 @@ EOF
 }
 
 DCH_FLAGS=""
-typeset -a GBP_OPTIONS=""
+typeset -a GBP_OPTIONS
+GBP_OPTIONS=()
 while getopts :upbh OPT; do
     case $OPT in
 	h)
