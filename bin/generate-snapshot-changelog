@@ -3,9 +3,12 @@
 
 # work-around for git-dch not being able to write to a specific file
 
+# This works together with  ./snap, which creates the changelog!
+
+
 local_dir=$(pwd)
 
-cecho red "$local_dir -> $GBP_GIT_DIR"
+cecho red "Generating debian/changelog in $GBP_GIT_DIR (for $local_dir)"
 
 cd $GBP_GIT_DIR/..
 
@@ -16,3 +19,10 @@ cd $GBP_GIT_DIR/..
 # version number!
 cp debian/changelog $local_dir/debian/changelog
 # mv debian/changelog.save debian/changelog
+
+cd $local_dir
+
+if [ -e auto ]
+then
+    ./auto
+fi

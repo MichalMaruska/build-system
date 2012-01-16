@@ -17,6 +17,7 @@ function debian_control_automatic() {
 }
 
 
+# Dangerous - misleading. Could be overwritten by options on CMD line.
 if [ -e auto ]
 then
     args+="--git-prebuild=./auto"
