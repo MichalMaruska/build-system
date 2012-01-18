@@ -1,0 +1,65 @@
+#! /bin/bash -eux
+
+# out of: /usr/share/maruska/recipes/git-deb
+
+
+# options:
+
+DISTRO=release
+# TAG=
+# ARCH
+while getopts :r:t:a: OPT; do
+    case $OPT in
+	a)
+	    ARCH="$OPTARG";;
+	r|+r)
+	    "$OPTARG"
+	    ;;
+	t|+t)
+	    "$OPTARG"
+	    ;;
+	*)
+	    echo "usage: ${0##*/} [+-r ARG] [+-t ARG} [--] ARGS..."
+	    exit 2
+    esac
+done
+shift $(( OPTIND - 1 ))
+OPTIND=1
+
+
+
+
+# if debian/changelog is up-to-date, skip this:?
+
+if false;
+then
+# Finally:
+# fixme: this needs the git-last-tag:
+    git-dch --release --auto
+# "--debian-tag=$DISTRO/%(version)s"
+    git add debian/changelog; git commit -m release
+fi
+
+
+# fixme: maybe the tag is there already?
+mygit-buildpackage --git-tag "--git-debian-tag=$DISTRO/%(version)s"
+debi --debs-dir ../build-area/
+debrelease --debs-dir=../build-area --dput local
+debrelease --debs-dir=../build-area --dput server
+
+
+# Source
+# -S is handed over.... git-buildpackage -> debuild -> dpkg-buildpackage.
+
+
+# again  debian/control   Could be done Once
+# again ./auto  Yes
+mygit-buildpackage -S
+
+# notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
+# Here we rely on the debian/changelog to confirm it.
+debrelease -S --debs-dir=../build-area --dput local
+debrelease -S --debs-dir=../build-area --dput server
+
+# --git-builder /usr/bin/git-pbuilder
+
