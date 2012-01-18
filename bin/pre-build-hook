@@ -1,0 +1,22 @@
+#! /bin/bash -eu
+
+
+function debian_control_automatic() {
+    count1=$(git ls-files debian/control.in|wc -c)
+
+    count2=$(git ls-files debian/control|wc -c)
+    test \( $count1 != 0 -a $count2 = 0 \)
+}
+
+if debian_control_automatic;
+then
+    generate-debian-control
+fi
+
+
+generate-snapshot-changelog
+
+if [ -e auto ]
+then
+    ./auto
+fi

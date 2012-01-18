@@ -21,8 +21,3 @@ cp debian/changelog $local_dir/debian/changelog
 # mv debian/changelog.save debian/changelog
 
 cd $local_dir
-
-if [ -e auto ]
-then
-    ./auto
-fi
