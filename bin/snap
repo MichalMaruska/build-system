@@ -80,7 +80,12 @@ cecho red "Starting!"
 
 
 # --color=auto
-mygit-buildpackage -i $GBP_OPTIONS --git-prebuild=pre-build-hook --git-dist=oneiric --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) --git-postbuild=install-snapshot
+# lsb_release -c
+# --git-dist=oneiric
+git-buildpackage --git-ignore-new $GBP_OPTIONS --git-prebuild=pre-build-hook \
+--git-dist=UNRELEASED --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
+--git-postbuild=install-snapshot
+
 
 #&& debi --debs-dir ../build-area/
 
