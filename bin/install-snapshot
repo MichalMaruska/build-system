@@ -39,5 +39,13 @@ fi
 
 
 cecho red "$GBP_CHANGES_FILE in $GBP_BUILD_DIR"
-# mini-dinstall
-dput $DPUT_OPTIONS $SINK $GBP_CHANGES_FILE
+
+if [ -n "$REPREPRO_BASE_DIR" ]
+then
+    # fixme: snapshot -> not a big deal if I still get the dist. wrong?
+    # --basedir ~/reprepro/
+    reprepro --ignore=wrongdistribution  -V \
+        include UNRELEASED $GBP_CHANGES_FILE
+else
+    dput $DPUT_OPTIONS $SINK $GBP_CHANGES_FILE
+fi
