@@ -12,13 +12,15 @@ cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
     -b  ... ignore branch
     -b  ... ignore branch
+    -v  ... new version
 EOF
 }
 
+DEFAULT_NEW_VERSION=3
 DCH_FLAGS=""
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
-while getopts :upbh OPT; do
+while getopts :upbhv: OPT; do
     case $OPT in
 	h)
 	    usage
@@ -36,6 +38,9 @@ while getopts :upbh OPT; do
 	p|+p)
 	    # /usr/bin/
 	    GBP_OPTIONS+="--git-builder=git-pbuilder"
+	    ;;
+	v)
+	    DEFAULT_NEW_VERSION=$OPTARG
 	    ;;
 	*)
 	    usage
@@ -57,13 +62,15 @@ cecho green "last release tag: $last_tag"
 
 # for release: --git-builder /usr/bin/git-pbuilder
 # dubious:
+DCH_OPTIONS=""
 if git status --porcelain debian/changelog |grep --silent '^ M';
 then
     cp debian/changelog debian/changelog.save
+else
+    DCH_OPTIONS="--new-version=$DEFAULT_NEW_VERSION"
 fi
 
-
-git-dch --auto --snapshot "--debian-tag=$last_tag/%(version)s"
+git-dch --auto --snapshot "--debian-tag=$last_tag/%(version)s" $DCH_OPTIONS
 
 if false;
 then
