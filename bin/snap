@@ -1,8 +1,13 @@
 #! /bin/zsh -xeu
 
+# setop pipefail
 
 function git-last-tag() {
-    git describe $(git rev-list --tags --max-count=1) |\
+    # fixme: HEAD~100
+    # ..HEAD
+    # $(git rev-list --tags --max-count=1 )
+    # might want to separate  tag-[[:digit:]]+-[[:alpha:]]+
+    git describe 2> /dev/null |\
     sed -e 's|^\(.*\)/.*$|\1|g'
 }
 
