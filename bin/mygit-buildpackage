@@ -8,14 +8,8 @@
 # -i -> --git-ignore-new
 args=()
 
-
-
-
 # Dangerous - misleading. Could be overwritten by options on CMD line.
-
 args+="--git-prebuild=pre-build-hook"
-
-
 
 # DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
 
