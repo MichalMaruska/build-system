@@ -47,7 +47,7 @@ OPTIND=1
 
 
 last_tag=$(git-last-tag)
-cecho green "tag $last_tag"
+cecho green "last release tag: $last_tag"
 
 # todo: in-place if "git status" says clean
 
@@ -73,7 +73,7 @@ then
 fi
 
 
-cecho red "Starting!"
+cecho red "Starting git-buildpackage, with hooks!"
 #
 # DIST=oneiric  ARCH=amd64
 # --git-sign-tags
