@@ -1,6 +1,21 @@
-mmc-build-system (1.0) oneiric; urgency=low
+mmc-build-system (1.0) release; urgency=low
 
   * Initial release.
   * snap: usage
+  * careful with  -u option
+  * make it invokable & process'n'pass options to dput
+  * use shell arrays
+  * dependency
+  * fix Array (shell) syntax
+  * workaround for only one git-prebuild hook.
+  * pre-build-hook
+  * avoid mygit-buildpackage (from snap).
+  * pre-build-hook: test file-system for debian/control, not Git
+  * support reprepro(1)
+  * start release
+  * use only universal   pre-build-hook
+  * more informative
+  * default NEW version for snapshot ... Should be automatic
+  * simpler: last git tag
 
- -- Michal Maruska <mmaruska@gmail.com>  Thu, 12 Jan 2012 13:13:40 +0100
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 21 Jan 2012 20:08:37 +0100
