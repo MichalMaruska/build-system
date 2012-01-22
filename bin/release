@@ -71,9 +71,11 @@ fi
 # if NO tag at all:
 # fatal: No names found, cannot describe anything.
 set +e
-version=$(git describe HEAD)
+description=$(git describe HEAD)
 if [ $? = 0 ]
 then
+    version=${description#*/}
+    DISTRO=${description%/*}
     echo $version
 else
     # extract the distro from changelog!
@@ -91,16 +93,17 @@ cecho green $GIT_TAG
 
 
 # tagname-N-hash
-#typeset -a options
-options=""
+typeset -a MGB_OPTIONS
+MGB_OPTIONS=()
 if git tag -l "$GIT_TAG"|grep ".";	# $DISTRO/$version
 then
     :
 else
-    options+="--git-tag --git-debian-tag=$DISTRO/%(version)s"
+    MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRO/%(version)s")
 fi
 
-mygit-buildpackage $options
+# exit
+mygit-buildpackage -i $MGB_OPTIONS
 
 
 debi --debs-dir ../build-area/
