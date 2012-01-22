@@ -62,7 +62,7 @@ function generate_commit_changelog() {
 
 
 # if debian/changelog is up-to-date, skip this:?
-if  git status --porcelain debian/changelog|grep '^ M';
+if git status --porcelain debian/changelog|grep '^ M';
 then
     generate_commit_changelog
 elif [ $FORCE = "y" ] ;
@@ -91,6 +91,7 @@ fi
 set -e
 
 
+
 # *now* the default value:
 : ${GIT_TAG:=$DISTRO/$version}
 
@@ -100,7 +101,7 @@ cecho green $GIT_TAG
 # tagname-N-hash
 typeset -a MGB_OPTIONS
 MGB_OPTIONS=()
-if git tag -l "$GIT_TAG"|grep ".";	# $DISTRO/$version
+if git tag -l "$GIT_TAG"|grep ".";
 then
     :
 else
