@@ -31,7 +31,7 @@ while getopts :rf:t:a:p: OPT; do
 	    "$OPTARG"
 	    ;;
 	p)
-	    DPUT_TARGET=($DPUT_TARGET $OPTARG)
+	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
 	    ;;
 	*)
 	    usage
@@ -40,6 +40,11 @@ while getopts :rf:t:a:p: OPT; do
 done
 shift $(( OPTIND - 1 ))
 OPTIND=1
+
+if [ "$DPUT_TARGETS" = "" -a -n "${MBS_TARGETS-}" ];
+then
+    DPUT_TARGETS=$MBS_TARGETS
+fi
 
 
 function generate_commit_changelog() {
