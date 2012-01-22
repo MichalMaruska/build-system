@@ -1,0 +1,31 @@
+#! /usr/bin/perl
+
+# Read from stdin  paths to source packages, and output the list of those
+# that are NOT installed at the current version.
+
+use AptPkg::Cache;
+
+use Dpkg::Control::Info;
+use Dpkg::Control::Hash;
+use Dpkg::Control::Changelog;
+use Dpkg::Changelog::Entry;
+use Dpkg::Changelog::Debian;
+
+# use strict;
+
+
+#my $dir=".";
+#my $filename=$dir . "/debian/changelog";
+my $filename=$ARGV[0];
+
+my $c;
+$c = Dpkg::Changelog::Debian->new();
+$c->load($filename);
+
+my $control = $c->dpkg({});
+#my $ver = $control->{Version};
+my $dist = $control->{Distribution};
+
+print $dist;
+
+#    my $entry = Dpkg::Changelog::Entry->new();
