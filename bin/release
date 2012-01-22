@@ -1,25 +1,40 @@
-#! /bin/bash -eux
+#! /bin/zsh -euxf
 
-# out of: /usr/share/maruska/recipes/git-deb
-
+function usage()
+{
+    echo "usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* "
+}
 
 # options:
 
 DISTRO=release
-# TAG=
+# GIT_TAG=
+
+typeset -a DPUT_TARGETS
+DPUT_TARGETS=()
+FORCE=n
 # ARCH
-while getopts :r:t:a: OPT; do
+
+
+while getopts :rf:t:a:p: OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
+	f)
+	    FORCE=y
+	    ;;
 	r|+r)
 	    "$OPTARG"
 	    ;;
 	t|+t)
+	    # git-tag
 	    "$OPTARG"
 	    ;;
+	p)
+	    DPUT_TARGET=($DPUT_TARGET $OPTARG)
+	    ;;
 	*)
-	    echo "usage: ${0##*/} [+-r ARG] [+-t ARG} [--] ARGS..."
+	    usage
 	    exit 2
     esac
 done
@@ -27,25 +42,68 @@ shift $(( OPTIND - 1 ))
 OPTIND=1
 
 
-
-
-# if debian/changelog is up-to-date, skip this:?
-
-if false;
-then
+function generate_commit_changelog() {
 # Finally:
 # fixme: this needs the git-last-tag:
     git-dch --release --auto
 # "--debian-tag=$DISTRO/%(version)s"
     git add debian/changelog; git commit -m release
+}
+
+
+# if debian/changelog is up-to-date, skip this:?
+if  git status --porcelain debian/changelog|grep '^ M';
+then
+    generate_commit_changelog
+elif [ $FORCE = "y" ] ;
+then
+    generate_commit_changelog
 fi
 
 
+
 # fixme: maybe the tag is there already?
-mygit-buildpackage --git-tag "--git-debian-tag=$DISTRO/%(version)s"
+# if NO tag at all:
+# fatal: No names found, cannot describe anything.
+set +e
+version=$(git describe HEAD)
+if [ $? = 0 ]
+then
+    echo $version
+else
+    # extract the distro from changelog!
+    ls -l debian/changelog
+    DISTRO=$(dpkg-distribution debian/changelog)
+    version=$(dpkg-version debian/changelog)
+fi
+set -e
+
+
+# *now* the default value:
+: ${GIT_TAG:=$DISTRO/$version}
+
+cecho green $GIT_TAG
+
+
+# tagname-N-hash
+#typeset -a options
+options=""
+if git tag -l "$GIT_TAG"|grep ".";	# $DISTRO/$version
+then
+    :
+else
+    options+="--git-tag --git-debian-tag=$DISTRO/%(version)s"
+fi
+
+mygit-buildpackage $options
+
+
 debi --debs-dir ../build-area/
-debrelease --debs-dir=../build-area --dput local
-debrelease --debs-dir=../build-area --dput server
+
+for target in $DPUT_TARGETS;
+do
+    debrelease --debs-dir=../build-area --dput $target
+done
 
 
 # Source
@@ -58,8 +116,11 @@ mygit-buildpackage -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
-debrelease -S --debs-dir=../build-area --dput local
-debrelease -S --debs-dir=../build-area --dput server
+for target in $DPUT_TARGETS;
+do
+    debrelease -S --debs-dir=../build-area --dput $target
+done
+
 
 # --git-builder /usr/bin/git-pbuilder
 
