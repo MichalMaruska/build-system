@@ -12,11 +12,13 @@ DISTRO=release
 
 typeset -a DPUT_TARGETS
 DPUT_TARGETS=()
+typeset -a MGB_COMMON_OPTIONS
+MGB_COMMON_OPTIONS=()
 FORCE=n
 # ARCH
 
 
-while getopts :rf:t:a:p: OPT; do
+while getopts :rf:t:a:p:i OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
@@ -32,6 +34,9 @@ while getopts :rf:t:a:p: OPT; do
 	    ;;
 	p)
 	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
+	    ;;
+	i)
+	    MGB_COMMON_OPTIONS=("-i")
 	    ;;
 	*)
 	    usage
@@ -103,7 +108,7 @@ else
 fi
 
 # exit
-mygit-buildpackage -i $MGB_OPTIONS
+mygit-buildpackage $MGB_COMMON_OPTIONS $MGB_OPTIONS
 
 
 debi --debs-dir ../build-area/
@@ -120,7 +125,7 @@ done
 
 # again  debian/control   Could be done Once
 # again ./auto  Yes
-mygit-buildpackage -S
+mygit-buildpackage $MGB_COMMON_OPTIONS -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
