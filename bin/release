@@ -18,7 +18,7 @@ FORCE=n
 # ARCH
 
 
-while getopts :rf:t:a:p:i OPT; do
+while getopts :rft:a:p:i OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
