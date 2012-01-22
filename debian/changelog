@@ -1,4 +1,4 @@
-mmc-build-system (1.0) release; urgency=low
+mmc-build-system (1.1) release; urgency=low
 
   * Initial release.
   * snap: usage
@@ -17,5 +17,13 @@ mmc-build-system (1.0) release; urgency=low
   * more informative
   * default NEW version for snapshot ... Should be automatic
   * simpler: last git tag
+  * 2 new tools: dpkg-distribution dpkg-version
+  * improving release
+  * release:  dput_targets
+  * conditionally create the git-tag
+  * MGB_COMMON_OPTIONS
+  * clean
+  * check for other Git tags
+  * force argument
 
- -- Michal Maruska <mmaruska@gmail.com>  Sat, 21 Jan 2012 20:08:37 +0100
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 22 Jan 2012 20:02:58 +0100
