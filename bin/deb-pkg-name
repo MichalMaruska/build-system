@@ -1,0 +1,21 @@
+#! /usr/bin/perl
+
+# Given the path to the debian/control file...
+# dump (on stdout) the NAME of the source package ...
+
+
+use Dpkg::Control::Info;
+use Dpkg::Control::Hash;
+
+my $file=shift() . "/debian/control" ;
+
+unless  (-f $file) {
+    die("non-existent file");
+}
+
+my $p= Dpkg::Control::Info->new($file);
+my $s= $p->get_source();
+
+print $s->{Source}, "\n";
+
+

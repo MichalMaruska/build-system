@@ -96,6 +96,8 @@ else
     ls -l debian/changelog
     DISTRO=$(dpkg-distribution debian/changelog)
     version=$(dpkg-version debian/changelog)
+    DISTRO=$(deb-pkg-distribution debian/changelog)
+    version=$(deb-pkg-version debian/changelog)
 fi
 set -e
 
