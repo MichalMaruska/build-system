@@ -1,7 +1,7 @@
 #! /usr/bin/perl
 
-# Read from stdin  paths to source packages, and output the list of those
-# that are NOT installed at the current version.
+# Given paths to  debian/changelog, output the distribution
+# of the top/most recent entry
 
 use AptPkg::Cache;
 
@@ -27,5 +27,3 @@ my $control = $c->dpkg({});
 my $dist = $control->{Distribution};
 
 print $dist;
-
-#    my $entry = Dpkg::Changelog::Entry->new();
