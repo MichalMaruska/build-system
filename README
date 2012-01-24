@@ -1,0 +1,54 @@
+
+
+* Features
+
+*** snap
+
+** When making a package (source or preparing for compilation)
+I want to generate all the "autoconf" generated files.
+So that I don't have to store configure .... install.sh
+and similar files in Git.
+
+** debian/control ....support for generation from the *.in file.
+
+** making a Snapshot package does NOT make a commit.
+So the debian/changelog is not submitted, but still changed.
+
+git-buildpackage does not do that out-of-box. a pre-build hook is
+necessary.
+
+
+*** release
+
+** I want an option to switch to git-builder.  todo!
+** I want to dictate the Distro name on command line.  how?
+
+
+
+* History
+** First I had my PPA on lauchpad
+
+** git-buildpackage ... I had a recipe, and pasted on Zsh command line.
+
+** Then I automated this: I had a function zload-file which pushed on
+the "stack" the commands (builtin print -z $line), so they would
+auto-magically appear in sequence, when you press Enter.
+
+I made a wrapper mygit-buildpackage which invoked some hooks, when
+necessary.
+
+
+** Then, upgrading to yet another ubuntu release,
+I made Perl tools for debian/{control,changelog} parsing, so that I
+could somehow rebuild all my packages for that distro. ... still in progress
+
+** Then I wanted to build inside ...  pbuilder -> git-builder (cow-worker)
+
+** Then I noticed how to make "snapshot" package.
+** At the same time I installed mini-dinstall, and after 2 weeks reprepro.
+
+*** release 1.0
+
+
+** soon mygit-buildpackage, which was just to invoke the prototype hooks,
+will not be needed:  snap is enough?
