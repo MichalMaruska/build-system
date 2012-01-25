@@ -2,7 +2,14 @@
 
 function usage()
 {
-    echo "usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* "
+cat <<EOF
+usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]*
+
+by defaut:
+Distro .... previous from debian/changelog or ??
+Tag ... distro/version
+dput-target ... taken from MBS_TARGETS env variable
+EOF
 }
 
 # options:
