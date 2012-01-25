@@ -94,8 +94,6 @@ else
     cecho red "not past Git tag. Taking hint from the debian/changelog"
     # extract the distro from changelog!
     ls -l debian/changelog
-    DISTRO=$(dpkg-distribution debian/changelog)
-    version=$(dpkg-version debian/changelog)
     DISTRO=$(deb-pkg-distribution debian/changelog)
     version=$(deb-pkg-version debian/changelog)
 fi
