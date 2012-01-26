@@ -55,8 +55,7 @@ OPTIND=1
 
 if [ "$DPUT_TARGETS" = "" -a -n "${MBS_TARGETS-}" ];
 then
-    DPUT_TARGETS=$MBS_TARGETS
-fi
+    DPUT_TARGETS=${=MBS_TARGETS}
 
 
 function generate_commit_changelog() {
