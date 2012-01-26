@@ -1,5 +1,7 @@
 #! /bin/zsh -euxf
 
+source /usr/share/build-system/functions.sh
+
 function usage()
 {
 cat <<EOF
@@ -76,34 +78,25 @@ then
     generate_commit_changelog
 fi
 
+# at this point I have the commit, but not a tag.
+# If a stop here, and rerun, I would like to resume.
+#
 
 
-# fixme: maybe the tag is there already?
-# if NO tag at all:
-# fatal: No names found, cannot describe anything.
-set +e
-description=$(git describe HEAD)
-if [ $? = 0 ]
+
+
+if current_tag;
 then
-    version=${description#*/}
-    DISTRO=${description%/*}
-    echo $version
-else
-    if git tag -l |grep .;
-    then
-	cecho red "not _past_ Git tag. But other tags present"
-	if [ $FORCE != "y" ]
-	then
-	    exit 1
-	fi
-    fi
     cecho red "not past Git tag. Taking hint from the debian/changelog"
     # extract the distro from changelog!
     ls -l debian/changelog
     DISTRO=$(deb-pkg-distribution debian/changelog)
     version=$(deb-pkg-version debian/changelog)
 fi
-set -e
+
+# fixme: maybe the tag is there already?
+# if NO tag at all:
+# fatal: No names found, cannot describe anything.
 
 
 

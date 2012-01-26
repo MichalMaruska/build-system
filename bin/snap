@@ -2,7 +2,17 @@
 
 # setop pipefail
 
+
+# see the previous tag for the Version.
+# unless the debian/changelog contains the development
+# version already.
+
+#source @@SHAREDIR@@/functions
+source /usr/share/build-system/functions.sh
+
 function git-last-tag() {
+    current_tag
+    exit
     # fixme: HEAD~100
     # ..HEAD
     # $(git rev-list --tags --max-count=1 )
