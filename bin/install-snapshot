@@ -11,7 +11,6 @@ EOF
 }
 
 # make it invokable ...
-SINK=local
 DPUT_OPTIONS=""
 while getopts :uf OPT; do
     case $OPT in
@@ -47,5 +46,8 @@ then
     reprepro --ignore=wrongdistribution  -V \
         include UNRELEASED $GBP_CHANGES_FILE
 else
-    dput $DPUT_OPTIONS $SINK $GBP_CHANGES_FILE
+    for TARGET in ${MBS_SNAP_TARGETS-local}
+    do
+	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
+    done
 fi
