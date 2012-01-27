@@ -1,5 +1,12 @@
 #! /bin/bash -eux
 
+# This is just a wrapper around dput.
+
+# Given as $1 the changes file
+# dput it to all in MBS_SNAP_TARGETS.
+
+
+
 
 function usage(){
 cat <<EOF
