@@ -17,7 +17,6 @@ EOF
 # options:
 
 DISTRO=release
-# GIT_TAG=
 
 typeset -a DPUT_TARGETS
 DPUT_TARGETS=()
@@ -91,12 +90,19 @@ fi
 
 if current_tag;
 then
+    if [ $GIT_OFFSET != "" ]
+    then
+	# don't use this!
+    fi
+else
     cecho red "not past Git tag. Taking hint from the debian/changelog"
     # extract the distro from changelog!
     ls -l debian/changelog
     DISTRO=$(deb-pkg-distribution debian/changelog)
     version=$(deb-pkg-version debian/changelog)
 fi
+
+# so we have VERSION,DISTRO, GIT_OFFSET.
 
 # fixme: maybe the tag is there already?
 # if NO tag at all:
@@ -115,7 +121,7 @@ typeset -a MGB_OPTIONS
 MGB_OPTIONS=()
 if git tag -l "$GIT_TAG"|grep ".";
 then
-    :
+    cecho red "the tag $GIT_TAG already exists! not re-creating it now"
 else
     MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRO/%(version)s")
 fi
