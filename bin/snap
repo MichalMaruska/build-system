@@ -10,16 +10,17 @@
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
 
-function git-last-tag() {
-    get_current_tag
-    return
-    # fixme: HEAD~100
-    # ..HEAD
-    # $(git rev-list --tags --max-count=1 )
-    # might want to separate  tag-[[:digit:]]+-[[:alpha:]]+
-    git describe 2> /dev/null |\
-    sed -e 's|^\(.*\)/.*$|\1|g'
-}
+# function git-last-tag() {
+#     get_current_tag
+#     return
+#     # fixme: HEAD~100
+#     # ..HEAD
+#     # $(git rev-list --tags --max-count=1 )
+#     # might want to separate  tag-[[:digit:]]+-[[:alpha:]]+
+#     git describe 2> /dev/null |\
+#     sed -e 's|^\(.*\)/.*$|\1|g'
+# cecho green "last release tag:_tag"
+# }
 
 
 function usage(){
@@ -66,8 +67,7 @@ shift $(( OPTIND - 1 ))
 OPTIND=1
 
 
-last_tag=$(git-last-tag)
-cecho green "last release tag: $last_tag"
+get_current_tag
 
 # todo: in-place if "git status" says clean
 
@@ -85,7 +85,7 @@ else
     DCH_OPTIONS="--new-version=$DEFAULT_NEW_VERSION"
 fi
 
-git-dch --auto --snapshot "--debian-tag=$last_tag/%(version)s" $DCH_OPTIONS
+git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
 
 if false;
 then
