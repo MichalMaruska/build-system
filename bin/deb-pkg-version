@@ -13,8 +13,8 @@ use Dpkg::Changelog::Debian;
 
 
 
-#my $dir=".";
-my $filename=shift() . "/debian/changelog";
+#my $dir="."; . "/debian/changelog"
+my $filename=shift();
 my $c = Dpkg::Changelog::Debian->new();
 $c->load($filename);
 
