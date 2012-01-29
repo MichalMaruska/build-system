@@ -102,10 +102,15 @@ then
 else
     minor=$(expr $minor + 1)
 fi
+
+
+# so, we decided for the Changelog update.
+# That obviously implies the Git-Tag, then, on the new commit.
 function generate_commit_changelog() {
-# Finally:
 # fixme: this needs the git-last-tag:
-    git-dch --release --auto
+    # todo:  either Major+1. 0
+    # or  Major. Minor  + 1 !
+    git-dch --release --auto --new-version="$major.$minor"
 # "--debian-tag=$DISTRO/%(version)s"
     git add debian/changelog; git commit -m release
 }
