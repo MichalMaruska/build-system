@@ -44,7 +44,8 @@ fi
 
 
 
-cecho red "$GBP_CHANGES_FILE in $GBP_BUILD_DIR"
+# $GBP_BUILD_DIR is the build directory: I don't need it.
+cecho green "putting into repositories: $GBP_CHANGES_FILE"
 
 if [ -n "$REPREPRO_BASE_DIR" ]
 then
@@ -62,5 +63,6 @@ fi
 # this is even faster:
 if [ ${INSTALL_IMMEDIATELY:-n} = "y" ]
 then
+    cecho green "installing immediately $GBP_CHANGES_FILE"
     debi --upgrade $GBP_CHANGES_FILE
 fi
