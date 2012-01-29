@@ -76,7 +76,7 @@ found_any_tag=$?
 load_distr_version_from_changelog()
 {
     DISTRO=$(deb-pkg-distribution debian/changelog)
-    version=$(deb-pkg-version debian/changelog)
+    VERSION=$(deb-pkg-version debian/changelog)
 }
 
 if [ $found_any_tag != 0]
