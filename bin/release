@@ -66,7 +66,7 @@ OPTIND=1
 if [ "$DPUT_TARGETS" = "" -a -n "${MBS_TARGETS-}" ];
 then
     # since it comes from a generic shell, divide it as such:
-    DPUT_TARGETS=${=MBS_TARGETS}
+    DPUT_TARGETS=(${=MBS_TARGETS})
 fi
 
 
