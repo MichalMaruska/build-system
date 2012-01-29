@@ -48,6 +48,11 @@ get_current_tag()
 	    VERSION=$match[2]
 	    GIT_OFFSET=$match[3]
 	    # ${${description%-g*}#*-}
+	    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^[:digit:]].*)$" ]]
+	    then
+		VERSION="$match[1].$match[2]"
+		cecho red "Discarding $match[3]"
+	    fi
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
 	then
