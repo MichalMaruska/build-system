@@ -60,6 +60,6 @@ get_current_tag()
 	fi
     fi
 
-    cecho yellow $VERSION $GIT_OFFSET $DISTRO >&2
+    cecho yellow $VERSION ${GIT_OFFSET:-} $DISTRO >&2
 }
 
