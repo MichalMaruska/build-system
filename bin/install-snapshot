@@ -58,3 +58,9 @@ else
 	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
     done
 fi
+
+# this is even faster:
+if [ ${INSTALL_IMMEDIATELY:-n} = "y" ]
+then
+    debi --upgrade $GBP_CHANGES_FILE
+fi

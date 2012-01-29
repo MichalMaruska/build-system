@@ -104,12 +104,14 @@ cecho red "Starting git-buildpackage, with hooks!"
 # --color=auto
 # lsb_release -c
 # --git-dist=oneiric
-git-buildpackage --git-ignore-new $GBP_OPTIONS --git-prebuild=pre-build-hook \
---git-dist=UNRELEASED --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
---git-postbuild=install-snapshot
+INSTALL_IMMEDIATELY=y \
+git-buildpackage \
+    --git-ignore-new $GBP_OPTIONS \
+    --git-prebuild=pre-build-hook \
+    --git-dist=UNRELEASED \
+    --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
+    --git-postbuild=install-snapshot
 
-
-#&& debi --debs-dir ../build-area/
 
 # snap     fast, without any cow. Doesn't verify dependencies
 #          but still  control.in ?
