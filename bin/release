@@ -91,6 +91,8 @@ fi
 
 
 # so we have VERSION,DISTRO, GIT_OFFSET.
+#Note: maybe a comitted debian/changelog has a higher
+#version n. which was not released with a tag.
 
 major=${VERSION%.*}
 minor=${VERSION#*.}
