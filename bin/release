@@ -64,6 +64,35 @@ fi
 
 
 
+# I want to be able to repeat the run.
+# So, to skip the changelog and/or  git tag!
+
+# So, changelog if needed.
+# git tag if ....needed.
+get_current_tag
+found_any_tag=$?
+
+
+load_distr_version_from_changelog()
+{
+    DISTRO=$(deb-pkg-distribution debian/changelog)
+    version=$(deb-pkg-version debian/changelog)
+}
+
+if [ $found_any_tag != 0]
+then
+    cecho red "not past Git tag. Taking hint from the debian/changelog"
+    # extract the distro from changelog!
+    ls -l debian/changelog
+    load_distr_version_from_changelog;
+    # fixme: If not even there:
+    # default version 0.1, distro your current.
+fi
+
+
+# so we have VERSION,DISTRO, GIT_OFFSET.
+
+
 function generate_commit_changelog() {
 # Finally:
 # fixme: this needs the git-last-tag:
