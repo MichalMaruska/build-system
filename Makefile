@@ -10,16 +10,16 @@ SHARED_FILES=$(wildcard share/*)
 all:
 	echo ""
 
-install: install-zsh
+install: install-zsh install-functions
 	$(INSTALL) -v -D --directory $(DESTDIR)$(BIN_INSTALL_DIR)
-	for p in $(SHARED_FILES); do \
+	for p in $(BINFILES); do \
 	  $(INSTALL) -v -m 555 $$p $(DESTDIR)$(BIN_INSTALL_DIR) ; \
 	done
 
 
 install-functions:
 	$(INSTALL) -v -D --directory $(DESTDIR)$(SHAREDIR)
-	for p in $(BINFILES); do \
+	for p in $(SHARED_FILES); do \
 	  $(INSTALL) -v -m 555 $$p $(DESTDIR)$(SHAREDIR) ; \
 	done
 
