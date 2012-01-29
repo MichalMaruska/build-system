@@ -129,47 +129,42 @@ then
     generate_commit_changelog
 fi
 
-# at this point I have the commit, but not a tag.
+
+
+# at this point I have the last commit, but maybe not a tag.
 # If a stop here, and rerun, I would like to resume.
-#
-
-
-
-
-if current_tag;
-then
-    if [ $GIT_OFFSET != "" ]
-    then
-	# don't use this!
-    fi
-else
-    cecho red "not past Git tag. Taking hint from the debian/changelog"
-    # extract the distro from changelog!
-    ls -l debian/changelog
-    DISTRO=$(deb-pkg-distribution debian/changelog)
-    version=$(deb-pkg-version debian/changelog)
-fi
-
-# so we have VERSION,DISTRO, GIT_OFFSET.
 
 # fixme: maybe the tag is there already?
 # if NO tag at all:
 # fatal: No names found, cannot describe anything.
 
+NEED_TAG="n"
+if [ ${GIT_OFFSET-0} != "" ]
+then
+    NEED_TAG="y"
+    # don't use the version!
+fi
+
+
+
 
 
 # *now* the default value:
-: ${GIT_TAG:=$DISTRO/$version}
+# : ${GIT_TAG:=$DISTRO/$VERSION}
 
-cecho green $GIT_TAG
+load_distr_version_from_changelog
+# if different &
+: ${NEWGIT_TAG:=$DISTRO/$VERSION}
+
+cecho green $NEWGIT_TAG
 
 
+MGB_OPTIONS=""
 # tagname-N-hash
-typeset -a MGB_OPTIONS
-MGB_OPTIONS=()
-if git tag -l "$GIT_TAG"|grep ".";
+typeset -a
+if git tag -l "$NEWGIT_TAG"|grep ".";
 then
-    cecho red "the tag $GIT_TAG already exists! not re-creating it now"
+    cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
 else
     MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRO/%(version)s")
 fi
