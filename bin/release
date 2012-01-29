@@ -25,7 +25,7 @@ MGB_COMMON_OPTIONS=()
 FORCE=n
 # ARCH
 
-
+step=0
 while getopts :rft:a:p:i OPT; do
     case $OPT in
 	a)
@@ -92,7 +92,16 @@ fi
 
 # so we have VERSION,DISTRO, GIT_OFFSET.
 
+major=${VERSION%.*}
+minor=${VERSION#*.}
 
+if [ step = "1" ]
+then
+    major=$(expr $major + 1)
+    minor=0
+else
+    minor=$(expr $minor + 1)
+fi
 function generate_commit_changelog() {
 # Finally:
 # fixme: this needs the git-last-tag:
