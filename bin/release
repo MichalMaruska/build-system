@@ -110,8 +110,11 @@ fi
 
 increase_version()
 {
-    major=${VERSION%.*}
-    minor=${VERSION#*.}
+    major=${VERSION%%.*}
+    minor=${VERSION##*.}
+
+    tail=.${VERSION#*.}
+    middle=${tail%.*}
 
     cecho red "increasing version by $step"
     if [ step = "1" ]
@@ -122,7 +125,7 @@ increase_version()
 	minor=$(expr $minor + 1)
     fi
 
-    VERSION="$major.$minor"
+    VERSION="$major${middle-.${middle}}.$minor"
 }
 
 
