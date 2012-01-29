@@ -147,7 +147,12 @@ function generate_commit_changelog() {
     # or  Major. Minor  + 1 !
     git-dch --release --auto --new-version="$VERSION"
 # "--debian-tag=$DISTRO/%(version)s"
-    git add debian/changelog; git commit -m release
+
+    if git status debian/changelog | grep '^ M';
+    then
+	git add debian/changelog;
+	git commit -m release
+    fi
 }
 
 
