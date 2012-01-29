@@ -97,21 +97,47 @@ then
 fi
 
 
-# so we have VERSION,DISTRO, GIT_OFFSET.
 #Note: maybe a comitted debian/changelog has a higher
 #version n. which was not released with a tag.
 
-major=${VERSION%.*}
-minor=${VERSION#*.}
+increase_version()
+{
+    major=${VERSION%.*}
+    minor=${VERSION#*.}
 
-if [ step = "1" ]
+    cecho red "increasing version by $step"
+    if [ step = "1" ]
+    then
+	major=$(expr $major + 1)
+	minor=0
+    else
+	minor=$(expr $minor + 1)
+    fi
+
+    VERSION="$major.$minor"
+}
+
+
+# so we have VERSION,DISTRO, GIT_OFFSET.
+increase_version
+git_version=$VERSION
+
+
+# git_distro=$DISTRO
+# This should be from
+load_distr_version_from_changelog
+increase_version
+
+if dpkg --compare-versions $VERSION lt $git_version;
 then
-    major=$(expr $major + 1)
-    minor=0
-else
-    minor=$(expr $minor + 1)
+    VERSION=$git_version
+    # so the changelog contains a higher
+    # version. git-dch would notice it.
+    #
+    # So, increase more.
 fi
 
+echo $DISTRO $VERSION
 
 # so, we decided for the Changelog update.
 # That obviously implies the Git-Tag, then, on the new commit.
@@ -119,7 +145,7 @@ function generate_commit_changelog() {
 # fixme: this needs the git-last-tag:
     # todo:  either Major+1. 0
     # or  Major. Minor  + 1 !
-    git-dch --release --auto --new-version="$major.$minor"
+    git-dch --release --auto --new-version="$VERSION"
 # "--debian-tag=$DISTRO/%(version)s"
     git add debian/changelog; git commit -m release
 }
