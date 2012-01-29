@@ -12,17 +12,17 @@
 # VERSION
 # DISTRO
 # GIT_OFFSET
-current_tag()
+get_current_tag()
 {
     set +e
 # git describe --all -> HEAD or master.
 # I only want tags
     description=$(git describe --tags)
-    status=$?
+    git_status=$?
     set -e
 
     # if no tags at all -> exit, or ?
-    if [ $status ne 0 ]
+    if [ $git_status -ne 0 ]
     then
 	if git tag -l |grep .;
 	then
@@ -42,17 +42,17 @@ current_tag()
     # Either only the tag (possibly name/version),
     # or name/version-offset-g{hash}
     #
-	if [[ $description =~ "^(.*)/(.*)-([[:digit]]+)-g[[:alnum:]]*$" ]]
+	if [[ $description =~ "^(.*)/(.*)-([[:digit:]]+)-g[[:alnum:]]*$" ]]
 	then
-	    DISTRO=match[1]
-	    VERSION=match[2]
-	    GIT_OFFSET=match[3]
+	    DISTRO=$match[1]
+	    VERSION=$match[2]
+	    GIT_OFFSET=$match[3]
 	    # ${${description%-g*}#*-}
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
 	then
-	    DISTRO=match[1]
-	    VERSION=match[2]
+	    DISTRO=$match[1]
+	    VERSION=$match[2]
 	    #VERSION=${description#*/}
 	    #DISTRO=${description%/*}
 	else
@@ -60,6 +60,6 @@ current_tag()
 	fi
     fi
 
-    cecho yellow $VERSION $offset $hash >&2
+    cecho yellow $VERSION $GIT_OFFSET $DISTRO >&2
 }
 
