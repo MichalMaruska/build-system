@@ -211,11 +211,13 @@ mygit-buildpackage $MGB_COMMON_OPTIONS -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
+if false;
+then
 for target in $DPUT_TARGETS;
 do
     debrelease -S --debs-dir=../build-area --dput $target
 done
-
+fi
 
 # --git-builder /usr/bin/git-pbuilder
 
