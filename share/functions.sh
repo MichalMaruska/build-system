@@ -85,6 +85,8 @@ load_distr_version_from_changelog()
 
 increase_version()
 {
+    step=$1
+
     major=${VERSION%%.*}
     minor=${VERSION##*.}
 
@@ -92,7 +94,7 @@ increase_version()
     middle=${tail%.*}
 
     cecho red "increasing version by $step"
-    if [ step = "1" ]
+    if [ step = "major" ]
     then
 	major=$(expr $major + 1)
 	minor=0

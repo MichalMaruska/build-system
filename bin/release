@@ -25,7 +25,7 @@ MGB_COMMON_OPTIONS=()
 FORCE=n
 # ARCH
 
-step=0
+step=major
 install_immediately="n"
 while getopts :rft:a:p:iI OPT; do
     case $OPT in
@@ -94,14 +94,16 @@ fi
 #version n. which was not released with a tag.
 
 # so we have VERSION,DISTRO, GIT_OFFSET.
-increase_version
+increase_version $step
 git_version=$VERSION
+#fixme:  wtf ^^^^ why?
+
 
 
 # git_distro=$DISTRO
 # This should be from
 load_distr_version_from_changelog
-increase_version
+increase_version $step
 
 if dpkg --compare-versions $VERSION lt $git_version;
 then

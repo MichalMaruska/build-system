@@ -19,7 +19,6 @@ usage: ${0##*/} [+-upb} [--] ARGS...
 EOF
 }
 
-DEFAULT_NEW_VERSION=3
 DCH_FLAGS=""
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
@@ -69,6 +68,9 @@ if git status --porcelain debian/changelog |grep --silent '^ M';
 then
     cp debian/changelog debian/changelog.save
 else
+    # get the current version & increase. The major maybe.
+    load_distr_version_from_changelog
+    increase_version major
     DCH_OPTIONS="--new-version=$DEFAULT_NEW_VERSION"
 fi
 
