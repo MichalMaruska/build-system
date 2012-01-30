@@ -81,7 +81,7 @@ get_current_tag
 found_any_tag=$?
 set -e
 
-if [ $found_any_tag != 0]
+if [ $found_any_tag != 0 ]
 then
     cecho red "not past Git tag. Taking hint from the debian/changelog"
     # extract the distro from changelog!
