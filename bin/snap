@@ -10,19 +10,6 @@
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
 
-# function git-last-tag() {
-#     get_current_tag
-#     return
-#     # fixme: HEAD~100
-#     # ..HEAD
-#     # $(git rev-list --tags --max-count=1 )
-#     # might want to separate  tag-[[:digit:]]+-[[:alpha:]]+
-#     git describe 2> /dev/null |\
-#     sed -e 's|^\(.*\)/.*$|\1|g'
-# cecho green "last release tag:_tag"
-# }
-
-
 function usage(){
 cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
