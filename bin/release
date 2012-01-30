@@ -79,21 +79,6 @@ fi
 get_current_tag
 found_any_tag=$?
 
-
-load_distr_version_from_changelog()
-{
-    DISTRO=$(deb-pkg-distribution debian/changelog)
-    VERSION=$(deb-pkg-version debian/changelog)
-
-    # conditionally remove. but this
-    # should not remove a middle  a.b.c.
-    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^.[:digit:]].*)$" ]]
-    then
-	VERSION="$match[1].$match[2]"
-	cecho red "Discarding $match[3]"
-    fi
-}
-
 if [ $found_any_tag != 0]
 then
     cecho red "not past Git tag. Taking hint from the debian/changelog"
@@ -107,27 +92,6 @@ fi
 
 #Note: maybe a comitted debian/changelog has a higher
 #version n. which was not released with a tag.
-
-increase_version()
-{
-    major=${VERSION%%.*}
-    minor=${VERSION##*.}
-
-    tail=.${VERSION#*.}
-    middle=${tail%.*}
-
-    cecho red "increasing version by $step"
-    if [ step = "1" ]
-    then
-	major=$(expr $major + 1)
-	minor=0
-    else
-	minor=$(expr $minor + 1)
-    fi
-
-    VERSION="$major${middle-.${middle}}.$minor"
-}
-
 
 # so we have VERSION,DISTRO, GIT_OFFSET.
 increase_version

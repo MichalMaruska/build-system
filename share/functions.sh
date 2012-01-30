@@ -68,3 +68,37 @@ get_current_tag()
     cecho yellow $VERSION ${GIT_OFFSET:-} $DISTRO >&2
 }
 
+load_distr_version_from_changelog()
+{
+    DISTRO=$(deb-pkg-distribution debian/changelog)
+    VERSION=$(deb-pkg-version debian/changelog)
+
+    # conditionally remove. but this
+    # should not remove a middle  a.b.c.
+    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^.[:digit:]].*)$" ]]
+    then
+	VERSION="$match[1].$match[2]"
+	cecho red "Discarding $match[3]"
+    fi
+}
+
+
+increase_version()
+{
+    major=${VERSION%%.*}
+    minor=${VERSION##*.}
+
+    tail=.${VERSION#*.}
+    middle=${tail%.*}
+
+    cecho red "increasing version by $step"
+    if [ step = "1" ]
+    then
+	major=$(expr $major + 1)
+	minor=0
+    else
+	minor=$(expr $minor + 1)
+    fi
+
+    VERSION="$major${middle-.${middle}}.$minor"
+}
