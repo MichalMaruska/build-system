@@ -1,5 +1,19 @@
 
 
+* Background:
+
+git-dch passes (not a simple mapping) only *some* params to
+debchange/dch.
+Dch employes a heuristics to do stuff.
+
+So it's difficult to build on a low-level tool, which does heuristics
+for itself.
+
+So, that Perl code should be treated as a library, git-dch should
+build on top of that (again in Perl, I'm sorry).
+
+
+
 * Features
 
 *** snap
