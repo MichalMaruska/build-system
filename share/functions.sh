@@ -14,12 +14,12 @@
 # GIT_OFFSET
 get_current_tag()
 {
-    set +e
+#    set +e
 # git describe --all -> HEAD or master.
 # I only want tags
     description=$(git describe --tags)
     git_status=$?
-    set -e
+#    set -e
 
     # if no tags at all -> exit, or ?
     if [ $git_status -ne 0 ]
