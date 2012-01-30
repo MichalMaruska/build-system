@@ -8,11 +8,10 @@
 
 local_dir=$(pwd)
 
-cecho red "Generating debian/changelog in $GBP_GIT_DIR (for $local_dir)"
-
 cd $GBP_GIT_DIR/..
 
 # cp debian/changelog debian/changelog.save
+# cecho red "Generating debian/changelog in $GBP_GIT_DIR (for $local_dir)"
 # git-dch --auto --snapshot
 
 # I need to keep it there, to have increasing
