@@ -194,7 +194,12 @@ else
     MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRO/%(version)s")
 fi
 
-mygit-buildpackage $MGB_COMMON_OPTIONS $MGB_OPTIONS
+
+git-buildpackage \
+    --git-ignore-new \
+    --git-prebuild=pre-build-hook \
+    $MGB_OPTIONS $MGB_COMMON_OPTIONS
+
 
 
 if [ ${install_immediately-n} = "y" ]
