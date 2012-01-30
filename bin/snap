@@ -53,10 +53,12 @@ shift $(( OPTIND - 1 ))
 OPTIND=1
 
 
+set +e
 get_current_tag
+found_tag=$?
+set -e
 
 # todo: in-place if "git status" says clean
-
 
 # keep changelog out:
 # create it in a hook!
