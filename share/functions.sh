@@ -34,6 +34,9 @@ get_current_tag()
 		exit 1
 	    fi
 	else
+	    # fake values.
+	    VERSION=
+	    DISTRO=
 	    return 1
 	fi
     else
