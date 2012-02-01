@@ -216,6 +216,8 @@ done
 # Source
 # -S is handed over.... git-buildpackage -> debuild -> dpkg-buildpackage.
 
+if false;
+then
 
 # again  debian/control   Could be done Once
 # again ./auto  Yes
@@ -223,8 +225,6 @@ mygit-buildpackage $MGB_COMMON_OPTIONS -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
-if false;
-then
 for target in $DPUT_TARGETS;
 do
     debrelease -S --debs-dir=../build-area --dput $target
