@@ -1,3 +1,57 @@
+mmc-build-system (2.1) oneiric; urgency=low
+
+  * adopt the  deb-pkg-* prefix for the low level tools (to extract info from debian/* files)
+  * fix deb-pkg-distribution
+  * Some documentation.
+  * remove old/ double deb-*-version
+  * better usage()
+  * convert SH value into zsh array
+  * snap install into  $MBS_SNAP_TARGETS
+  * isolate common functions into  Share dir.
+  * document
+  * check  debian/changelogs status between now and _just_ the previos commit
+  * the deb-* tools accept the changelog as $1 ?
+  * functions fix!
+  * git tag
+  * mbs_targets
+  * get the v-d from past Git tag, or from debian/ch
+  * calculate incremented version
+  * bump the version, when invoking git-dch
+  * decide for tagging & also what tag!
+  * fix load_distr_version_from_changelog
+  * note about repeated release w/o  tag
+  * install conditionally
+  * fix
+  * fix GIT_OFFSET
+  * increase_version
+  * depend on mmc-shell.   cecho at least
+  * snap: fix git-last-tag. Still a workaround!
+  * stupid work-around: don't try to commit if not changed.
+  * snap: invoke debi  if so desired
+  * fix the Makefile
+  * install-snapshot: better messages. green
+  * drop  ubuntu3~.....  suffix from version but not purely numeric
+  * snap: stop this get_current_tag wrapper
+  * dput_targets
+  * middle part of version
+  * move functions
+  * again ... drop the workaround
+  * increase_version ... improve & use it
+  * first ever release
+  * don't play with  +-e in functions. No scoping there!
+  * fake values
+  * fix
+  * snap:  fix digging inexistant git tag. But why?
+  * don't dput the sources.... checksum is overwritten
+  * doc: about heuristics
+  * better info
+  * finally:  sane condition for changelog update (debchange, git-dch)
+  * release: run git-buildpackage with the pre-build-hook
+  * release: skip building source. It overwrites the .dsc file, so the checksum in changes file is wrong.
+  * after git-dch, correct che check of debian/changelog needing commit
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 01 Feb 2012 15:20:00 +0100
+
 mmc-build-system (1.1) release; urgency=low
 
   * Initial release.
