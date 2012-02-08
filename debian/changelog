@@ -1,3 +1,15 @@
+mmc-build-system (2.2) oneiric; urgency=low
+
+  * snap: handle (better) starting a new version.
+  * release: new-version
+  * conflict with mmc-shell
+  * fix GIT_OFFSET
+  * REPREPRO_BASE_DIR optional!
+  * document dput targets
+  * zsh -n test is different?
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 08 Feb 2012 15:55:16 +0100
+
 mmc-build-system (2.1) oneiric; urgency=low
 
   * adopt the  deb-pkg-* prefix for the low level tools (to extract info from debian/* files)
