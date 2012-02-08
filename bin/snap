@@ -68,12 +68,17 @@ set -e
 DCH_OPTIONS=""
 if git status --porcelain debian/changelog |grep --silent '^ M';
 then
+    # Already updated since a release. So, the version should be there.
     cp debian/changelog debian/changelog.save
 else
     # get the current version & increase. The major maybe.
     load_distr_version_from_changelog
     increase_version major
-    DCH_OPTIONS="--new-version=$DEFAULT_NEW_VERSION"
+    if [ -z "${DEFAULT_NEW_VERSION:-}" ]
+    then
+	echo "Starting a new version $VERSION. Could have been explicitely specified with the -v option.">&2
+    fi
+    DCH_OPTIONS="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 fi
 
 git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
