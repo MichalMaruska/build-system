@@ -66,3 +66,10 @@ could somehow rebuild all my packages for that distro. ... still in progress
 
 ** soon mygit-buildpackage, which was just to invoke the prototype hooks,
 will not be needed:  snap is enough?
+
+
+
+* push into
+by default:
+** snap:  REPREPRO_BASE_DIR  _or_ MBS_SNAP_TARGETS
+** release                        MBS_TARGETS
