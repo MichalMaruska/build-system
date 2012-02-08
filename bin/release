@@ -128,7 +128,7 @@ function generate_commit_changelog() {
     # todo:  either Major+1. 0
     # or  Major. Minor  + 1 !
 
-    if [ -n ${USER_VERSION:-} ]
+    if [ -n "${USER_VERSION:-}" ]
     then
 	echo "overriding the version, as requested" >&2
 	VERSION=${USER_VERSION}
