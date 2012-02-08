@@ -177,7 +177,7 @@ fi
 # fatal: No names found, cannot describe anything.
 
 NEED_TAG="n"
-if [ ${GIT_OFFSET-} != "" ]
+if [ ${GIT_OFFSET:-} != "" ]
 then
     NEED_TAG="y"
     # don't use the version!
