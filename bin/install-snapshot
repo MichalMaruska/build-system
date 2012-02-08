@@ -47,7 +47,7 @@ fi
 # $GBP_BUILD_DIR is the build directory: I don't need it.
 cecho green "putting into repositories: $GBP_CHANGES_FILE"
 
-if [ -n "$REPREPRO_BASE_DIR" ]
+if [ -n "${REPREPRO_BASE_DIR:-}" ]
 then
     # fixme: snapshot -> not a big deal if I still get the dist. wrong?
     # --basedir ~/reprepro/
