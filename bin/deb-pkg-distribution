@@ -13,17 +13,16 @@ use Dpkg::Changelog::Debian;
 
 # use strict;
 
-
-#my $dir=".";
-#my $filename=$dir . "/debian/changelog";
 my $filename=$ARGV[0];
 
-my $c;
-$c = Dpkg::Changelog::Debian->new();
+if ( -d $filename ) {
+    $filename=$filename .  "/debian/changelog";
+}
+
+my $c = Dpkg::Changelog::Debian->new();
 $c->load($filename);
 
 my $control = $c->dpkg({});
-#my $ver = $control->{Version};
 my $dist = $control->{Distribution};
 
-print $dist;
+print $dist,"\n";
