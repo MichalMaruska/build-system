@@ -19,7 +19,7 @@ usage: ${0##*/} [+-upb} [--] ARGS...
 EOF
 }
 
-DCH_FLAGS=""
+typeset -a DCH_OPTIONS
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
 while getopts :upbhv: OPT; do
@@ -29,7 +29,7 @@ while getopts :upbhv: OPT; do
 	    exit 0;;
 	b)
 	    # ignore-branch
-	    DCH_FLAGS="--ignore-branch"
+	    DCH_OPTIONS=("--ignore-branch")
 	    GBP_OPTIONS+="--git-ignore-branch"
 	    ;;
 	u|+u)
@@ -65,7 +65,6 @@ set -e
 
 # for release: --git-builder /usr/bin/git-pbuilder
 # dubious:
-DCH_OPTIONS=""
 if git status --porcelain debian/changelog |grep --silent '^ M';
 then
     # Already updated since a release. So, the version should be there.
@@ -78,7 +77,7 @@ else
     then
 	echo "Starting a new version $VERSION. Could have been explicitely specified with the -v option.">&2
     fi
-    DCH_OPTIONS="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
+    DCH_OPTIONS+=" --new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 fi
 
 git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
