@@ -1,0 +1,152 @@
+#! /usr/bin/perl
+
+# Given source-packages as paths to dirs, output the list of those
+# that are NOT installed at the version in the directory (debian/changelog).
+
+use AptPkg::Cache;
+
+use Dpkg::Control::Info;
+use Dpkg::Control::Hash;
+use Dpkg::Control::Changelog;
+use Dpkg::Changelog::Entry;
+use Dpkg::Changelog::Debian;
+
+# AptPkg::Cache::Package
+
+my $ac= new AptPkg::Cache;
+
+my $verbose=1;
+
+my @obsolete;
+
+# Given _path_ to the source package, if it is NOT installed,
+# add it to the @obsolete list.
+sub decide_if_obsolete
+{
+    my ($dir) = @_;
+
+    my $file=$dir .  "/debian/control";
+    # print $file, "\n";
+    unless  (-f $file) {
+	print "non-existent file $file\n";
+	die("non-existent file " + $file);
+    }
+
+    # |
+    # v
+    my $p = Dpkg::Control::Info->new($file);
+    # $p->get_packages();
+
+
+    # ---->
+    my $filename=$dir . "/debian/changelog";
+    my $c = Dpkg::Changelog::Debian->new();
+    $c->load($filename);
+    # my $c = Dpkg::Control::Changelog->new();
+    my $control = $c->dpkg({});
+    my $s= $p->get_source();
+
+    my $entry = Dpkg::Changelog::Entry->new();
+    # changelog_parse(%opt)
+
+
+    # my $control = $c->dpkg(0);
+    # print "Source in version: ", $control->{Version}, "\n";
+
+    my $ver = $control->{Version};
+    # fixme! $entry->get_version();
+
+    # check the binary packages.
+    # print $s->{Source}, "\n";
+    # print $s->{Version}, "\n";
+
+    # print $c->{};
+    # my $c = Dpkg::Changelog->new(%options)
+
+    foreach $_ ($p->get_packages())
+    {
+#    print "next";
+#    print $_;
+	my $name =$_->{Package};
+	#
+	# print "binary: ", $name , "\n";
+
+	# Now what is installed.
+	# foreach  pkg in ..binpkg
+	{
+	    my $pkg=$ac->{$name};
+
+	    # print "now from apt DB: ";
+	    #print $pkg->{Name};
+	    #print "\n";
+
+	    # print "\n";
+	    my $version=$pkg->{CurrentVer};
+	    my $installed=$version->{VerStr};
+
+
+	    if ($pkg->{CurrentState} ne "Installed")
+	    {
+
+		if ($verbose) {
+		    print <STDERR>, "$name $pkg->{Name} not installed\n";
+		}
+	    }
+	    elsif ($ver ne $installed)
+	    {
+		if ($verbose) {
+		    print <STDERR>, "$name $pkg->{Name} DIFFERENT version\n";
+		}
+	    }
+
+
+
+	    push @obsolete, $name;
+
+	    # print <STDERR> "binary: ", $name, " ";
+
+	    if ($pkg->{CurrentState} eq "Installed") {
+		# print $ver, " vs. ", $installed, "\n";
+		# print <STDERR> " is obsolete: ", $ver, " vs. ", $installed, "\n";
+	    } else {
+		# print <STDERR> "is NOT installed";
+	    }
+	    # print <STDERR> "\n";
+	    #print $version->{VerStr};
+	}
+
+	#else
+	{
+	    # print $pkg->{CurrentState};
+	    # print "\n";
+	}
+    }
+    #
+#if at least 1 -> need to rebuild?
+# But I should see not installed, but available version!
+}
+
+
+if (@ARGV < 1)
+{
+    print <STDERR>, "Usage: $0 bin-pkg-name ...\n";
+    exit -1;
+}
+
+while (my $name = shift)
+{
+    chomp $name;
+    decide_if_obsolete($name);
+}
+
+
+# print "outdated :=\t";
+foreach $_ (@obsolete)
+{print $_, "\n"};
+# print join (" ", @obsolete);
+#print "\n"
+
+
+# map back to source!
+#  build-xxx where xxx is source.
+#

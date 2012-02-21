@@ -1,0 +1,37 @@
+#! /usr/bin/perl
+
+# Given a package name ...
+# dump the version installed   (like dpkg -l xxx)
+# output:
+#  NAME
+#  Installed|NotInstalled
+#  version-string
+use AptPkg::Cache;
+
+# AptPkg::Cache::Package
+
+my $ac=new AptPkg::Cache;
+
+
+if (@ARGV < 1)
+{
+    print <STDERR>, "Usage: $0 bin-pkg-name\n";
+    exit -1;
+}
+
+my $name = shift;
+my $pkg=$ac->{$name};
+
+if  (!$pkg) {
+    exit();
+}
+
+print $pkg->{Name};
+print "\n";
+print $pkg->{CurrentState};
+print "\n";
+
+my $version=$pkg->{CurrentVer};
+print $version->{VerStr};
+print "\n";
+

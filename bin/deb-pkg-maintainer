@@ -1,0 +1,19 @@
+#! /usr/bin/perl
+
+# Given path to the debian/control file, ...
+# parse it & dump (on stdout) the name of the Maintainer.
+
+
+use Dpkg::Control::Info;
+use Dpkg::Control::Hash;
+
+my $file=shift;
+
+unless  (-f $file) {
+    die("non-existent file $file");
+}
+
+my $p= Dpkg::Control::Info->new($file);
+my $s= $p->get_source();
+
+print $s->{Maintainer}, "\n";

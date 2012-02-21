@@ -1,0 +1,23 @@
+#! /usr/bin/perl
+
+# Dump (on stdout) the list of binary pkgs. buildable from the source package.
+# Given by the path to the debian/control file.
+# one per line.
+
+use Dpkg::Control::Info;
+
+$file=shift . "/debian/control";
+
+unless  (-f $file) {
+    die("non-existent file");
+}
+
+$p= Dpkg::Control::Info->new($file);
+$p->get_packages();
+foreach $_ ($p->get_packages())
+{
+#    print "next";
+#    print $_;
+    print $_->{Package}, "\n";
+}
+
