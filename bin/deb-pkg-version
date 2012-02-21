@@ -19,7 +19,7 @@ my $c = Dpkg::Changelog::Debian->new();
 $c->load($filename);
 
 
-    my $control = $c->dpkg({});
+my $control = $c->dpkg({});
 my $ver = $control->{Version};
 
 print $ver, "\n";
