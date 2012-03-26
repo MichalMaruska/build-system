@@ -81,6 +81,8 @@ fi
 # git tag if ....needed.
 set +e
 get_current_tag
+# this sets DISTRO,VERSION & GIT_OFFSET
+
 found_any_tag=$?
 set -e
 
@@ -90,13 +92,14 @@ then
     # extract the distro from changelog!
     ls -l debian/changelog
     load_distr_version_from_changelog;
+    # DISTRO & VERSION
     # fixme: If not even there:
     # default version 0.1, distro your current.
 fi
 
 
-#Note: maybe a comitted debian/changelog has a higher
-#version n. which was not released with a tag.
+# Note: maybe a comitted debian/changelog has a higher
+# version n. which was not released with a tag.
 
 function get_new_version()
 {
@@ -124,7 +127,6 @@ function get_new_version()
 
 
 
-echo $DISTRO $VERSION
 
 # so, we decided for the Changelog update.
 # That obviously implies the Git-Tag, then, on the new commit.
