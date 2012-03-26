@@ -65,6 +65,8 @@ set -e
 
 # for release: --git-builder /usr/bin/git-pbuilder
 # dubious:
+
+# todo: but, maybe it WAS committed in the last commit & nothing has changed!
 if git status --porcelain debian/changelog |grep --silent '^ M';
 then
     # Already updated since a release. So, the version should be there.
