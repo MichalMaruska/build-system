@@ -130,7 +130,8 @@ function get_new_version()
 
 # so, we decided for the Changelog update.
 # That obviously implies the Git-Tag, then, on the new commit.
-function generate_commit_changelog() {
+function generate_commit_changelog()
+{
 # fixme: this needs the git-last-tag:
     # todo:  either Major+1. 0
     # or  Major. Minor  + 1 !
@@ -145,6 +146,8 @@ function generate_commit_changelog() {
 	echo "Starting a new version $VERSION. Could have been explicitely specified with the -v option.">&2
 	# no need to echo... the user will see it?
     fi
+
+
     git-dch --release --auto --new-version="$VERSION"
 # "--debian-tag=$DISTRO/%(version)s"
 
