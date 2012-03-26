@@ -1,3 +1,16 @@
+mmc-build-system (2.3) release; urgency=low
+
+  * new low tools fro my original sketch
+  * distribution: rename & accept dir or changelog
+  * name/version accept dir or changelog
+  * snap:  polish DCH_OPTIONS vs DCH_FLAGS
+  * get_new_version: calculate the increase version _only_ when needed
+  * comments
+  * format
+  * comment
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 26 Mar 2012 23:30:32 +0200
+
 mmc-build-system (2.2) oneiric; urgency=low
 
   * snap: handle (better) starting a new version.
