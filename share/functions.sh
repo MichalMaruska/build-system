@@ -64,6 +64,7 @@ get_current_tag()
 	    #VERSION=${description#*/}
 	    #DISTRO=${description%/*}
 	else
+	    echo "cannot find a git tag? wrong format of: $description" >&2
 	    exit
 	fi
     fi
