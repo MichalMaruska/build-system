@@ -219,9 +219,10 @@ else
 fi
 
 
+# -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 git-buildpackage \
     --git-ignore-new \
-    --git-prebuild=pre-build-hook \
+    --git-prebuild=pre-build-hook -sa \
     $MGB_OPTIONS $MGB_COMMON_OPTIONS
 
 
