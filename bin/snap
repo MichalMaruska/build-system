@@ -24,7 +24,7 @@ DISTRO=$UNRELEASED
 typeset -a DCH_OPTIONS
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
-while getopts :upbhv: OPT; do
+while getopts :upbhv:d: OPT; do
     case $OPT in
 	h)
 	    usage
@@ -45,6 +45,9 @@ while getopts :upbhv: OPT; do
 	    ;;
 	v)
 	    DEFAULT_NEW_VERSION=$OPTARG
+	    ;;
+	d)
+	    DISTRO=$OPTARG
 	    ;;
 	*)
 	    usage
