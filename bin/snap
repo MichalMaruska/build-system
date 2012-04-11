@@ -75,11 +75,13 @@ then
     cp debian/changelog debian/changelog.save
 else
     # get the current version & increase. The major maybe.
-    load_distr_version_from_changelog
-    increase_version major
     if [ -z "${DEFAULT_NEW_VERSION:-}" ]
     then
 	echo "Starting a new version $VERSION. Could have been explicitely specified with the -v option.">&2
+	load_distr_version_from_changelog
+	increase_version major
+    else
+	:
     fi
     DCH_OPTIONS+=" --new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 fi
