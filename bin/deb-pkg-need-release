@@ -29,7 +29,8 @@ sub decide_if_obsolete
     # print $file, "\n";
     unless  (-f $file) {
 	print "non-existent file $file\n";
-	die("non-existent file " + $file);
+	# die("non-existent file " + $file);
+	return;
     }
 
     # |
@@ -95,7 +96,7 @@ sub decide_if_obsolete
 	    elsif ($ver ne $installed)
 	    {
 		if ($verbose) {
-		    print <STDERR>, "$name $pkg->{Name} DIFFERENT version\n";
+		    printf <STDERR>, "$name $pkg->{Name} DIFFERENT version: %s i: %s\n", $ver, $installed;
 		}
 	    }
 
@@ -127,16 +128,19 @@ sub decide_if_obsolete
 }
 
 
+# accept -h option!
+
 if (@ARGV < 1)
 {
+    decide_if_obsolete(".");
     print <STDERR>, "Usage: $0 bin-pkg-name ...\n";
     exit -1;
 }
 
-while (my $name = shift)
+while (my $dir = shift)
 {
-    chomp $name;
-    decide_if_obsolete($name);
+    chomp $dir;
+    decide_if_obsolete($dir);
 }
 
 
