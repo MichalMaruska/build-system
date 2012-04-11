@@ -24,6 +24,9 @@ DISTRO=$UNRELEASED
 typeset -a DCH_OPTIONS
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
+typeset -a ARGS
+ARGS=($@)
+
 while getopts :upbhv:d: OPT; do
     case $OPT in
 	h)
@@ -37,7 +40,7 @@ while getopts :upbhv:d: OPT; do
 	u|+u)
 	    # fixme: should use arrays
 	    # prepend!
-	    GBP_OPTIONS=(-u ${GBP_OPTIONS})
+	    GBP_OPTIONS+=-u ${GBP_OPTIONS}
 	    ;;
 	p|+p)
 	    # /usr/bin/
@@ -49,6 +52,17 @@ while getopts :upbhv:d: OPT; do
 	d)
 	    DISTRO=$OPTARG
 	    ;;
+	?)
+	    echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
+	    case $ARGS[$OPTIND] in
+		--git*)
+		    GBP_OPTIONS+=$ARGS[$OPTIND]
+		    OPTIND=$(expr $OPTIND + 1)
+		    ;;
+		*)
+		    echo "$OPTIND -> $ARGS[$OPTIND] $OPTARG"
+		    exit 3;;
+	    esac ;;
 	*)
 	    usage
 	    exit 2
