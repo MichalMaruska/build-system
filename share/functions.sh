@@ -65,7 +65,7 @@ get_current_tag()
 	    #DISTRO=${description%/*}
 	else
 	    echo "cannot find a git tag? wrong format of: $description" >&2
-	    exit
+	    return 1
 	fi
     fi
 
