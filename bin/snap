@@ -19,6 +19,8 @@ usage: ${0##*/} [+-upb} [--] ARGS...
 EOF
 }
 
+UNRELEASED=UNRELEASED
+DISTRO=$UNRELEASED
 typeset -a DCH_OPTIONS
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
@@ -105,7 +107,7 @@ INSTALL_IMMEDIATELY=y \
 git-buildpackage \
     --git-ignore-new $GBP_OPTIONS \
     --git-prebuild=pre-build-hook \
-    --git-dist=UNRELEASED \
+    --git-dist=$UNRELEASED \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=install-snapshot
 
