@@ -225,16 +225,17 @@ git-buildpackage \
     --git-prebuild=pre-build-hook -sa \
     $MGB_OPTIONS $MGB_COMMON_OPTIONS
 
-
-
+BUILD_AREA=../_build-area/
+# todo: do this in a git-postbuild=command!
+# and there use: GBP_BUILD_DIR
 if [ ${install_immediately-n} = "y" ]
 then
-    debi --debs-dir ../build-area/
+    debi --debs-dir $BUILD_AREA
 fi
 
 for target in $DPUT_TARGETS;
 do
-    debrelease --debs-dir=../build-area --dput $target
+    debrelease --debs-dir=$BUILD_AREA --dput $target
 done
 
 
@@ -252,7 +253,7 @@ mygit-buildpackage $MGB_COMMON_OPTIONS -S
 # Here we rely on the debian/changelog to confirm it.
 for target in $DPUT_TARGETS;
 do
-    debrelease -S --debs-dir=../build-area --dput $target
+    debrelease -S --debs-dir=$BUILD_AREA --dput $target
 done
 fi
 
