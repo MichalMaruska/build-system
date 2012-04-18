@@ -1,3 +1,9 @@
+mmc-build-system (2.4) release; urgency=low
+
+  * build_area renaming  & lot's of other changes
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 18 Apr 2012 14:06:21 +0200
+
 mmc-build-system (2.3) release; urgency=low
 
   * new low tools fro my original sketch
