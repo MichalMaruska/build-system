@@ -129,7 +129,8 @@ git-buildpackage \
     --git-dist=$UNRELEASED \
     --git-cleaner=/bin/true \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
-    --git-postbuild=install-snapshot
+    --git-postbuild=install-snapshot \
+    --source-option="--format='3.0 (native)'"
 
 
 # snap     fast, without any cow. Doesn't verify dependencies
