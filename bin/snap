@@ -127,6 +127,7 @@ git-buildpackage \
     --git-ignore-new $GBP_OPTIONS \
     --git-prebuild=pre-build-hook \
     --git-dist=$UNRELEASED \
+    --git-cleaner=/bin/true \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=install-snapshot
 
