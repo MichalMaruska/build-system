@@ -85,12 +85,18 @@ set -e
 # for release: --git-builder /usr/bin/git-pbuilder
 # dubious:
 
-# todo: but, maybe it WAS committed in the last commit & nothing has changed!
+changelog_needs_update() {
 if git status --porcelain debian/changelog |grep --silent '^ M';
 then
-    # Already updated since a release. So, the version should be there.
-    cp debian/changelog debian/changelog.save
+    return 0;
 else
+    return 1;
+fi
+}
+
+# todo: but, maybe it WAS committed in the last commit & nothing has changed!
+if changelog_needs_update;
+then
     # get the current version & increase. The major maybe.
     if [ -z "${DEFAULT_NEW_VERSION:-}" ]
     then
@@ -101,9 +107,14 @@ else
 	:
     fi
     DCH_OPTIONS+=" --new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
+
+    git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
+else
+    # Already updated since a release. So, the version should be there.
+    cp -v debian/changelog debian/changelog.save
 fi
 
-git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
+
 
 if false;
 then
