@@ -16,6 +16,7 @@ usage: ${0##*/} [+-upb} [--] ARGS...
     -b  ... ignore branch
     -b  ... ignore branch
     -v  ... new version
+    -t  ... don't create the (ORIG) tarball
 EOF
 }
 
@@ -27,7 +28,7 @@ GBP_OPTIONS=()
 typeset -a ARGS
 ARGS=($@)
 
-while getopts :upbhv:d: OPT; do
+while getopts :upbhv:d:t OPT; do
     case $OPT in
 	h)
 	    usage
@@ -51,6 +52,11 @@ while getopts :upbhv:d: OPT; do
 	    ;;
 	d)
 	    DISTRO=$OPTARG
+	    ;;
+	t)
+	    # still  dpkg-buildpackage will call dpkg-source --before-build
+	    # which does not do harm, though.
+	    GBP_OPTIONS+=(--git-no-create-orig -b)
 	    ;;
 	?)
 	    echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
