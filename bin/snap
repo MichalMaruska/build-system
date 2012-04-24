@@ -14,7 +14,7 @@ function usage(){
 cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
     -b  ... ignore branch
-    -b  ... ignore branch
+    -u  ... do not sign!
     -v  ... new version
     -t  ... don't create the (ORIG) tarball
 EOF
@@ -41,7 +41,7 @@ while getopts :upbhv:d:t OPT; do
 	u|+u)
 	    # fixme: should use arrays
 	    # prepend!
-	    GBP_OPTIONS+=-u ${GBP_OPTIONS}
+	    GBP_OPTIONS+=-u
 	    ;;
 	p|+p)
 	    # /usr/bin/
