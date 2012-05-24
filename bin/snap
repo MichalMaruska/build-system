@@ -1,7 +1,11 @@
-#! /bin/zsh -xeu
+#! /bin/zsh -eu
 
 # setop pipefail
 
+
+if [ -n "${DEBUG:-}" ]; then
+    set -x
+fi
 
 # see the previous tag for the Version.
 # unless the debian/changelog contains the development
