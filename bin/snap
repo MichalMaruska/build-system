@@ -131,10 +131,12 @@ then
 
     git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
 else
-    # Already updated since a release. So, the version should be there.
-    cp -v debian/changelog debian/changelog.save
+    # cp -v debian/changelog debian/changelog.save
+    # Already updated since a release (fixme?). So, the version should be there.
+    git-dch --auto --snapshot
 fi
 
+# the changelog will be copied! (after the git checkout)
 
 
 if false;
