@@ -95,17 +95,28 @@ set -e
 # for release: --git-builder /usr/bin/git-pbuilder
 # dubious:
 
-changelog_needs_update() {
+# Return 0 iff needs update, 1 if does not!
+changelog_needs_new_section() {
 if git status --porcelain debian/changelog |grep --silent '^ M';
 then
-    return 0;
+    return 1;
+elif git status --porcelain  |grep --silent '^ M';
+    # something changed, (but _not_ debian/changelog)
+then
+    return 0
+elif git diff --name-only HEAD~1 | grep 'debian/changelog'
+    # so nothing changed, was it changed in the previous commit?
+then
+    return 0
 else
     return 1;
 fi
 }
 
+
+
 # todo: but, maybe it WAS committed in the last commit & nothing has changed!
-if changelog_needs_update;
+if changelog_needs_new_section;
 then
     # get the current version & increase. The major maybe.
     if [ -z "${DEFAULT_NEW_VERSION:-}" ]
