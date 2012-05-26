@@ -54,7 +54,7 @@ get_current_tag()
 	    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^[:digit:]].*)$" ]]
 	    then
 		VERSION="$match[1].$match[2]"
-		cecho red "Discarding $match[3]"
+		if [ -n $DEBUG ]; then cecho red "Discarding $match[3] from the TAG";fi
 	    fi
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
@@ -69,7 +69,7 @@ get_current_tag()
 	fi
     fi
 
-    cecho yellow $VERSION ${GIT_OFFSET:-} $DISTRO >&2
+    cecho yellow "version: $VERSION git-offset: ${GIT_OFFSET:-} distro: $DISTRO" >&2
 }
 
 load_distr_version_from_changelog()
