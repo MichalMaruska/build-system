@@ -152,8 +152,7 @@ function generate_commit_changelog()
 	# no need to echo... the user will see it?
     fi
 
-
-    git-dch --release --auto --new-version="$VERSION"
+    git-dch --release --auto --new-version="$VERSION" --distribution $DISTRO
 # "--debian-tag=$DISTRO/%(version)s"
 
     if git status --porcelain debian/changelog| grep '^ M';
