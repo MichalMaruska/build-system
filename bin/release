@@ -1,4 +1,9 @@
-#! /bin/zsh -euxf
+#! /bin/zsh -euf
+
+if [ -n "${DEBUG:-}" ]; then
+    set -x
+fi
+
 
 source /usr/share/build-system/functions.sh
 
