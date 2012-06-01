@@ -155,7 +155,7 @@ function generate_commit_changelog()
     git-dch --release --auto --new-version="$VERSION" --distribution $DISTRO
 # "--debian-tag=$DISTRO/%(version)s"
 
-    if git status --porcelain debian/changelog| grep '^ M';
+    if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
     then
 	git add debian/changelog;
 	git commit -m release
@@ -170,11 +170,11 @@ function generate_commit_changelog()
 # if no debian/changelog or not in Git ->
 
 # if status OR not updated!
-if git status --porcelain debian/changelog | grep '^ M';
+if git status --porcelain debian/changelog | grep '^ M' > /dev/null
 then
-    cecho yellow "debian/changelog is NOT commited, so review it!"
+    cecho yellow "debian/changelog is dirty, so let's review it"
     generate_commit_changelog
-elif ! git diff HEAD~1 --name-status debian/changelog | grep '^M';
+elif ! git diff HEAD~1 --name-status debian/changelog | grep '^M' > /dev/null
 then
     cecho yellow "debian/changelog is NOT up-to-date"
     generate_commit_changelog
