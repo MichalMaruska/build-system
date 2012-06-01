@@ -239,12 +239,17 @@ fi
 
 for target in $DPUT_TARGETS;
 do
-    debrelease --debs-dir=$BUILD_AREA --dput $target
+    if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
+	(echo "Failed to upload to $target"; echo )>&2
+    fi
 done
 
 
 # Source
 # -S is handed over.... git-buildpackage -> debuild -> dpkg-buildpackage.
+
+
+
 
 if false;
 then
@@ -257,7 +262,9 @@ mygit-buildpackage $GBP_OPTIONS -S
 # Here we rely on the debian/changelog to confirm it.
 for target in $DPUT_TARGETS;
 do
-    debrelease -S --debs-dir=$BUILD_AREA --dput $target
+    if ! debrelease -S --debs-dir=$BUILD_AREA --dput $target; then
+	(echo "Failed to upload to $target"; echo )>&2
+    fi
 done
 fi
 
