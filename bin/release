@@ -25,8 +25,8 @@ DISTRO=release
 
 typeset -a DPUT_TARGETS
 DPUT_TARGETS=()
-typeset -a MGB_COMMON_OPTIONS
-MGB_COMMON_OPTIONS=()
+typeset -a GBP_OPTIONS
+GBP_OPTIONS=()
 FORCE=n
 # ARCH
 
@@ -50,7 +50,7 @@ while getopts :rft:a:p:iIv: OPT; do
 	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
 	    ;;
 	i)
-	    MGB_COMMON_OPTIONS=("-i")
+	    GBP_OPTIONS=("-i")
 	    ;;
 	I)
 	    install_immediately="y"
@@ -227,7 +227,7 @@ fi
 git-buildpackage \
     --git-ignore-new \
     --git-prebuild=pre-build-hook -sa \
-    $MGB_OPTIONS $MGB_COMMON_OPTIONS
+    $MGB_OPTIONS $GBP_OPTIONS
 
 BUILD_AREA=../_build-area/
 # todo: do this in a git-postbuild=command!
@@ -251,7 +251,7 @@ then
 
 # again  debian/control   Could be done Once
 # again ./auto  Yes
-mygit-buildpackage $MGB_COMMON_OPTIONS -S
+mygit-buildpackage $GBP_OPTIONS -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
