@@ -32,19 +32,30 @@ FORCE=n
 
 step=major
 install_immediately="n"
-while getopts :rft:a:p:iIv: OPT; do
+while getopts :rfbtT:a:p:iIv: OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
+	b)
+	    # ignore-branch
+	    DCH_OPTIONS=("--ignore-branch")
+	    GBP_OPTIONS+="--git-ignore-branch"
+	    ;;
+
 	f)
 	    FORCE=y
 	    ;;
 	r|+r)
 	    "$OPTARG"
 	    ;;
-	t|+t)
+	T|+T)
 	    # git-tag
 	    "$OPTARG"
+	    ;;
+	t)
+	    # still  dpkg-buildpackage will call dpkg-source --before-build
+	    # which does not do harm, though.
+	    GBP_OPTIONS+=(--git-no-create-orig -b)
 	    ;;
 	p)
 	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
