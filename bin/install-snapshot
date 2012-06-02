@@ -1,9 +1,13 @@
-#! /bin/bash -eux
+#! /bin/bash -eu
 
 # This is just a wrapper around dput.
 
 # Given as $1 the changes file
 # dput it to all in MBS_SNAP_TARGETS.
+
+if [ -n "${DEBUG:-}" ]; then
+    set -x
+fi
 
 
 
