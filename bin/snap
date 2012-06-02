@@ -133,7 +133,7 @@ then
 else
     # cp -v debian/changelog debian/changelog.save
     # Already updated since a release (fixme?). So, the version should be there.
-    git-dch --auto --snapshot
+    git-dch --auto --snapshot $DCH_OPTIONS
 fi
 
 # the changelog will be copied! (after the git checkout)
