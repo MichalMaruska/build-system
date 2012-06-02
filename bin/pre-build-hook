@@ -15,8 +15,7 @@ then
     generate-debian-control
 fi
 
-
-generate-snapshot-changelog
+copy-snapshot-changelog
 
 if [ -e auto ]
 then

@@ -1,5 +1,6 @@
 #! /bin/bash -eu
 
+# fixme: rename to copy-
 
 # work-around for git-dch not being able to write to a specific file
 
@@ -8,6 +9,7 @@
 
 local_dir=$(pwd)
 
+# pushd
 cd $GBP_GIT_DIR/..
 
 # cp debian/changelog debian/changelog.save
@@ -19,4 +21,6 @@ cd $GBP_GIT_DIR/..
 cp debian/changelog $local_dir/debian/changelog
 # mv debian/changelog.save debian/changelog
 
+
+# popd
 cd $local_dir
