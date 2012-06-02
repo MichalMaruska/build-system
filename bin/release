@@ -282,3 +282,7 @@ fi
 
 # --git-builder /usr/bin/git-pbuilder
 
+
+echo
+echo "If you want to install:"
+echo "debi --debs-dir $BUILD_AREA"
