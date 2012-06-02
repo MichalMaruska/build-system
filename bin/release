@@ -163,6 +163,7 @@ function generate_commit_changelog()
 	# no need to echo... the user will see it?
     fi
 
+    DISTRO=release
     git-dch --release --auto --new-version="$VERSION" --distribution $DISTRO
 # "--debian-tag=$DISTRO/%(version)s"
 
