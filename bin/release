@@ -144,13 +144,10 @@ function get_new_version()
 
 
 
-# so, we decided for the Changelog update.
 # That obviously implies the Git-Tag, then, on the new commit.
 function generate_commit_changelog()
 {
-# fixme: this needs the git-last-tag:
-    # todo:  either Major+1. 0
-    # or  Major. Minor  + 1 !
+    # fixme: this needs the git-last-tag:
 
     if [ -n "${USER_VERSION:-}" ]
     then
@@ -170,6 +167,7 @@ function generate_commit_changelog()
     if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
     then
 	git add debian/changelog;
+	# get the version and "release $VERSION"
 	git commit -m release
     fi
 }
@@ -249,6 +247,9 @@ then
     debi --debs-dir $BUILD_AREA
 fi
 
+
+
+###  put into Archives:
 for target in $DPUT_TARGETS;
 do
     if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
@@ -257,30 +258,34 @@ do
 done
 
 
-# Source
+
+
+
+#### Source package:
+
 # -S is handed over.... git-buildpackage -> debuild -> dpkg-buildpackage.
-
-
-
-
 if false;
 then
 
 # again  debian/control   Could be done Once
 # again ./auto  Yes
-mygit-buildpackage $GBP_OPTIONS -S
+    mygit-buildpackage $GBP_OPTIONS -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
-for target in $DPUT_TARGETS;
-do
-    if ! debrelease -S --debs-dir=$BUILD_AREA --dput $target; then
-	(echo "Failed to upload to $target"; echo )>&2
-    fi
-done
+    for target in $DPUT_TARGETS;
+    do
+	if ! debrelease -S --debs-dir=$BUILD_AREA --dput $target; then
+	    (echo "Failed to upload to $target"; echo )>&2
+	fi
+    done
 fi
 
+
+
+# todo:
 # --git-builder /usr/bin/git-pbuilder
+
 
 
 echo

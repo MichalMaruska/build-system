@@ -1,7 +1,6 @@
 #! /bin/zsh -eu
 
-# setop pipefail
-
+# Bash can: setop pipefail
 
 if [ -n "${DEBUG:-}" ]; then
     set -x
@@ -24,8 +23,8 @@ usage: ${0##*/} [+-upb} [--] ARGS...
 EOF
 }
 
-UNRELEASED=UNRELEASED
-DISTRO=$UNRELEASED
+DISTRIBUTION=UNRELEASED
+DISTRO=$DISTRIBUTION
 typeset -a DCH_OPTIONS
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
@@ -94,19 +93,17 @@ set -e
 
 # for release: --git-builder /usr/bin/git-pbuilder
 # dubious:
+# todo: but, maybe it WAS committed in the last commit & nothing has changed!
 
 # Return 0 iff needs update, 1 if does not!
 changelog_needs_new_section() {
-if git status --porcelain debian/changelog |grep --silent '^ M';
-then
+if git status --porcelain debian/changelog |grep --silent '^ M'; then
     return 1;
-elif git status --porcelain  |grep --silent '^ M';
+elif git status --porcelain  |grep --silent '^ M'; then
     # something changed, (but _not_ debian/changelog)
-then
     return 0
-elif git diff --name-only HEAD~1 | grep 'debian/changelog'
+elif git diff --name-only HEAD~1 | grep 'debian/changelog'; then
     # so nothing changed, was it changed in the previous commit?
-then
     return 0
 else
     return 1;
@@ -115,20 +112,26 @@ fi
 
 
 
-# todo: but, maybe it WAS committed in the last commit & nothing has changed!
+# The changelog is updated inside the Git repo.
+# After the git checkout, it will be copied.
 if changelog_needs_new_section;
 then
     # get the current version & increase. The major maybe.
     if [ -z "${DEFAULT_NEW_VERSION:-}" ]
     then
-	echo "Starting a new version $VERSION. Could have been explicitely specified with the -v option.">&2
+	(echo "Starting a new version $VERSION."
+	 echo "Could have been explicitely specified with the -v option." ) >&2
 	load_distr_version_from_changelog
 	increase_version major
     else
 	:
     fi
-    DCH_OPTIONS+=" --new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 
+    # This is fishy:  should be added only on git-dch invocation.
+    # not _forever_ into the variable!
+    DCH_OPTIONS+="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
+
+    # Do I have to provide the previous GIT TAG?
     git-dch --auto --snapshot "--debian-tag=$DISTRO/%(version)s" $DCH_OPTIONS
 else
     # cp -v debian/changelog debian/changelog.save
@@ -136,32 +139,21 @@ else
     git-dch --auto --snapshot $DCH_OPTIONS
 fi
 
-# the changelog will be copied! (after the git checkout)
 
 
-if false;
-then
-    git-dch --auto --snapshot
-# exit 0
-    git add debian/changelog; git commit -m snapshot-build
-fi
 
 
 cecho red "Starting git-buildpackage, with hooks!"
-#
-# DIST=oneiric  ARCH=amd64
+
 # --git-sign-tags
-
-
 # --color=auto
 # lsb_release -c
-# --git-dist=oneiric
 INSTALL_IMMEDIATELY=y \
 git-buildpackage \
     --git-ignore-new $GBP_OPTIONS \
     --git-prebuild=pre-build-hook \
-    --git-dist=$UNRELEASED \
     --git-cleaner=/bin/true \
+    --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=install-snapshot \
     --source-option="--format='3.0 (native)'"
