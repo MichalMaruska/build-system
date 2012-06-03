@@ -161,7 +161,9 @@ function generate_commit_changelog()
     fi
 
     DISTRO=release
+    set -x
     git-dch --release --auto --new-version="$VERSION" --distribution $DISTRO
+    set +x
 # "--debian-tag=$DISTRO/%(version)s"
 
     if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
