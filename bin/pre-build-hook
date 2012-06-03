@@ -1,6 +1,7 @@
 #! /bin/bash -eu
 
 
+# to-be-generated
 # function debian_control_automatic() {
 #     count1=$(git ls-files debian/control.in|wc -c)
 
@@ -10,13 +11,14 @@
 
 
 
-if [ ! -e ./debian/control ]  # ;;debian_control_automatic;
+if [ ! -e debian/control ]
 then
     generate-debian-control
 fi
 
 copy-snapshot-changelog
 
+# Generate stuff for  ./configure
 if [ -e auto ]
 then
     ./auto

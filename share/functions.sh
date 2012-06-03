@@ -4,7 +4,7 @@
 
 
 
-# I want to detect a current tag & reuse it, ie. not recreate it.
+# I want to detect a current git tag & reuse it, ie. not recreate it.
 
 ## return 0 & set the variables if successul.
 # variables:
@@ -54,7 +54,9 @@ get_current_tag()
 	    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^[:digit:]].*)$" ]]
 	    then
 		VERSION="$match[1].$match[2]"
-		if [ -n $DEBUG ]; then cecho red "Discarding $match[3] from the TAG";fi
+		if [ -n $DEBUG ]; then
+		    cecho red "Discarding $match[3] from the TAG";
+		fi
 	    fi
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
@@ -79,6 +81,7 @@ load_distr_version_from_changelog()
 
     # conditionally remove. but this
     # should not remove a middle  a.b.c.
+    # 1.2ubuntu ->  1.2
     if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^.[:digit:]].*)$" ]]
     then
 	VERSION="$match[1].$match[2]"
@@ -87,16 +90,24 @@ load_distr_version_from_changelog()
 }
 
 
+# in VERSION variable.
 increase_version()
 {
     step=$1
 
+    # it can be: (from git)
+    # a.b.c~git-offset
+    if [[ $VERSION =~ "(.*)~.*$" ]]
+    then
+	VERSION="$match[1]"
+    fi
     major=${VERSION%%.*}
     minor=${VERSION##*.}
 
     tail=.${VERSION#*.}
     middle=${tail%.*}
 
+    echo "major=$major  minor=$minor"
     cecho red "increasing version by $step"
     if [ step = "major" ]
     then
