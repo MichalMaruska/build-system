@@ -148,6 +148,8 @@ cecho red "Starting git-buildpackage, with hooks!"
 # --git-sign-tags
 # --color=auto
 # lsb_release -c
+
+set -x
 INSTALL_IMMEDIATELY=y \
 git-buildpackage \
     --git-ignore-new $GBP_OPTIONS \
@@ -156,7 +158,9 @@ git-buildpackage \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=install-snapshot \
-    --source-option="--format='3.0 (native)'"
+    --source-option="--format=\"3.0 (native)\""
+
+set +x
 
 
 # snap     fast, without any cow. Doesn't verify dependencies
