@@ -1,3 +1,21 @@
+mmc-build-system (2.5) release; urgency=low
+
+  * release(1): unification MGB_COMMON_OPTIONS -> GBP_OPTIONS
+  * release:  deliver to all Repos. Skip over errors.
+  * discard  output of Grep
+  * release:  -b -t (-T) options
+  * use DCH_OPTIONS always
+  * release  DISTRO=release
+  * release:  inform on next possible steps (to install)
+  * copy-snapshot-changelog (renamed from create-*)
+  * make -x optional (intall-snapshot)
+  * reformat: comments
+  * be (always) verbose about the git-buildpackage invocation
+  * comments + more fixing the VERSION string
+  * comment
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 03 Jun 2012 13:23:05 +0200
+
 mmc-build-system (2.4) release; urgency=low
 
   * build_area renaming  & lot's of other changes
