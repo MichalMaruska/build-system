@@ -61,7 +61,7 @@ while getopts :rfbtT:a:p:iIv: OPT; do
 	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
 	    ;;
 	i)
-	    GBP_OPTIONS=("-i")
+	    GBP_OPTIONS+=("-i")
 	    ;;
 	I)
 	    install_immediately="y"
