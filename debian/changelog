@@ -1,3 +1,15 @@
+mmc-build-system (2.6) release; urgency=low
+
+  * verbose about Uploading
+  * verbose about git-dch
+  * shell bug in test []
+  * post-tag hook: push the tag & also the branch.
+  * fix GBP_OPTIONS
+  * use DCH_OPTIONS
+  * (release:) Version is not specified on the CMDLine. Pick it up inside the editor.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 16 Jun 2012 15:39:38 +0200
+
 mmc-build-system (2.5) release; urgency=low
 
   * release(1): unification MGB_COMMON_OPTIONS -> GBP_OPTIONS
