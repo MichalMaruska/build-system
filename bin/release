@@ -239,6 +239,7 @@ fi
 git-buildpackage \
     --git-ignore-new \
     --git-prebuild=pre-build-hook -sa \
+    --git-posttag=post-tag-hook \
     $MGB_OPTIONS $GBP_OPTIONS
 
 BUILD_AREA=../_build-area/

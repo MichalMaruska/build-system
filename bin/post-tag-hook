@@ -1,0 +1,9 @@
+#! /bin/bash -eu
+
+CENTRALREPO=maruska
+
+git push $CENTRALREPO $GBP_TAG
+git push $CENTRALREPO $GBP_BRANCH
+#GBP_BRANCH
+#GBP_SHA1
+
