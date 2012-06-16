@@ -27,6 +27,8 @@ typeset -a DPUT_TARGETS
 DPUT_TARGETS=()
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
+DCH_OPTIONS=()
+
 FORCE=n
 # ARCH
 
@@ -162,7 +164,7 @@ function generate_commit_changelog()
 
     DISTRO=release
     set -x
-    git-dch --release --auto --new-version="$VERSION" --distribution $DISTRO
+    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" --distribution $DISTRO
     set +x
 # "--debian-tag=$DISTRO/%(version)s"
 
