@@ -2,6 +2,9 @@
 
 CENTRALREPO=maruska
 
+: ${GBP_TAG=$(git describe)}
+: ${GBP_BRANCH=$(git name-rev --name-only  HEAD)}
+
 git push $CENTRALREPO $GBP_TAG
 git push $CENTRALREPO $GBP_BRANCH
 #GBP_BRANCH
