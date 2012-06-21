@@ -154,7 +154,7 @@ git-buildpackage \
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
-    --git-postbuild=install-snapshot \
+    --git-postbuild=install-dput-snapshot \
     --source-option="--format=\"3.0 (native)\""
 
 set +x
