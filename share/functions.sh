@@ -3,6 +3,13 @@
 # Common functions for the scripts
 
 
+possibly_trace()
+{
+    if [ -n "${DEBUG:-}" ]; then
+	set -x
+    fi
+}
+
 
 # I want to detect a current git tag & reuse it, ie. not recreate it.
 

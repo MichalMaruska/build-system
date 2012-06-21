@@ -2,16 +2,13 @@
 
 # Bash can: setop pipefail
 
-if [ -n "${DEBUG:-}" ]; then
-    set -x
-fi
-
 # see the previous tag for the Version.
 # unless the debian/changelog contains the development
 # version already.
 
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
+possibly_trace
 
 function usage(){
 cat >&2 <<EOF

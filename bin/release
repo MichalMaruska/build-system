@@ -1,11 +1,8 @@
 #! /bin/zsh -euf
 
-if [ -n "${DEBUG:-}" ]; then
-    set -x
-fi
-
-
 source /usr/share/build-system/functions.sh
+possibly_trace
+
 
 function usage()
 {
