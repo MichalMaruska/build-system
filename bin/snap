@@ -146,8 +146,11 @@ cecho red "Starting git-buildpackage, with hooks!"
 # --color=auto
 # lsb_release -c
 
+export DPUT_OPTIONS=""
+export DPUT_TARGETS=${MBS_SNAP_TARGETS-local}
+export INSTALL_IMMEDIATELY=y
+
 set -x
-INSTALL_IMMEDIATELY=y \
 git-buildpackage \
     --git-ignore-new $GBP_OPTIONS \
     --git-prebuild=pre-build-hook \

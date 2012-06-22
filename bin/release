@@ -17,8 +17,7 @@ EOF
 }
 
 # options:
-
-DISTRO=release
+DISTRO=${MBS_DISTRO:-release}
 
 typeset -a DPUT_TARGETS
 DPUT_TARGETS=()
@@ -30,7 +29,7 @@ FORCE=n
 # ARCH
 
 step=major
-install_immediately="n"
+INSTALL_IMMEDIATELY="n"
 while getopts :rfbtT:a:p:iIv: OPT; do
     case $OPT in
 	a)
@@ -59,14 +58,16 @@ while getopts :rfbtT:a:p:iIv: OPT; do
 	p)
 	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
 	    ;;
+
+	##  which is?  install the package?
 	i)
 	    GBP_OPTIONS+=("-i")
 	    ;;
 	I)
-	    install_immediately="y"
+	    INSTALL_IMMEDIATELY="y"
 	    ;;
 	+I)
-	    install_immediately="n"
+	    INSTALL_IMMEDIATELY="n"
 	    ;;
 	v)
 	    USER_VERSION=$OPTARG
@@ -238,26 +239,8 @@ git-buildpackage \
     --git-ignore-new \
     --git-prebuild=pre-build-hook -sa \
     --git-posttag=post-tag-hook \
+    --git-postbuild=install-dput-snapshot \
     $MGB_OPTIONS $GBP_OPTIONS
-
-BUILD_AREA=../_build-area/
-# todo: do this in a git-postbuild=command!
-# and there use: GBP_BUILD_DIR
-if [ ${install_immediately-n} = "y" ]
-then
-    debi --debs-dir $BUILD_AREA
-fi
-
-
-
-###  put into Archives:
-for target in $DPUT_TARGETS;
-do
-    cecho blue "Uploading to $target"
-    if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
-	(echo "Failed to upload to $target"; echo )>&2
-    fi
-done
 
 
 
@@ -287,9 +270,3 @@ fi
 
 # todo:
 # --git-builder /usr/bin/git-pbuilder
-
-
-
-echo
-echo "If you want to install:"
-echo "debi --debs-dir $BUILD_AREA"

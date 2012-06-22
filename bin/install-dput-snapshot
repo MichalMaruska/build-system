@@ -1,13 +1,23 @@
 #! /bin/bash -eu
 
-# This is just a wrapper around dput.
+# This is just a wrapper around debi & dput (or reprepro)
+
+# Normally invoked as a post-build hook by git-buildpackage -- receives variables see bellow
+# via `env' variables, it can be tuned:
+# DPUT_TARGETS & DPUT_OPTIONS
+# INSTALL_IMMEDIATELY
+
+
+# When invoked manually, we use:
+# MBS_SNAP_TARGETS
 
 # Given as $1 the changes file
-# dput it to all in MBS_SNAP_TARGETS.
+# dput it to all in 
 
-if [ -n "${DEBUG:-}" ]; then
-    set -x
-fi
+#source @@SHAREDIR@@/functions
+source /usr/share/build-system/functions.sh
+possibly_trace
+
 
 
 function usage(){
@@ -57,19 +67,34 @@ then
     reprepro --ignore=wrongdistribution  -V \
         include UNRELEASED $GBP_CHANGES_FILE
 else
-    for TARGET in ${MBS_SNAP_TARGETS-local}
+    for TARGET in ${DPUT_TARGETS}
     do
 	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
     done
 fi
 
 
-
+###  put into Archives:
+for target in $;
+do
+    cecho blue "Uploading to $target"
+    if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
+	(echo "Failed to upload to $target"; echo )>&2
+    fi
+done
 
 
 # this is even faster:
 if [ ${INSTALL_IMMEDIATELY:-n} = "y" ]
 then
     cecho green "installing immediately $GBP_CHANGES_FILE"
-    debi --upgrade $GBP_CHANGES_FILE
+    if [ -n "$GBP_CHANGES_FILE" ]; then
+	debi --upgrade $GBP_CHANGES_FILE
+    else
+	debi --debs-dir $BUILD_AREA
+else
+    echo
+    echo "** If you want to install:"
+    # cecho gray:
+    echo "debi --debs-dir $BUILD_AREA"
 fi
