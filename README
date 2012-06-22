@@ -1,5 +1,15 @@
 
 
+* Relevant Variables (for your env)
+M Build system:
+
+REPREPRO_BASE_DIR
+MBS_TARGETS
+MBS_SNAP_TARGETS
+MBS_DISTRO
+
+
+
 * Background:
 
 git-dch passes (not a simple mapping) only *some* params to
