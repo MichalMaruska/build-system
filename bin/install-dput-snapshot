@@ -76,11 +76,11 @@ fi
 
 for TARGET in ${DPUT_TARGETS:-}
 do
-    cecho blue "Uploading to $target"
+    cecho blue "Uploading to $TARGET"
 
     if [ -z ${GBP_CHANGES_FILE-} ]; then
-	if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
-	    (echo "Failed to upload to $target"; echo )>&2
+	if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
+	    (echo "Failed to upload to $TARGET"; echo )>&2
 	fi
     else
 	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
