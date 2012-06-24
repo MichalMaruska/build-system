@@ -70,22 +70,23 @@ then
     # --basedir ~/reprepro/
     reprepro --ignore=wrongdistribution  -V \
         include UNRELEASED $GBP_CHANGES_FILE
-else
-    for TARGET in ${DPUT_TARGETS:-}
-    do
-	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
-    done
 fi
 
 
-###  put into Archives:
-for target in $;
+
+for TARGET in ${DPUT_TARGETS:-}
 do
     cecho blue "Uploading to $target"
-    if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
-	(echo "Failed to upload to $target"; echo )>&2
+
+    if [ -z ${GBP_CHANGES_FILE-} ]; then
+	if ! debrelease --debs-dir=$BUILD_AREA --dput $target; then
+	    (echo "Failed to upload to $target"; echo )>&2
+	fi
+    else
+	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
     fi
 done
+
 
 
 # this is even faster:
