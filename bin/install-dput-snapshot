@@ -62,9 +62,9 @@ fi
 
 
 # $GBP_BUILD_DIR is the build directory: I don't need it.
-cecho green "putting into repositories: $GBP_CHANGES_FILE"
+cecho green "putting into repositories: ${GBP_CHANGES_FILE-}"
 
-if [ -n "${REPREPRO_BASE_DIR:-}" ]
+if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE-}" ]
 then
     # fixme: snapshot -> not a big deal if I still get the dist. wrong?
     # --basedir ~/reprepro/
@@ -91,8 +91,8 @@ done
 # this is even faster:
 if [ ${INSTALL_IMMEDIATELY:-n} = "y" ]
 then
-    cecho green "installing immediately $GBP_CHANGES_FILE"
-    if [ -n "$GBP_CHANGES_FILE" ]; then
+    cecho green "installing immediately ${GBP_CHANGES_FILE-}"
+    if [ -n "${GBP_CHANGES_FILE-}" ]; then
 	debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
     else
 	debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
