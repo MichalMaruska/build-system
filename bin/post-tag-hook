@@ -1,6 +1,6 @@
 #! /bin/bash -eu
 
-CENTRALREPO=maruska
+: ${CENTRALREPO=origin}
 
 : ${GBP_TAG=$(git describe)}
 : ${GBP_BRANCH=$(git name-rev --name-only  HEAD)}
