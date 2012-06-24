@@ -71,7 +71,7 @@ then
     reprepro --ignore=wrongdistribution  -V \
         include UNRELEASED $GBP_CHANGES_FILE
 else
-    for TARGET in ${DPUT_TARGETS}
+    for TARGET in ${DPUT_TARGETS:-}
     do
 	dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE
     done
