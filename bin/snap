@@ -29,19 +29,30 @@ DISTRIBUTION=UNRELEASED
 DISTRO=$DISTRIBUTION
 typeset -a DCH_OPTIONS
 typeset -a GBP_OPTIONS
+# default:
+ignore_branch=y
+create_tarball=n
+do_sign=y
 GBP_OPTIONS=()
 typeset -a ARGS
 ARGS=($@)
 
-while getopts :upibhv:d:t OPT; do
+# A `leading' `:' in OPTSTRING causes getopts to store the letter of
+# any invalid option in OPTARG, and to set NAME to `?' for an
+
+# If a letter is `followed' by a `:', that option requires an argument.
+# The options can be
+while getopts :uspibhv:d:t OPT; do
     case $OPT in
 	h)
 	    usage
 	    exit 0;;
+	## how to invert:  i.e. remove from a Zsh array?
 	b)
-	    # ignore-branch
-	    DCH_OPTIONS=("--ignore-branch")
-	    GBP_OPTIONS+="--git-ignore-branch"
+	    ignore_branch=n
+	    ;;
+	s)
+	    do_sign=y
 	    ;;
 	u|+u)
 	    # fixme: should use arrays
@@ -70,7 +81,7 @@ while getopts :upibhv:d:t OPT; do
 	t)
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
 	    # which does not do harm, though.
-	    GBP_OPTIONS+=(--git-no-create-orig -b)
+	    create_tarball=y
 	    ;;
 	?)
 	    echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
@@ -90,6 +101,20 @@ while getopts :upibhv:d:t OPT; do
 done
 shift $(( OPTIND - 1 ))
 OPTIND=1
+
+
+if [ $ignore_branch = "y" ];then
+    DCH_OPTIONS+=("--ignore-branch")
+    GBP_OPTIONS+=("--git-ignore-branch")
+fi
+
+if [ $create_tarball = "n" ]; then
+    GBP_OPTIONS+=(--git-no-create-orig -b)
+fi
+
+if [ $do_sign = "n" ]; then
+    GBP_OPTIONS+=(-us -uc)
+fi
 
 
 set +e
