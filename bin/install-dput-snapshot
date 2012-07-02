@@ -1,4 +1,4 @@
-#! /bin/bash -eu
+#! /usr/bin/zsh -f
 
 # This is just a wrapper around debi & dput (or reprepro)
 
