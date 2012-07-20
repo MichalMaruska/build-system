@@ -35,10 +35,11 @@ use open ':utf8';  # changelogs are written with UTF-8 encoding
 use filetest 'access';  # use access rather than stat for -w
 # for checking whether user names are valid and making format() behave
 use Encode qw/decode_utf8 encode_utf8/;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Copy;
 use File::Basename;
 use Cwd;
+use Dpkg::Compression;
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
 
@@ -94,7 +95,7 @@ Options:
          editor opened.  Otherwise, the original changelog will not be
          modified. (default)
   --no-force-save-on-release
-         Do not do so. Note that a dummy changelog entry made be supplied
+         Do not do so. Note that a dummy changelog entry may be supplied
          in order to achieve the same effect - e.g. $progname --release ""
          The entry will not be added to the changelog but its presence will
          suppress the editor
@@ -206,7 +207,7 @@ EOF
 
 sub version () {
     print <<"EOF";
-This is $progname, from the Debian devscripts package, version 2.11.1ubuntu3.1
+This is $progname, from the Debian devscripts package, version 2.11.6ubuntu1.3
 This code is copyright 1999-2003 by Julian Gilbey, all rights reserved.
 Based on code by Christoph Lameter.
 This program comes with ABSOLUTELY NO WARRANTY.
@@ -574,7 +575,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
 	unless exists $changelog{'Distribution'};
     if ($distributor eq 'Ubuntu') {
 	# In Ubuntu uploads should go to precise
-	$DISTRIBUTION = 'oneiric';
+	$DISTRIBUTION = 'precise';
     } else {
 	$DISTRIBUTION=$changelog{'Distribution'};
     }
@@ -1305,7 +1306,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		    $distribution = $dist_indicator;
 		} else {
 		    if ($distributor eq 'Ubuntu') {
-			$distribution = $opt_D || "oneiric";
+			$distribution = $opt_D || "precise";
 		    } else {
 			$distribution = $opt_D || $lastdist || "unstable";
 		    }
@@ -1513,7 +1514,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	}
 	# And check whether a new orig tarball exists
 	my @origs = glob("../$PACKAGE\_$new_uversion.*");
-	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma|xz)$/ } @origs;
+	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.$compression_re_file_ext$/ } @origs;
 	if ($num_origs == 0) {
 	    warn "$progname warning: no orig tarball found for the new version.\n";
 	}
