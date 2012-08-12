@@ -17,7 +17,7 @@ EOF
 }
 
 # options:
-DISTRO=${MBS_DISTRO:-release}
+DISTRO=""
 
 typeset -a DPUT_TARGETS
 DPUT_TARGETS=()
@@ -30,7 +30,7 @@ FORCE=n
 
 step=major
 INSTALL_IMMEDIATELY="n"
-while getopts :rfbtT:a:p:iIv: OPT; do
+while getopts :r:fbtT:a:p:iIv: OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
@@ -44,7 +44,7 @@ while getopts :rfbtT:a:p:iIv: OPT; do
 	    FORCE=y
 	    ;;
 	r|+r)
-	    "$OPTARG"
+	    DISTRO="$OPTARG"
 	    ;;
 	T|+T)
 	    # git-tag
@@ -79,6 +79,10 @@ while getopts :rfbtT:a:p:iIv: OPT; do
 done
 shift $(( OPTIND - 1 ))
 OPTIND=1
+
+if [ "$DISTRO" = "" ]; then
+    DISTRO=${MBS_DISTRO:-release}
+fi
 
 
 # fallback on env-var value:
@@ -159,7 +163,8 @@ function generate_commit_changelog()
 	# no need to echo... the user will see it?
     fi
 
-    DISTRO=release
+    # DISTRO=release
+    DISTRO=${MBS_DISTRO:-release}
     set -x
     git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" --distribution $DISTRO
     set +x
