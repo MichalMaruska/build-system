@@ -7,7 +7,7 @@ possibly_trace
 function usage()
 {
 cat <<EOF
-usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* [-V version ]
+usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* [-v version ]
 
 by defaut:
 Distro .... previous from debian/changelog or ??
