@@ -31,7 +31,7 @@ FORCE=n
 
 step=major
 INSTALL_IMMEDIATELY="n"
-while getopts :r:fbtT:a:p:iIv: OPT; do
+while getopts :r:fbtT:a:p:iIv:s OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
@@ -73,7 +73,11 @@ while getopts :r:fbtT:a:p:iIv: OPT; do
 	v)
 	    USER_VERSION=$OPTARG
 	    ;;
+	s)
+	    GBP_OPTIONS+=("-us"  "-uc")
+	    ;;
 	*)
+	    echo "Unknown option: $OPTARG" >&2
 	    usage
 	    exit 2
     esac
