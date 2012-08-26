@@ -19,8 +19,9 @@ EOF
 # options:
 DISTRO=""
 
-typeset -a DPUT_TARGETS
-DPUT_TARGETS=()
+# same what I use in zlogin for MBS_TARGETS!
+typeset -T DPUT_TARGETS dput_targets :
+dput_targets=()
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
 DCH_OPTIONS=()
@@ -56,7 +57,7 @@ while getopts :r:fbtT:a:p:iIv: OPT; do
 	    GBP_OPTIONS+=(--git-no-create-orig -b)
 	    ;;
 	p)
-	    DPUT_TARGETS=($DPUT_TARGETS $OPTARG)
+	    dput_targets+=($OPTARG)
 	    ;;
 
 	##  which is?  install the package?
@@ -86,10 +87,11 @@ fi
 
 
 # fallback on env-var value:
-if [ "$DPUT_TARGETS" = "" -a -n "${MBS_TARGETS-}" ];
+if [ "$dput_targets" = "" -a -n "${MBS_TARGETS-}" ];
 then
-    # since it comes from a generic shell, divide it as such:
-    DPUT_TARGETS=(${=MBS_TARGETS})
+    # fixme: since it comes from a generic shell, divide it as such:
+    #dput_targets=${=MBS_TARGETS}
+    DPUT_TARGETS=${MBS_TARGETS}
 fi
 
 
@@ -238,6 +240,9 @@ else
     MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRO/%(version)s")
 fi
 
+
+echo exporting DPUT_TARGETS $DPUT_TARGETS
+export DPUT_TARGETS
 
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 git-buildpackage \
