@@ -10,6 +10,9 @@
 source /usr/share/build-system/functions.sh
 possibly_trace
 
+export INSTALL_IMMEDIATELY=y
+export DEBI_OPTIONS=--upgrade
+
 function usage(){
 cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
@@ -17,6 +20,8 @@ usage: ${0##*/} [+-upb} [--] ARGS...
     -u  ... do not sign!
     -v  ... new version
     -t  ... don't create the (ORIG) tarball
+    -i ... install immediately, +i do NOT install
+           by default .... update only
 EOF
 }
 
@@ -28,7 +33,7 @@ GBP_OPTIONS=()
 typeset -a ARGS
 ARGS=($@)
 
-while getopts :upbhv:d:t OPT; do
+while getopts :upibhv:d:t OPT; do
     case $OPT in
 	h)
 	    usage
@@ -46,6 +51,15 @@ while getopts :upbhv:d:t OPT; do
 	p|+p)
 	    # /usr/bin/
 	    GBP_OPTIONS+="--git-builder=git-pbuilder"
+	    ;;
+	+i)
+	    ## -i don't upgrade, +i don't install at all.
+	    ## and how to force it? just leave.
+	    INSTALL_IMMEDIATELY=n
+	    ;;
+	i)
+	    # remove the --upgrade
+	    DEBI_OPTIONS=""
 	    ;;
 	v)
 	    DEFAULT_NEW_VERSION=$OPTARG
@@ -148,7 +162,6 @@ cecho red "Starting git-buildpackage, with hooks!"
 
 export DPUT_OPTIONS=""
 export DPUT_TARGETS=${MBS_SNAP_TARGETS-local}
-export INSTALL_IMMEDIATELY=y
 
 set -x
 git-buildpackage \

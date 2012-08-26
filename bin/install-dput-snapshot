@@ -22,17 +22,19 @@ possibly_trace
 
 function usage(){
 cat <<EOF
-usage: ${0##*/} [+-uf} [--] ARGS...
+usage: ${0##*/} [+-ufi} [--] ARGS...
 dput(1) options basically
 -u don't check the signaure
 -f force RE-upload
+-i install immediatelly
 EOF
 }
 
+# fixme: ${GBP_BUILD_DIR+../}
+BUILD_AREA=${GBP_BUILD_DIR:-../_build-area/}
 
-# make it invokable ...
-DPUT_OPTIONS=""
-while getopts :uf OPT; do
+# make it invocable ...
+while getopts :ufi OPT; do
     case $OPT in
 	u|+u)
 	    DPUT_OPTIONS+="--unchecked "
@@ -40,7 +42,9 @@ while getopts :uf OPT; do
 	f)
 	    DPUT_OPTIONS+="--force "
 	    ;;
-
+	i)
+	    INSTALL_IMMEDIATELY=y
+	    ;;
 	*)
 	    usage
 	    exit 2
@@ -89,9 +93,10 @@ if [ ${INSTALL_IMMEDIATELY:-n} = "y" ]
 then
     cecho green "installing immediately $GBP_CHANGES_FILE"
     if [ -n "$GBP_CHANGES_FILE" ]; then
-	debi --upgrade $GBP_CHANGES_FILE
+	debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
     else
-	debi --debs-dir $BUILD_AREA
+	debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
+    fi
 else
     echo
     echo "** If you want to install:"
