@@ -1,4 +1,8 @@
-#! /usr/bin/zsh -f
+#! /usr/bin/zsh -fx
+
+# todo:
+# could use GBP_CHANGES_FILE even after building with db!
+
 
 # This is just a wrapper around debi & dput (or reprepro)
 
@@ -12,7 +16,7 @@
 # MBS_SNAP_TARGETS
 
 # Given as $1 the changes file
-# dput it to all in 
+# dput it to all in
 
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
@@ -27,16 +31,25 @@ dput(1) options basically
 -u don't check the signaure
 -f force RE-upload
 -i install immediatelly
+-d {DISTRO}
+-r release, so use the MBS_TARGETS, and hence dput(1) in those
 EOF
 }
 
-# fixme: ${GBP_BUILD_DIR+../}
+#defaults:
+# fixme: this is set in ~/.gbp.conf (by git-buildpackage)
 BUILD_AREA=${GBP_BUILD_DIR:-../_build-area/}
-INSTALL_IMMEDIATELY=n
+: ${INSTALL_IMMEDIATELY=n}
+DISTRO=$MBS_DISTRO
 
 
-# make it invocable ...
-while getopts :ufi OPT; do
+# Convert from MBS_TARGETS into a Zsh array. My standard!
+typeset -xT MBS_TARGETS mbs_targets ":"
+typeset -a DPUT_TARGETS
+
+
+# make it manually invokable:
+while getopts :ufird: OPT; do
     case $OPT in
 	u|+u)
 	    DPUT_OPTIONS+="--unchecked "
@@ -47,6 +60,12 @@ while getopts :ufi OPT; do
 	i)
 	    INSTALL_IMMEDIATELY=y
 	    ;;
+	r)
+	    DPUT_TARGETS=($mbs_targets)
+	    ;;
+	d)
+	    DISTRO=$OPTARG
+	    ;;
 	*)
 	    usage
 	    exit 2
@@ -55,56 +74,65 @@ done
 shift $(( OPTIND - 1 ))
 OPTIND=1
 
+# if still arguments remain,
 if [ $# -gt 0 ]
 then
     GBP_CHANGES_FILE=$1
-    GBP_BUILD_DIR="/"
+fi
+
+if [ -z "$GBP_CHANGES_FILE" ]; then
+    echo "did not provide the Changes file!"
+    usage
+    exit 2
 fi
 
 
-
+# install into (local) reprepro:
 # $GBP_BUILD_DIR is the build directory: I don't need it.
-cecho green "putting into repositories: ${GBP_CHANGES_FILE-}"
-
-if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE-}" ]
+if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE}" ]
 then
+    cecho green "Putting into Reprepro: ${GBP_CHANGES_FILE}"
+
     # fixme: snapshot -> not a big deal if I still get the dist. wrong?
-    # --basedir ~/reprepro/
-    reprepro --ignore=wrongdistribution  -V \
-        include UNRELEASED $GBP_CHANGES_FILE
+    reprepro --basedir "$REPREPRO_BASE_DIR" --ignore=wrongdistribution  -V \
+        include $DISTRO $GBP_CHANGES_FILE
 fi
 
 
 
-for TARGET in ${DPUT_TARGETS:-}
-do
-    cecho blue "Uploading to $TARGET"
+if [ -z "${DPUT_TARGETS}" ]; then
+    cecho green "no Dput targets"
+else
+    for TARGET in ${DPUT_TARGETS:-}
+    do
+	cecho blue "Uploading to $TARGET"
 
-    if [ -z ${GBP_CHANGES_FILE-} ]; then
-	if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
-	    (echo "Failed to upload to $TARGET"; echo )>&2
+	if [ -z ${GBP_CHANGES_FILE-} ]; then
+	    if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
+		(echo "Failed to upload to $TARGET"; echo )>&2
+	    fi
+	else
+	    if ! dput --unchecked $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE;
+	    then
+		cecho yellow "target $TARGET failed, but not fatal!"
+	    fi
 	fi
-    else
-	if ! dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE;
-	then
-	    cecho yellow "target $TARGET failed, but not fatal!"
-	fi
-    fi
-done
+    done
+fi
 
 
 
 ## Install  (this is even faster)
 if [ ${INSTALL_IMMEDIATELY} = "y" ]
 then
-    cecho green "installing immediately ${GBP_CHANGES_FILE-}"
-    if [ -n "${GBP_CHANGES_FILE-}" ]; then
+    cecho green "installing immediately ${GBP_CHANGES_FILE}"
+    if [ -n "${GBP_CHANGES_FILE}" ]; then
 	debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
     else
 	debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
     fi
 else
-    echo
+    echo green "not requested to install immediately"
     echo "** If you want to install:"
     # cecho gray:
     echo "debi --debs-dir $BUILD_AREA"
