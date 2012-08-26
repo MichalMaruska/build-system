@@ -32,6 +32,8 @@ EOF
 
 # fixme: ${GBP_BUILD_DIR+../}
 BUILD_AREA=${GBP_BUILD_DIR:-../_build-area/}
+INSTALL_IMMEDIATELY=n
+
 
 # make it invocable ...
 while getopts :ufi OPT; do
@@ -94,8 +96,8 @@ done
 
 
 
-# this is even faster:
-if [ ${INSTALL_IMMEDIATELY:-n} = "y" ]
+## Install  (this is even faster)
+if [ ${INSTALL_IMMEDIATELY} = "y" ]
 then
     cecho green "installing immediately ${GBP_CHANGES_FILE-}"
     if [ -n "${GBP_CHANGES_FILE-}" ]; then
