@@ -227,12 +227,14 @@ fi
 load_distr_version_from_changelog
 # if different &
 : ${NEWGIT_TAG:=$DISTRO/$VERSION}
+NEWGIT_TAG=${NEWGIT_TAG/:/%}
 
 cecho green $NEWGIT_TAG
 
 
 typeset -a MGB_OPTIONS
 MGB_OPTIONS=()
+## fixme: 1/ grep  2/ the tag might have ":" converted to %.
 if git tag -l "$NEWGIT_TAG"|grep ".";
 then
     cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
