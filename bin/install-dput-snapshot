@@ -85,10 +85,8 @@ do
 	    (echo "Failed to upload to $TARGET"; echo )>&2
 	fi
     else
-	if dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE;
+	if ! dput $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE;
 	then
-	    :
-	else
 	    cecho yellow "target $TARGET failed, but not fatal!"
 	fi
     fi
