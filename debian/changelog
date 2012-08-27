@@ -1,3 +1,32 @@
+mmc-build-system (2.7) release; urgency=low
+
+  * make it usable interactively .... guess the current TAG & BRANCH
+  * patched dependencies / external tools
+  * possibly_trace
+  * rename to install-dput-snapshot
+  * Use the common install-dput-snapshot (even from release)
+  * document
+  * INSTALL_IMMEDIATELY and possibly --upgrade
+  * CENTRALREPO default to origin
+  * DPUT_TARGETS default to None
+  * ready for GBP_CHANGES_FILE undefined
+  * use both reprepro direct import, and also dput
+  * fix TARGET vs target
+  * when uploading to targets, don't stop at failure. Try others!
+  * change to Zsh (to experiment with setopt)
+  * reverse defaults for snap
+  * adapt for Precise
+  * incomplete! attempt to specify  -r DISTRO
+  * fix the Help string
+  * set default values, and stop using the {xxx-default} form.
+  * use the ! for in shell condition stmt.
+  * make install-dput-snapshot usable separately. And make it access the Shell variables set in zlogin.
+  * release:  pass the TARGETS.  Machinery to convert Zsh arrays & shell scalars
+  * Protect when the Git tag uses some quoting for the Version string part.
+  * release: without signing??
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 27 Aug 2012 02:04:45 +0200
+
 mmc-build-system (2.6) release; urgency=low
 
   * verbose about Uploading
