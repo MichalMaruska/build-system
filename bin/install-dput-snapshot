@@ -44,8 +44,8 @@ DISTRO=$MBS_DISTRO
 
 
 # Convert from MBS_TARGETS into a Zsh array. My standard!
-typeset -xT MBS_TARGETS mbs_targets ":"
-typeset -a DPUT_TARGETS
+typeset -T MBS_TARGETS mbs_targets ":"
+typeset -T DPUT_TARGETS dput_targets
 
 
 # make it manually invokable:
@@ -61,7 +61,7 @@ while getopts :ufird: OPT; do
 	    INSTALL_IMMEDIATELY=y
 	    ;;
 	r)
-	    DPUT_TARGETS=($mbs_targets)
+	    dput_targets=($mbs_targets)
 	    ;;
 	d)
 	    DISTRO=$OPTARG
@@ -100,10 +100,10 @@ fi
 
 
 
-if [ -z "${DPUT_TARGETS}" ]; then
+if [ -z "${dput_targets}" ]; then
     cecho green "no Dput targets"
 else
-    for TARGET in ${DPUT_TARGETS:-}
+    for TARGET in ${dput_targets}
     do
 	cecho blue "Uploading to $TARGET"
 
