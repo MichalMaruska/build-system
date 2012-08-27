@@ -1,3 +1,9 @@
+mmc-build-system (2.7.1) release; urgency=low
+
+  * fix: install-dput-snapshot uses the DPUT_TARGETS. And only in interactive mode can it use MBS_TARGETS, if -r.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 27 Aug 2012 02:11:13 +0200
+
 mmc-build-system (2.7) release; urgency=low
 
   * make it usable interactively .... guess the current TAG & BRANCH
