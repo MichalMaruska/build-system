@@ -133,7 +133,7 @@ then
 	debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
     fi
 else
-    echo green "not requested to install immediately"
+    cecho green "not requested to install immediately"
     echo "** If you want to install:"
     # cecho gray:
     echo "debi --debs-dir $BUILD_AREA"
