@@ -42,6 +42,7 @@ BUILD_AREA=${GBP_BUILD_DIR:-../_build-area/}
 : ${INSTALL_IMMEDIATELY=n}
 DISTRO=$MBS_DISTRO
 
+typeset -T DPUT_OPTIONS dput_options
 
 # Convert from MBS_TARGETS into a Zsh array. My standard!
 typeset -T MBS_TARGETS mbs_targets ":"
@@ -52,10 +53,10 @@ typeset -T DPUT_TARGETS dput_targets
 while getopts :ufird: OPT; do
     case $OPT in
 	u|+u)
-	    DPUT_OPTIONS+="--unchecked "
+	    dput_options+=("--unchecked")
 	    ;;
 	f)
-	    DPUT_OPTIONS+="--force "
+	    dput_options+=("--force")
 	    ;;
 	i)
 	    INSTALL_IMMEDIATELY=y
@@ -112,7 +113,7 @@ else
 		(echo "Failed to upload to $TARGET"; echo )>&2
 	    fi
 	else
-	    if ! dput --unchecked $DPUT_OPTIONS $TARGET $GBP_CHANGES_FILE;
+	    if ! dput --unchecked $dput_options $TARGET $GBP_CHANGES_FILE;
 	    then
 		cecho yellow "target $TARGET failed, but not fatal!"
 	    fi
