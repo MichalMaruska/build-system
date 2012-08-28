@@ -40,7 +40,7 @@ EOF
 # fixme: this is set in ~/.gbp.conf (by git-buildpackage)
 BUILD_AREA=${GBP_BUILD_DIR:-../_build-area/}
 : ${INSTALL_IMMEDIATELY=n}
-DISTRO=$MBS_DISTRO
+DISTRO=${MBS_DISTRO-}
 
 typeset -T DPUT_OPTIONS dput_options
 
