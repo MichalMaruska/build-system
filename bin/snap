@@ -26,6 +26,7 @@ EOF
 }
 
 # this exports to the `install-dput-snapshot'!
+USER_DISTRIBUTION=""
 : ${DISTRIBUTION=UNRELEASED}
 export DISTRIBUTION
 typeset -a DCH_OPTIONS
@@ -77,7 +78,7 @@ while getopts :uspibhv:d:t OPT; do
 	    DEFAULT_NEW_VERSION=$OPTARG
 	    ;;
 	d)
-	    DISTRIBUTION=$OPTARG
+	    USER_DISTRIBUTION=$OPTARG
 	    ;;
 	t)
 	    # still  dpkg-buildpackage will call dpkg-source --before-build

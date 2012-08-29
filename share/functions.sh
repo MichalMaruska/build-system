@@ -17,7 +17,7 @@ possibly_trace()
 # variables:
 
 # VERSION
-# DISTRO
+# DISTRIBUTION
 # GIT_OFFSET
 get_current_tag()
 {
@@ -43,7 +43,7 @@ get_current_tag()
 	else
 	    # fake values.
 	    VERSION=
-	    DISTRO=
+	    DISTRIBUTION=
 	    return 1
 	fi
     else
@@ -54,7 +54,7 @@ get_current_tag()
     #
 	if [[ $description =~ "^(.*)/(.*)-([[:digit:]]+)-g[[:alnum:]]*$" ]]
 	then
-	    DISTRO=$match[1]
+	    DISTRIBUTION=$match[1]
 	    VERSION=$match[2]
 	    GIT_OFFSET=$match[3]
 	    # ${${description%-g*}#*-}
@@ -68,10 +68,10 @@ get_current_tag()
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
 	then
-	    DISTRO=$match[1]
+	    DISTRIBUTION=$match[1]
 	    VERSION=$match[2]
 	    #VERSION=${description#*/}
-	    #DISTRO=${description%/*}
+	    #DISTRIBUTION=${description%/*}
 	else
 	    echo "cannot find a git tag? wrong format of: $description" >&2
 	    return 1
@@ -85,7 +85,7 @@ get_current_tag()
 
 load_distr_version_from_changelog()
 {
-    DISTRO=$(deb-pkg-distribution debian/changelog)
+    DISTRIBUTION=$(deb-pkg-distribution debian/changelog)
     VERSION=$(deb-pkg-version debian/changelog)
 
     # conditionally remove. but this

@@ -17,7 +17,8 @@ EOF
 }
 
 # options:
-DISTRO=""
+USER_DISTRIBUTION=""
+DISTRIBUTION=""
 
 # same what I use in zlogin for MBS_TARGETS!
 typeset -T DPUT_TARGETS dput_targets :
@@ -45,7 +46,7 @@ while getopts :r:fbtT:a:p:iIv:s OPT; do
 	    FORCE=y
 	    ;;
 	r|+r)
-	    DISTRO="$OPTARG"
+	    USER_DISTRIBUTION="$OPTARG"
 	    ;;
 	T|+T)
 	    # git-tag
@@ -85,8 +86,8 @@ done
 shift $(( OPTIND - 1 ))
 OPTIND=1
 
-if [ "$DISTRO" = "" ]; then
-    DISTRO=${MBS_DISTRO:-release}
+if [ "$DISTRIBUTION" = "" ]; then
+    DISTRIBUTION=${MBS_DISTRO:-release}
 fi
 
 
@@ -107,7 +108,7 @@ fi
 # git tag if ....needed.
 set +e
 get_current_tag
-# this sets DISTRO,VERSION & GIT_OFFSET
+# this sets DISTRIBUTION,VERSION & GIT_OFFSET
 
 found_any_tag=$?
 set -e
@@ -118,7 +119,7 @@ then
     # extract the distro from changelog!
     ls -l debian/changelog
     load_distr_version_from_changelog;
-    # DISTRO & VERSION
+    # DISTRIBUTION & VERSION
     # fixme: If not even there:
     # default version 0.1, distro your current.
 fi
@@ -133,7 +134,7 @@ function get_new_version()
     git_version=$VERSION
 #fixme:  wtf ^^^^ why?
 
-# git_distro=$DISTRO
+# git_distro=$DISTRIBUTION
 # This should be from
     load_distr_version_from_changelog
     if dpkg --compare-versions $VERSION lt $git_version;
@@ -147,7 +148,7 @@ function get_new_version()
     # So, increase more.
     fi
 
-    echo $DISTRO $VERSION
+    echo $DISTRIBUTION $VERSION
 }
 
 
@@ -169,12 +170,10 @@ function generate_commit_changelog()
 	# no need to echo... the user will see it?
     fi
 
-    # DISTRO=release
-    DISTRO=${MBS_DISTRO:-release}
     set -x
-    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" --distribution $DISTRO
+    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" --distribution $DISTRIBUTION
     set +x
-# "--debian-tag=$DISTRO/%(version)s"
+# "--debian-tag=$DISTRIBUTION/%(version)s"
 
     if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
     then
@@ -226,11 +225,12 @@ fi
 
 
 # *now* the default value:
-# : ${GIT_TAG:=$DISTRO/$VERSION}
+# : ${GIT_TAG:=$DISTRIBUTION/$VERSION}
 
+# fixme: this only after `generate_commit_changelog' ... 
 load_distr_version_from_changelog
 # if different &
-: ${NEWGIT_TAG:=$DISTRO/$VERSION}
+: ${NEWGIT_TAG:=$DISTRIBUTION/$VERSION}
 NEWGIT_TAG=${NEWGIT_TAG/:/%}
 
 cecho green "git tag is $NEWGIT_TAG"
@@ -243,7 +243,7 @@ if git tag -l "$NEWGIT_TAG"|grep "." > /dev/null
 then
     cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
 else
-    MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRO/%(version)s")
+    MGB_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
 fi
 
 
