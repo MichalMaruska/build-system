@@ -31,7 +31,7 @@ get_current_tag()
     # if no tags at all -> exit, or ?
     if [ $git_status -ne 0 ]
     then
-	if git tag -l |grep .;
+	if git tag -l |grep . > /dev/null;
 	then
 	    cecho red "not _past_ Git tag. But other tags present"
 	    if [ $FORCE != "y" ]
@@ -78,7 +78,9 @@ get_current_tag()
 	fi
     fi
 
-    cecho yellow "version: $VERSION git-offset: ${GIT_OFFSET:-} distro: $DISTRO" >&2
+    if [ -n "${DEBUG:-}" ]; then
+	cecho yellow "version: $VERSION git-offset: ${GIT_OFFSET:-} distro: $DISTRIBUTION" >&2
+    fi
 }
 
 load_distr_version_from_changelog()
