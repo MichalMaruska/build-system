@@ -257,6 +257,8 @@ git-buildpackage \
     --git-prebuild=pre-build-hook -sa \
     --git-posttag=post-tag-hook \
     --git-postbuild=install-dput-snapshot \
+    --git-builder="debuild -eMAKEFLAGS -nc" \
+   -b \
     $MGB_OPTIONS $GBP_OPTIONS
 
 

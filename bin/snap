@@ -198,6 +198,8 @@ git-buildpackage \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=install-dput-snapshot \
+    --git-builder="debuild -eMAKEFLAGS -nc" \
+    -b \
     --source-option="--format=\"3.0 (native)\""
 
 set +x
