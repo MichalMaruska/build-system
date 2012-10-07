@@ -23,3 +23,5 @@ if [ -e auto ]
 then
     ./auto
 fi
+
+echo "------------------- pre-build-hook finished ----------"
