@@ -5,8 +5,10 @@
 
 possibly_trace()
 {
-    if [ -n "${DEBUG:-}" ]; then
-	set -x
+    if [ -n "${DEBUG-}" ]; then
+	cecho blue setting DEBUGGING on >&2
+	setopt XTRACE
+	unsetopt LOCAL_OPTIONS
     fi
 }
 

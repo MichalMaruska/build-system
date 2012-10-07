@@ -1,4 +1,4 @@
-#! /usr/bin/zsh -fx
+#! /usr/bin/zsh -feu
 
 # todo:
 # could use GBP_CHANGES_FILE even after building with db!
