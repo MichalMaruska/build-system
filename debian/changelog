@@ -1,3 +1,14 @@
+mmc-build-system (2.7.3) release; urgency=low
+
+  * less verbose & better informative
+  * distribution (not distro)
+  * Finally fix the DEBUG interpretation
+  * don't clean
+  * Build only binary. Also Color Make run (propagate MAKEFLAGS env var).
+  * show when debuild starts.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 07 Oct 2012 02:18:19 +0200
+
 mmc-build-system (2.7.2) release; urgency=low
 
   * fix dput_options mess
