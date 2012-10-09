@@ -83,3 +83,8 @@ will not be needed:  snap is enough?
 by default:
 ** snap:  REPREPRO_BASE_DIR  _or_ MBS_SNAP_TARGETS
 ** release                        MBS_TARGETS
+
+
+* misc
+DEBUILD_DPKG_BUILDPACKAGE_OPTS
+DEBUILD_DPKG_BUILDPACKAGE_OPTS="--source-option="""
