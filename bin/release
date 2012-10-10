@@ -37,7 +37,7 @@ FORCE=n
 
 step=major
 INSTALL_IMMEDIATELY="n"
-while getopts :r:fbtT:a:p:iIv:s OPT; do
+while getopts :r:fbtT:a:p:iIv:u OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
@@ -79,7 +79,7 @@ while getopts :r:fbtT:a:p:iIv:s OPT; do
 	v)
 	    USER_VERSION=$OPTARG
 	    ;;
-	s)
+	u)
 	    GBP_OPTIONS+=("-us"  "-uc")
 	    ;;
 	*)
