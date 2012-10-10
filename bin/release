@@ -7,12 +7,17 @@ possibly_trace
 function usage()
 {
 cat <<EOF
-usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* [-v version ]
+usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* [-v version ] [-s]
 
 by defaut:
 Distro .... previous from debian/changelog or ??
 Tag ... distro/version
 dput-target ... taken from MBS_TARGETS env variable
+
+-s  ... don't Sign
+-b  ... ignore Git branch
+-i  ...
+-t  ... don't create tarball/source package
 EOF
 }
 
