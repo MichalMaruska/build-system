@@ -1,6 +1,23 @@
 #! /bin/bash -eu
 
-: ${CENTRALREPO=origin}
+# This can be run manually inside the (git) source tree.
+
+
+
+if [ ${CENTRALREPO-x} = x ];
+then
+    if git remote show | grep origin; then
+	CENTRALREPO=origin;
+    elif git remote show | grep maruska; then
+	CENTRALREPO=maruska;
+    else
+	# only 1 line?
+	# don't fail for this?  Or should fail?
+	exit 1;
+    fi
+fi
+
+# : ${CENTRALREPO=origin}
 
 : ${GBP_TAG=$(git describe)}
 : ${GBP_BRANCH=$(git name-rev --name-only  HEAD)}
