@@ -1,3 +1,10 @@
+mmc-build-system (2.7.4) release; urgency=low
+
+  * Try to detect which Git remote to push into (after tagging)
+  * fix: snap: do bump the version (generate new/snapshot changelog), when debian/changelog was not commited in the last commit.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Thu, 11 Oct 2012 16:20:02 +0200
+
 mmc-build-system (2.7.3) release; urgency=low
 
   * less verbose & better informative
