@@ -1,3 +1,12 @@
+mmc-build-system (2.8) release; urgency=low
+
+  * install into local reprepro only if Distro is present.
+  * more doc
+  * Better Usage help string
+  * correctly interpret the -u option, not to sign.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Thu, 11 Oct 2012 16:24:22 +0200
+
 mmc-build-system (2.7.4) release; urgency=low
 
   * Try to detect which Git remote to push into (after tagging)
