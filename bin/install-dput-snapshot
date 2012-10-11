@@ -94,9 +94,16 @@ if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE}" ]
 then
     cecho green "Putting into Reprepro: ${GBP_CHANGES_FILE}"
 
+    # fixme: if the distro is not local?
+    if [ -n "$DISTRO" ]; then
+	if grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
+	then
     # fixme: snapshot -> not a big deal if I still get the dist. wrong?
-    reprepro --basedir "$REPREPRO_BASE_DIR" --ignore=wrongdistribution  -V \
-        include $DISTRO $GBP_CHANGES_FILE
+	    reprepro --basedir "$REPREPRO_BASE_DIR" \
+		--ignore=wrongdistribution  -V \
+		include "$DISTRO" $GBP_CHANGES_FILE
+	fi
+    fi
 fi
 
 

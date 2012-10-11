@@ -59,7 +59,7 @@ while getopts :uspibhv:d:t OPT; do
 	u|+u)
 	    # fixme: should use arrays
 	    # prepend!
-	    GBP_OPTIONS+=-u
+	    GBP_OPTIONS+=-uc
 	    ;;
 	p|+p)
 	    # /usr/bin/
