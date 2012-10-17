@@ -53,13 +53,14 @@ while getopts :uspibhv:d:t OPT; do
 	b)
 	    ignore_branch=n
 	    ;;
+	# useless:
 	s)
 	    do_sign=y
 	    ;;
 	u|+u)
 	    # fixme: should use arrays
 	    # prepend!
-	    GBP_OPTIONS+=-uc
+	    do_sign=n
 	    ;;
 	p|+p)
 	    # /usr/bin/
