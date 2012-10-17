@@ -28,9 +28,12 @@ sub decide_if_obsolete
     my $file=$dir .  "/debian/control";
     # print $file, "\n";
     unless  (-f $file) {
-	print "non-existent file $file\n";
-	# die("non-existent file " + $file);
-	return;
+	$file=$dir .  "/debian/control.in";
+	unless  (-f $file) {
+	    print "non-existent file $file\n";
+	    # die("non-existent file " + $file);
+	    return;
+	}
     }
 
     # |
