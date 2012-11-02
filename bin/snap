@@ -157,10 +157,11 @@ then
     # get the current version & increase. The major maybe.
     if [ -z "${DEFAULT_NEW_VERSION:-}" ]
     then
-	(echo "Starting a new version $VERSION."
-	 echo "Could have been explicitely specified with the -v option." ) >&2
 	load_distr_version_from_changelog
 	increase_version major
+
+	(echo "Starting a new version $VERSION."
+	 echo "Could have been explicitely specified with the -v option." ) >&2
     else
 	:
     fi
