@@ -1,0 +1,20 @@
+History:
+
+
+The original "interactive recipe":
+----------------------
+git-dch  --release "--debian-tag=michal/%(version)s"
+git add debian/changelog; git commit -m release
+mygit-buildpackage --git-tag "--git-debian-tag=michal/%(version)s" && debi --debs-dir ../build-area/
+mygit-buildpackage -S && debrelease -S  --debs-dir=../build-area --dput
+---------------------------
+
+
+release version:
+----------------------------------
+git-dch --since   fe92297   -R
+git commit -am release
+mygit-buildpackage --git-tag    && debi --debs-dir ../build-area/
+
+mygit-buildpackage -S && debrelease -S  --debs-dir=../build-area  --dput
+--------------------
