@@ -9,7 +9,10 @@ use Dpkg::Control::Info;
 $file=shift . "/debian/control";
 
 unless  (-f $file) {
-    die("non-existent file");
+    $file=$file . ".in";
+    unless (-f $file) {
+	die("non-existent file");
+    }
 }
 
 $p= Dpkg::Control::Info->new($file);
