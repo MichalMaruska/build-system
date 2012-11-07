@@ -1,3 +1,11 @@
+mmc-build-system (2.9) release; urgency=low
+
+  * report the new VERSION after it has been prepared/increased.
+  * search  also  debian/control.in
+  * history documentation
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 07 Nov 2012 13:38:52 +0100
+
 mmc-build-system (2.8) release; urgency=low
 
   * install into local reprepro only if Distro is present.
