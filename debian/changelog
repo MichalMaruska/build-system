@@ -1,3 +1,12 @@
+mmc-build-system (2.10) release; urgency=low
+
+  * When searching for debian/control, try debian/control.in as well.
+  * snap: -u to avoid signing. Still, on putting into reprepro I have to sign.
+  * less verbosity
+  * Slightly move closer snap & release.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 12 Nov 2012 01:50:38 +0100
+
 mmc-build-system (2.9) release; urgency=low
 
   * report the new VERSION after it has been prepared/increased.
