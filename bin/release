@@ -3,6 +3,7 @@
 source /usr/share/build-system/functions.sh
 possibly_trace
 
+export INSTALL_IMMEDIATELY=y
 
 function usage()
 {
@@ -25,31 +26,38 @@ EOF
 USER_DISTRIBUTION=""
 DISTRIBUTION=""
 
+### Dput
 # same what I use in zlogin for MBS_TARGETS!
 typeset -T DPUT_TARGETS dput_targets :
 dput_targets=()
+
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
+typeset -a DCH_OPTIONS
 DCH_OPTIONS=()
 
+ignore_branch=y
 FORCE=n
 # ARCH
 
+
 step=major
+build_source=no
 INSTALL_IMMEDIATELY="n"
-while getopts :r:fbtT:a:p:iIv:u OPT; do
+while getopts :a:bfr:T:p:iIv:us OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
 	b)
-	    # ignore-branch
-	    DCH_OPTIONS=("--ignore-branch")
-	    GBP_OPTIONS+="--git-ignore-branch"
+	    ignore_branch=n
 	    ;;
-
 	f)
 	    FORCE=y
 	    ;;
+	p)
+	    dput_targets+=($OPTARG)
+	    ;;
+
 	r|+r)
 	    USER_DISTRIBUTION="$OPTARG"
 	    ;;
@@ -57,15 +65,11 @@ while getopts :r:fbtT:a:p:iIv:u OPT; do
 	    # git-tag
 	    "$OPTARG"
 	    ;;
-	t)
+	s)
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
 	    # which does not do harm, though.
-	    GBP_OPTIONS+=(--git-no-create-orig -b)
+	    build_source=yes
 	    ;;
-	p)
-	    dput_targets+=($OPTARG)
-	    ;;
-
 	##  which is?  install the package?
 	i)
 	    GBP_OPTIONS+=("-i")
@@ -90,6 +94,21 @@ while getopts :r:fbtT:a:p:iIv:u OPT; do
 done
 shift $(( OPTIND - 1 ))
 OPTIND=1
+
+if [ $ignore_branch = "y" ];then
+    DCH_OPTIONS+=("--ignore-branch")
+    GBP_OPTIONS+=("--git-ignore-branch")
+fi
+
+if [ $build_source != yes ]; then
+    GBP_OPTIONS+=(--git-no-create-orig -b)
+
+    # for more architectures:
+    # could be -B
+    # then I need to build also -A build.
+fi
+
+# we always sign.
 
 if [ "$DISTRIBUTION" = "" ]; then
     DISTRIBUTION=${MBS_DISTRO:-release}
@@ -265,7 +284,6 @@ git-buildpackage \
     --git-posttag=post-tag-hook \
     --git-postbuild=install-dput-snapshot \
     --git-builder="debuild -eMAKEFLAGS -nc" \
-   -b \
     $MGB_OPTIONS $GBP_OPTIONS
 
 

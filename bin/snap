@@ -29,13 +29,17 @@ EOF
 USER_DISTRIBUTION=""
 : ${DISTRIBUTION=UNRELEASED}
 export DISTRIBUTION
-typeset -a DCH_OPTIONS
+
+### Dput ... avoided
 typeset -a GBP_OPTIONS
+GBP_OPTIONS=()
+typeset -a DCH_OPTIONS
+DCH_OPTIONS=()
+
 # default:
 ignore_branch=y
-create_tarball=n
 do_sign=y
-GBP_OPTIONS=()
+build_source=no
 typeset -a ARGS
 ARGS=($@)
 
@@ -84,7 +88,7 @@ while getopts :uspibhv:d:t OPT; do
 	t)
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
 	    # which does not do harm, though.
-	    create_tarball=y
+	    build_source=yes
 	    ;;
 	?)
 	    echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
@@ -105,13 +109,12 @@ done
 shift $(( OPTIND - 1 ))
 OPTIND=1
 
-
 if [ $ignore_branch = "y" ];then
     DCH_OPTIONS+=("--ignore-branch")
     GBP_OPTIONS+=("--git-ignore-branch")
 fi
 
-if [ $create_tarball = "n" ]; then
+if [ $build_source != yes ]; then
     GBP_OPTIONS+=(--git-no-create-orig -b)
 fi
 
@@ -122,7 +125,7 @@ fi
 
 set +e
 get_current_tag
-found_tag=$?
+found_any_tag=$?
 set -e
 
 # todo: in-place if "git status" says clean
@@ -201,7 +204,6 @@ git-buildpackage \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=install-dput-snapshot \
     --git-builder="debuild -eMAKEFLAGS -nc" \
-    -b \
     --source-option="--format=\"3.0 (native)\""
 
 set +x
