@@ -118,7 +118,7 @@ increase_version()
     tail=.${VERSION#*.}
     middle=${tail%.*}
 
-    echo "major=$major  minor=$minor"
+    # echo "major=$major  minor=$minor"
     cecho red "increasing version by $step"
     if [ step = "major" ]
     then
