@@ -197,7 +197,18 @@ function generate_commit_changelog()
     fi
 
     set -x
+
+    # todo: if modified, reset it. Saving a copy.
+    # that copy will be then removed, at the end.
+    # This, because snap creates sections, which
+    # we don't want here.
+    if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
+    then
+	mv debian/changelog debian/changelog.snap
+	git checkout debian/changelog
+    fi
     git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" --distribution $DISTRIBUTION
+    rm -f debian/changelog.snap
     set +x
 # "--debian-tag=$DISTRIBUTION/%(version)s"
 
