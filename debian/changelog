@@ -1,3 +1,12 @@
+mmc-build-system (2.11) release; urgency=low
+
+  * release: avoid the (previously generated) SNAPHOT changelog.
+  * release: -s to mean source pkg.
+  * Simplify: option -> direct action, not via variable.
+  * release: option to skip editing the debian/changelog
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 05 Dec 2012 01:08:53 +0100
+
 mmc-build-system (2.10) release; urgency=low
 
   * When searching for debian/control, try debian/control.in as well.
