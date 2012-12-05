@@ -42,7 +42,7 @@ FORCE=n
 step=major
 build_source=no
 INSTALL_IMMEDIATELY="n"
-while getopts :a:bfr:T:p:iIv:us OPT; do
+while getopts :a:bfr:T:p:iIv:ous OPT; do
     case $OPT in
 	a)
 	    ARCH="$OPTARG";;
@@ -78,6 +78,9 @@ while getopts :a:bfr:T:p:iIv:us OPT; do
 	    ;;
 	+I)
 	    INSTALL_IMMEDIATELY="n"
+	    ;;
+	o) # non-interactive/offline
+	    DCH_OPTIONS+=("--spawn-editor=snapshot")
 	    ;;
 	v)
 	    USER_VERSION=$OPTARG
