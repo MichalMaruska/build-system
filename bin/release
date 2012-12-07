@@ -89,7 +89,7 @@ while getopts :a:bfr:T:p:iIv:ous OPT; do
 	    GBP_OPTIONS+=("-us"  "-uc")
 	    ;;
 	*)
-	    echo "Unknown option: $OPTARG" >&2
+	    echo "Unknown option: ${OPTARG-}" >&2
 	    usage
 	    exit 2
     esac
