@@ -8,7 +8,7 @@ export INSTALL_IMMEDIATELY=y
 function usage()
 {
 cat <<EOF
-usage: ${0##*/} [+-r Distro] [+-r arch] [+-t tag} [-p dput-target]* [-v version ] [-s]
+usage: ${0##*/} [+-r Distro] [+-a arch] [-p dput-target]* [-v version ] [-s] [-o]
 
 by defaut:
 Distro .... previous from debian/changelog or ??
@@ -18,6 +18,8 @@ dput-target ... taken from MBS_TARGETS env variable
 -b  ... ignore Git branch
 -i  ...
 -s  ... build the tarball/source package too.
+-o  ... don't open the Editor -- Changelog is unverified. DANGEROUS.
+-p  ... add named tput target.
 EOF
 }
 
