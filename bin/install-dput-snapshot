@@ -38,7 +38,12 @@ EOF
 
 #defaults:
 # fixme: this is set in ~/.gbp.conf (by git-buildpackage)
-BUILD_AREA=${GBP_BUILD_DIR:-../_build-area/}
+# DEBRELEASE_DEBS_DIR ?
+if [ -n ${GBP_BUILD_DIR-} ]; then
+    BUILD_AREA=${GBP_BUILD_DIR%/*}
+else
+    BUILD_AREA=../_build-area/
+fi
 : ${INSTALL_IMMEDIATELY=n}
 DISTRO=${MBS_DISTRO-}
 
