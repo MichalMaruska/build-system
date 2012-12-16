@@ -116,11 +116,16 @@ fi
 
 
 # fallback on env-var value:
-if [ "$dput_targets" = "" -a -n "${MBS_TARGETS-}" ];
-then
-    # fixme: since it comes from a generic shell, divide it as such:
-    #dput_targets=${=MBS_TARGETS}
-    DPUT_TARGETS=${MBS_TARGETS}
+if [ "$dput_targets" = "" ]; then
+    if [ -z "${MBS_TARGETS-}" ];
+    then
+	cecho red "No targets, only local then"
+	exit
+    else
+	# fixme: since it comes from a generic shell, divide it as such:
+	#dput_targets=${=MBS_TARGETS}
+	DPUT_TARGETS=${MBS_TARGETS}
+    fi
 fi
 
 
