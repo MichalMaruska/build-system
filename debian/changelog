@@ -1,3 +1,13 @@
+mmc-build-system (2.12) release; urgency=low
+
+  * fix OPTARG vs "set -u"
+  * clean up the Usage help.
+  * don't mention wrong BUILD_AREA
+  * Check for empty dput-targets first.
+  * don't try (& fail) to remake the git tag.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 19 Dec 2012 23:52:36 +0100
+
 mmc-build-system (2.11) release; urgency=low
 
   * release: avoid the (previously generated) SNAPHOT changelog.
