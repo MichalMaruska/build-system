@@ -20,7 +20,7 @@ install: install-zsh install-functions
 install-functions:
 	$(INSTALL) -v -D --directory $(DESTDIR)$(SHAREDIR)
 	for p in $(SHARED_FILES); do \
-	  $(INSTALL) -v -m 555 $$p $(DESTDIR)$(SHAREDIR) ; \
+	  $(INSTALL) -v -m 444 $$p $(DESTDIR)$(SHAREDIR) ; \
 	done
 
 
