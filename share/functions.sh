@@ -63,7 +63,7 @@ get_current_tag()
 	    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^[:digit:]].*)$" ]]
 	    then
 		VERSION="$match[1].$match[2]"
-		if [ -n $DEBUG ]; then
+		if [ -n ${DEBUG-} ]; then
 		    cecho red "Discarding $match[3] from the TAG";
 		fi
 	    fi
@@ -80,7 +80,7 @@ get_current_tag()
 	fi
     fi
 
-    if [ -n "${DEBUG:-}" ]; then
+    if [ -n "${DEBUG-}" ]; then
 	cecho yellow "version: $VERSION git-offset: ${GIT_OFFSET:-} distro: $DISTRIBUTION" >&2
     fi
 }
