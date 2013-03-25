@@ -1,3 +1,11 @@
+mmc-build-system (2.12.1) release; urgency=low
+
+  * fix DEBUG dereference while not defined.
+  * [fix] Install functions w/o -x bit.
+  * notes on non-stripping builds
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 25 Mar 2013 11:42:14 +0100
+
 mmc-build-system (2.12) release; urgency=low
 
   * fix OPTARG vs "set -u"
