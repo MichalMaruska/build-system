@@ -1,3 +1,13 @@
+* todo
+
+avoid stripping & gdb:
+
+CFLAGS to ./configure "CFLAGS=-O0 -ggdb"
+DEB_BUILD_OPTIONS=nostrip fmb
+
+
+
+
 
 
 * Relevant Variables (for your env)
