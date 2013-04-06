@@ -1,3 +1,10 @@
+mmc-build-system (2.13) release; urgency=low
+
+  * release: do install by default.
+  * snap: have a way to FORCE the version (as release does)
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 06 Apr 2013 11:51:14 +0200
+
 mmc-build-system (2.12.1) release; urgency=low
 
   * fix DEBUG dereference while not defined.
