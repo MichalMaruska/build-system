@@ -43,7 +43,6 @@ FORCE=n
 
 step=major
 build_source=no
-INSTALL_IMMEDIATELY="n"
 while getopts :a:bfr:T:p:iIv:ous OPT; do
     case $OPT in
 	a)
