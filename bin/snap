@@ -13,6 +13,8 @@ possibly_trace
 export INSTALL_IMMEDIATELY=y
 export DEBI_OPTIONS=--upgrade
 
+FORCE=n
+
 function usage(){
 cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
@@ -48,7 +50,7 @@ ARGS=($@)
 
 # If a letter is `followed' by a `:', that option requires an argument.
 # The options can be
-while getopts :uspibhv:d:t OPT; do
+while getopts :uspifbhv:d:t OPT; do
     case $OPT in
 	h)
 	    usage
@@ -89,6 +91,9 @@ while getopts :uspibhv:d:t OPT; do
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
 	    # which does not do harm, though.
 	    build_source=yes
+	    ;;
+	f)
+	    FORCE=y
 	    ;;
 	?)
 	    echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
