@@ -1,26 +1,22 @@
 #! /bin/bash -eu
 
-# fixme: rename to copy-
 
-# work-around for git-dch not being able to write to a specific file
+# So, git-xxx checks out from Git.
+# But, before that, git-dch is run, and possibly  debian/changelog
+# is not commited to git. -- I need to keep it there, to have increasing
+# version number!
+# So,  git-xxx would retrieve previous version.
+
+# Work-around (?) for git-dch not being able to write to a specific file
 
 # This works together with  ./snap, which creates the changelog!
 
 
 local_dir=$(pwd)
-
-# pushd
+# alternatively: pushd
 cd $GBP_GIT_DIR/..
 
-# cp debian/changelog debian/changelog.save
-# cecho red "Generating debian/changelog in $GBP_GIT_DIR (for $local_dir)"
-# git-dch --auto --snapshot
-
-# I need to keep it there, to have increasing
-# version number!
 cp debian/changelog $local_dir/debian/changelog
-# mv debian/changelog.save debian/changelog
-
 
 # popd
 cd $local_dir
