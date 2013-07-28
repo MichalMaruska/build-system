@@ -1,3 +1,10 @@
+mmc-build-system (2.14) release; urgency=low
+
+  * "./auto" might create debian/control, so start with that.
+  * document  copy-snapshot-changelog
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 28 Jul 2013 18:05:54 +0200
+
 mmc-build-system (2.13) release; urgency=low
 
   * release: do install by default.
