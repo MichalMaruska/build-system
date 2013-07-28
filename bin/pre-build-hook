@@ -10,6 +10,8 @@
 # }
 
 
+copy-snapshot-changelog
+
 # Generate stuff for  ./configure
 if [ -e auto ]
 then
@@ -20,10 +22,6 @@ if [ ! -e debian/control ]
 then
     generate-debian-control
 fi
-
-copy-snapshot-changelog
-
-
 
 
 echo "------------------- pre-build-hook finished ----------"
