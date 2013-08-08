@@ -40,7 +40,7 @@ DCH_OPTIONS=()
 
 # default:
 ignore_branch=y
-do_sign=y
+do_sign=n
 build_source=no
 typeset -a ARGS
 ARGS=($@)
