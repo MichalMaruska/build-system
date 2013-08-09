@@ -2,6 +2,7 @@
 
 source /usr/share/build-system/functions.sh
 possibly_trace
+check_getopt
 
 export INSTALL_IMMEDIATELY=y
 
@@ -15,11 +16,15 @@ Distro .... previous from debian/changelog or ??
 Tag ... distro/version
 dput-target ... taken from MBS_TARGETS env variable
 
--b  ... ignore Git branch
--i  ...
--s  ... build the tarball/source package too.
--o  ... don't open the Editor -- Changelog is unverified. DANGEROUS.
--p  ... add named tput target.
+--ignore  | -b  ... ignore Git branch
+--install | -i  ...
+--source | -s  ... build the tarball/source package too.
+--auto | -o  ... don't open the Editor -- Changelog is unverified. DANGEROUS.
+
+--dput | -p [target] ... add named tput target.
+--distr | -r [distro] ... package for that
+--tag  [name]  default  {distro}/
+
 EOF
 }
 
@@ -43,60 +48,78 @@ FORCE=n
 
 step=major
 build_source=no
-while getopts :a:bfr:T:p:iIv:ous OPT; do
-    case $OPT in
-	a)
-	    ARCH="$OPTARG";;
-	b)
+
+
+typeset -a cmd_options
+cmd_options=( $(getopt --name $0 --shell bash \
+    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,version:,force,source,distro: \
+	--options a:bfr:T:p:iIv:ous \
+	-- "$@" )) || { usage && exit 1 }
+
+while (( ${#cmd_options} > 0 )) do
+
+    case $cmd_options[1] in
+	--help | -h)
+	    usage
+	    exit 0
+	    ;;
+	--arch | -a)
+	    shift cmd_options
+	    ARCH="$cmd_options[1]"
+	    ;;
+	--ignore | -b)
 	    DCH_OPTIONS+=("--ignore-branch")
 	    GBP_OPTIONS+=("--git-ignore-branch")
 	    ;;
-	f)
+	--force | -f)
 	    FORCE=y
 	    ;;
-	p)
-	    dput_targets+=($OPTARG)
+	--dput | -p)
+	    shift cmd_options
+	    dput_targets+=($cmd_options[1])
 	    ;;
 
-	r|+r)
-	    USER_DISTRIBUTION="$OPTARG"
+	--distro | -r)
+	    shift cmd_options
+	    USER_DISTRIBUTION="$cmd_options[1]"
+	    GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
 	    ;;
-	T|+T)
-	    # git-tag
-	    "$OPTARG"
+
+	--tag | -T )
+	    shift
+	    git_tag=$cmd_options[1]
 	    ;;
-	s)
+	--source | -s)
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
 	    # which does not do harm, though.
 	    build_source=yes
 	    ;;
 	##  which is?  install the package?
-	i)
+	--install | -i)
+	    # fixme:
 	    GBP_OPTIONS+=("-i")
 	    ;;
-	I)
+	--install | -I)
 	    INSTALL_IMMEDIATELY="y"
 	    ;;
-	+I)
+	--noinstall | +I)
 	    INSTALL_IMMEDIATELY="n"
 	    ;;
-	o) # non-interactive/offline
+	--auto | -o)
+	    # non-interactive/offline
 	    DCH_OPTIONS+=("--spawn-editor=snapshot")
 	    ;;
-	v)
-	    USER_VERSION=$OPTARG
+	--version | -v)
+	    shift cmd_options
+	    USER_VERSION=$cmd_options[1]
 	    ;;
-	u)
+	-u)
+	    # don't sign??
 	    GBP_OPTIONS+=("-us"  "-uc")
 	    ;;
-	*)
-	    echo "Unknown option: ${OPTARG-}" >&2
-	    usage
-	    exit 2
     esac
+    shift cmd_options
 done
-shift $(( OPTIND - 1 ))
-OPTIND=1
 
 
 if [ $build_source != yes ]; then
