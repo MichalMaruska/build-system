@@ -4,8 +4,6 @@ source /usr/share/build-system/functions.sh
 possibly_trace
 check_getopt
 
-export INSTALL_IMMEDIATELY=y
-
 function usage()
 {
 cat <<EOF
@@ -20,17 +18,27 @@ dput-target ... taken from MBS_TARGETS env variable
 --install | -i  ...
 --source | -s  ... build the tarball/source package too.
 --auto | -o  ... don't open the Editor -- Changelog is unverified. DANGEROUS.
+--force |  -f  ... regenerate & commit even if apparently debian/changelog ...
 
 --dput | -p [target] ... add named tput target.
 --distr | -r [distro] ... package for that
 --tag  [name]  default  {distro}/
 
+-u         don't sign
 EOF
 }
 
-# options:
+# defaults for options:
 USER_DISTRIBUTION=""
 DISTRIBUTION=""
+step=major
+build_source=no
+FORCE=n
+# ARCH
+
+
+# this is for the (pre/post) hooks
+export INSTALL_IMMEDIATELY=y
 
 ### Dput
 # same what I use in zlogin for MBS_TARGETS!
@@ -42,19 +50,13 @@ GBP_OPTIONS=()
 typeset -a DCH_OPTIONS
 DCH_OPTIONS=()
 
-FORCE=n
-# ARCH
-
-
-step=major
-build_source=no
-
 
 typeset -a cmd_options
 cmd_options=( $(getopt --name $0 --shell bash \
-    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,version:,force,source,distro: \
-	--options a:bfr:T:p:iIv:ous \
-	-- "$@" )) || { usage && exit 1 }
+    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,version: \
+    --longoptions force,source,distro: \
+    --options a:bfr:T:p:iIv:ous \
+    -- "$@" )) || { usage && exit 1 }
 
 while (( ${#cmd_options} > 0 )) do
 
@@ -275,7 +277,6 @@ then
 fi
 
 
-
 # at this point I have the last commit, but maybe not a tag.
 # If a stop here, and rerun, I would like to resume.
 
@@ -293,14 +294,10 @@ else
     TAGOPTIONS=()
 fi
 
-
-
-
-
 # *now* the default value:
 # : ${GIT_TAG:=$DISTRIBUTION/$VERSION}
 
-# fixme: this only after `generate_commit_changelog' ... 
+# fixme: this only after `generate_commit_changelog' ...
 load_distr_version_from_changelog
 # if different &
 : ${NEWGIT_TAG:=$DISTRIBUTION/$VERSION}
@@ -348,7 +345,7 @@ then
 
 # again  debian/control   Could be done Once
 # again ./auto  Yes
-    mygit-buildpackage $GBP_OPTIONS -S
+#    mygit-buildpackage $GBP_OPTIONS -S
 
 # notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
 # Here we rely on the debian/changelog to confirm it.
