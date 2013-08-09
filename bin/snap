@@ -8,6 +8,7 @@
 
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
+check_getopt
 possibly_trace
 
 export INSTALL_IMMEDIATELY=y
@@ -18,12 +19,13 @@ FORCE=n
 function usage(){
 cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
-    -b  ... ignore branch
-    -u  ... do not sign!
-    -v  ... new version
-    -t  ... don't create the (ORIG) tarball
-    -i ... install immediately, +i do NOT install
+    --ignore -b  ... ignore branch
+    --nosign -u  ... do not sign!
+    --version -v  ... new version
+    --source     ... create sourcd pkg as well (create the (ORIG) tarball)
+    --install -i ... install immediately
            by default .... update only
+    --noinstall
 EOF
 }
 
@@ -50,29 +52,38 @@ ARGS=($@)
 
 # If a letter is `followed' by a `:', that option requires an argument.
 # The options can be
-while getopts :uspifbhv:d:t OPT; do
-    case $OPT in
-	h)
+
+
+typeset -a cmd_options
+cmd_options=( $(getopt --name $0 --shell bash \
+    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro: \
+	--options uspifbhv:d:t \
+	-- "$@" )) || { usage && exit 1 }
+
+while (( ${#cmd_options} > 0 )) do
+    case $cmd_options[1] in
+
+	--help | -h)
 	    usage
 	    exit 0;;
 	## how to invert:  i.e. remove from a Zsh array?
-	b)
+	--ignore | -b)
 	    ignore_branch=n
 	    ;;
 	# useless:
-	s)
+	--sign | -s)
 	    do_sign=y
 	    ;;
-	u|+u)
+	--nosign | -u)
 	    # fixme: should use arrays
 	    # prepend!
 	    do_sign=n
 	    ;;
-	p|+p)
+	--pbuilder | -p)
 	    # /usr/bin/
 	    GBP_OPTIONS+="--git-builder=git-pbuilder"
 	    ;;
-	+i)
+	--install | -i)
 	    ## -i don't upgrade, +i don't install at all.
 	    ## and how to force it? just leave.
 	    INSTALL_IMMEDIATELY=n
@@ -81,38 +92,48 @@ while getopts :uspifbhv:d:t OPT; do
 	    # remove the --upgrade
 	    DEBI_OPTIONS=""
 	    ;;
-	v)
-	    DEFAULT_NEW_VERSION=$OPTARG
+	--version | -v)
+	    shift cmd_options
+	    DEFAULT_NEW_VERSION=$cmd_options[1]
 	    ;;
-	d)
-	    USER_DISTRIBUTION=$OPTARG
+	--distro | -d )
+	    shift cmd_options
+	    USER_DISTRIBUTION=$cmd_options[1]
 	    ;;
-	t)
+	--source| -t )
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
 	    # which does not do harm, though.
 	    build_source=yes
 	    ;;
-	f)
+	--force | -f )
 	    FORCE=y
 	    ;;
-	?)
-	    echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
-	    case $ARGS[$OPTIND] in
-		--git*)
-		    GBP_OPTIONS+=$ARGS[$OPTIND]
-		    OPTIND=$(expr $OPTIND + 1)
-		    ;;
-		*)
-		    echo "$OPTIND -> $ARGS[$OPTIND] $OPTARG"
-		    exit 3;;
-	    esac ;;
-	*)
-	    usage
-	    exit 2
     esac
+    shift cmd_options
 done
-shift $(( OPTIND - 1 ))
-OPTIND=1
+
+# the rest are options for git-buildpackage
+
+	# ?)
+	#     echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
+	#     case $ARGS[$OPTIND] in
+	# 	--git*)
+	# 	    GBP_OPTIONS+=$ARGS[$OPTIND]
+	# 	    OPTIND=$(expr $OPTIND + 1)
+	# 	    ;;
+	# 	*)
+	# 	    echo "$OPTIND -> $ARGS[$OPTIND] $OPTARG"
+	# 	    exit 3;;
+	#     esac ;;
+	# *)
+	#     usage
+	#     exit 2
+
+
+#shift $(( OPTIND - 1 ))
+# OPTIND=1
+
+
 
 if [ $ignore_branch = "y" ];then
     DCH_OPTIONS+=("--ignore-branch")
