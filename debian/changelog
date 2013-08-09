@@ -1,3 +1,17 @@
+mmc-build-system (2.15) release; urgency=low
+
+  * At least copy the Changelog in pre-hook.
+  * retire  mygit-buildpackage
+  * fix subtle bug  -- zsh removes empty parameter expansions!
+  * don't sign snap/devel  packages
+  * snap:  migrate to getopt
+  * migration to getopt
+  * On head - merge debian/changelog should be regenerated.
+  * fix (re-)releasing for certain distro
+  * clean & comments
+
+ -- Michal Maruska <mmaruska@gmail.com>  Fri, 09 Aug 2013 03:17:24 +0200
+
 mmc-build-system (2.14) release; urgency=low
 
   * "./auto" might create debian/control, so start with that.
