@@ -249,16 +249,22 @@ function generate_commit_changelog()
 
 
 # if debian/changelog is up-to-date, skip this:?
-# broken...
-# if git status --porcelain debian/changelog
 
+# todo:
 # if no debian/changelog or not in Git ->
+#  --create
 
 # if status OR not updated!
 if git status --porcelain debian/changelog | grep '^ M' > /dev/null
 then
     cecho yellow "debian/changelog is dirty, so let's review it"
     generate_commit_changelog
+
+elif [ $(git log --pretty=%P -n 1 |wc -w) -gt 1 ]
+then
+    cecho yellow "debian/changelog is clean but now we merged"
+    generate_commit_changelog
+
 elif ! git diff HEAD~1 --name-status debian/changelog | grep '^M' > /dev/null
 then
     cecho yellow "debian/changelog is NOT up-to-date"
