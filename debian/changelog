@@ -1,4 +1,4 @@
-mmc-build-system (2.15) release; urgency=low
+mmc-build-system (2.16) release; urgency=low
 
   * Fix getopt application
 
