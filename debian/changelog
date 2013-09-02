@@ -1,5 +1,11 @@
 mmc-build-system (2.15) release; urgency=low
 
+  * Fix getopt application
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 02 Sep 2013 17:31:39 +0200
+
+mmc-build-system (2.15) release; urgency=low
+
   * At least copy the Changelog in pre-hook.
   * retire  mygit-buildpackage
   * fix subtle bug  -- zsh removes empty parameter expansions!
