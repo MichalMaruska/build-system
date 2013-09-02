@@ -61,7 +61,7 @@ cmd_options=$(getopt --name $0 --shell bash \
 eval set -- "$cmd_options"
 
 while (( $# > 0 )) do
-    case $cmd_options[1] in
+    case $1 in
 
 	--help | -h)
 	    usage
