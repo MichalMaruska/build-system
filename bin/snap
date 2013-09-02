@@ -54,13 +54,13 @@ ARGS=($@)
 # The options can be
 
 
-typeset -a cmd_options
-cmd_options=( $(getopt --name $0 --shell bash \
+cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro: \
 	--options uspifbhv:d:t \
-	-- "$@" )) || { usage && exit 1 }
+	-- "$@" ) || { usage && exit 1 }
+eval set -- "$cmd_options"
 
-while (( ${#cmd_options} > 0 )) do
+while (( $# > 0 )) do
     case $cmd_options[1] in
 
 	--help | -h)
@@ -93,12 +93,12 @@ while (( ${#cmd_options} > 0 )) do
 	    DEBI_OPTIONS=""
 	    ;;
 	--version | -v)
-	    shift cmd_options
-	    DEFAULT_NEW_VERSION=$cmd_options[1]
+	    shift
+	    DEFAULT_NEW_VERSION=$1
 	    ;;
 	--distro | -d )
-	    shift cmd_options
-	    USER_DISTRIBUTION=$cmd_options[1]
+	    shift
+	    USER_DISTRIBUTION=$1
 	    ;;
 	--source| -t )
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
@@ -109,7 +109,7 @@ while (( ${#cmd_options} > 0 )) do
 	    FORCE=y
 	    ;;
     esac
-    shift cmd_options
+    shift
 done
 
 # the rest are options for git-buildpackage

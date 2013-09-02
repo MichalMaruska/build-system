@@ -51,23 +51,23 @@ typeset -a DCH_OPTIONS
 DCH_OPTIONS=()
 
 
-typeset -a cmd_options
-cmd_options=( $(getopt --name $0 --shell bash \
+cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,version: \
     --longoptions force,source,distro: \
     --options a:bfr:T:p:iIv:ous \
-    -- "$@" )) || { usage && exit 1 }
+    -- "$@" ) || { usage && exit 1 }
+eval set -- "$cmd_options"
 
-while (( ${#cmd_options} > 0 )) do
+while (( $# > 0 )) do
 
-    case $cmd_options[1] in
+    case $1 in
 	--help | -h)
 	    usage
 	    exit 0
 	    ;;
 	--arch | -a)
-	    shift cmd_options
-	    ARCH="$cmd_options[1]"
+	    shift
+	    ARCH="$1"
 	    ;;
 	--ignore | -b)
 	    DCH_OPTIONS+=("--ignore-branch")
@@ -77,19 +77,19 @@ while (( ${#cmd_options} > 0 )) do
 	    FORCE=y
 	    ;;
 	--dput | -p)
-	    shift cmd_options
-	    dput_targets+=($cmd_options[1])
+	    shift
+	    dput_targets+=($1)
 	    ;;
 
 	--distro | -r)
-	    shift cmd_options
-	    USER_DISTRIBUTION="$cmd_options[1]"
+	    shift
+	    USER_DISTRIBUTION="$1"
 	    GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
 	    ;;
 
 	--tag | -T )
 	    shift
-	    git_tag=$cmd_options[1]
+	    git_tag=$1
 	    ;;
 	--source | -s)
 	    # still  dpkg-buildpackage will call dpkg-source --before-build
@@ -112,15 +112,15 @@ while (( ${#cmd_options} > 0 )) do
 	    DCH_OPTIONS+=("--spawn-editor=snapshot")
 	    ;;
 	--version | -v)
-	    shift cmd_options
-	    USER_VERSION=$cmd_options[1]
+	    shift
+	    USER_VERSION=$1
 	    ;;
 	-u)
 	    # don't sign??
 	    GBP_OPTIONS+=("-us"  "-uc")
 	    ;;
     esac
-    shift cmd_options
+    shift
 done
 
 
