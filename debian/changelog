@@ -1,3 +1,9 @@
+mmc-build-system (2.17) release; urgency=low
+
+  * more getopt fix for snap.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 02 Sep 2013 18:05:11 +0200
+
 mmc-build-system (2.16) release; urgency=low
 
   * Fix getopt application
