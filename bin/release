@@ -155,10 +155,8 @@ fi
 
 
 # I want to be able to repeat the run.
-# So, to skip the changelog and/or  git tag!
+# So, update the changelog and git tag only if needed.
 
-# So, changelog if needed.
-# git tag if ....needed.
 set +e
 get_current_tag
 # this sets DISTRIBUTION,VERSION & GIT_OFFSET
@@ -192,13 +190,12 @@ function get_new_version()
     load_distr_version_from_changelog
     if dpkg --compare-versions $VERSION lt $git_version;
     then
-
-    # increase_version $step
+	# increase_version $step
 	VERSION=$git_version
-    # so the changelog contains a higher
-    # version. git-dch would notice it.
-    #
-    # So, increase more.
+	# so the changelog contains a higher
+	# version. git-dch would notice it.
+	#
+	# So, increase more.
     fi
 
     echo $DISTRIBUTION $VERSION
@@ -217,7 +214,7 @@ function generate_commit_changelog()
 	echo "overriding the version, as requested" >&2
 	VERSION=${USER_VERSION}
     else
-# fixme: here we need to increase (& hence parse) the VERSION:
+	# fixme: here we need to increase (& hence parse) the VERSION:
 	get_new_version;
 	[[ -n $USER_DISTRIBUTION ]] && DISTRIBUTION=$USER_DISTRIBUTION
 	#echo "Starting a new version $VERSION."
@@ -236,16 +233,18 @@ function generate_commit_changelog()
 	mv debian/changelog debian/changelog.snap
 	git checkout debian/changelog
     fi
-    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" --distribution $DISTRIBUTION
+    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" \
+	--distribution $DISTRIBUTION
+
     rm -f debian/changelog.snap
     set +x
-# "--debian-tag=$DISTRIBUTION/%(version)s"
+    # "--debian-tag=$DISTRIBUTION/%(version)s"
 
     if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
     then
 	git add debian/changelog;
-	# get the version and "release $VERSION"
-	git commit -m release
+	# todo: "release $VERSION"
+	git commit -m "release"
     fi
 }
 
