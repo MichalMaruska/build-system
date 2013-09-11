@@ -292,6 +292,7 @@ then
     TAGOPTIONS=(--git-posttag=post-tag-hook)
 else
     TAGOPTIONS=()
+    cecho red "will not create git tag! HEAD already tagged"
 fi
 
 # *now* the default value:
