@@ -13,9 +13,10 @@ check_getopt()
 possibly_trace()
 {
     if [ -n "${DEBUG-}" ]; then
-	cecho blue setting DEBUGGING on >&2
-	setopt XTRACE
-	unsetopt LOCAL_OPTIONS
+	#cecho blue setting DEBUGGING on >&2
+	#setopt XTRACE
+	#unsetopt LOCAL_OPTIONS
+	echo "set -x"
     fi
 }
 

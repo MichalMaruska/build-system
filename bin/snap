@@ -9,7 +9,7 @@
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
 check_getopt
-possibly_trace
+eval $(possibly_trace)
 
 export INSTALL_IMMEDIATELY=n
 export DEBI_OPTIONS=--upgrade
