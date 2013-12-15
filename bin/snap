@@ -188,6 +188,10 @@ then
     if [[ -z ${DEFAULT_NEW_VERSION-} ]]
     then
 	load_distr_version_from_changelog
+
+	if [ -n "$USER_DISTRIBUTION" ]; then
+	    DISTRIBUTION=$USER_DISTRIBUTION
+	fi
 	increase_version major
 
 	( echo "Starting a new version $VERSION."
@@ -203,6 +207,10 @@ then
 else
     # cp -v debian/changelog debian/changelog.save
     # Already updated since a release (fixme?). So, the version should be there.
+    if [ -n "$USER_DISTRIBUTION" ]; then
+	DISTRIBUTION=$USER_DISTRIBUTION
+    fi
+
     git-dch --auto --snapshot $DCH_OPTIONS
 fi
 
