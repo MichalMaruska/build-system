@@ -182,10 +182,10 @@ fi
 
 # The changelog is updated inside the Git repo.
 # After the git checkout, it will be copied.
-if changelog_needs_new_section;
+if changelog_needs_new_section
 then
     # get the current version & increase. The major maybe.
-    if [ -z "${DEFAULT_NEW_VERSION:-}" ]
+    if [[ -z ${DEFAULT_NEW_VERSION-} ]]
     then
 	load_distr_version_from_changelog
 	increase_version major
