@@ -331,33 +331,5 @@ git-buildpackage \
     $MGB_OPTIONS $GBP_OPTIONS
 
 
-
-
-
-#### Source package:
-
-# I'd need $BINARY_BUILD_OPTIONS
-
-
-# -S is handed over.... git-buildpackage -> debuild -> dpkg-buildpackage.
-if false;
-then
-
-# again  debian/control   Could be done Once
-# again ./auto  Yes
-#    mygit-buildpackage $GBP_OPTIONS -S
-
-# notice the asymetry: in `snap' we invoke dput on GBP_CHANGES_FILE.
-# Here we rely on the debian/changelog to confirm it.
-    for target in $DPUT_TARGETS;
-    do
-	if ! debrelease -S --debs-dir=$BUILD_AREA --dput $target; then
-	    (echo "Failed to upload to $target"; echo )>&2
-	fi
-    done
-fi
-
-
-
 # todo:
 # --git-builder /usr/bin/git-pbuilder
