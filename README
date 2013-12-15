@@ -7,6 +7,8 @@ DEB_BUILD_OPTIONS=nostrip fmb
 
 
 
+** snap cares about tarbal ! ... only matter of #tarball-dir = ../tarballs/ in ~/.gbp.conf
+gbp:info: Orig tarball 'gauche_0.9.4.orig.tar.gz' not found at '../tarballs/'
 
 
 
@@ -98,3 +100,15 @@ by default:
 * misc
 DEBUILD_DPKG_BUILDPACKAGE_OPTS
 DEBUILD_DPKG_BUILDPACKAGE_OPTS="--source-option="""
+
+
+* do I sign UNRELEASED repo?
+I should not. And I configure in  SignWith:
+~/reprepro/conf/distributions
+
+
+* dch piece by piece versions.
+dunno!
+
+
+
