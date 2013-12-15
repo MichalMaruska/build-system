@@ -1,5 +1,7 @@
 #! /bin/bash -eu
 
+# This is invoked in the Build dir.
+# and has $GBP_GIT_DIR, ...
 
 # to-be-generated
 # function debian_control_automatic() {
@@ -10,7 +12,37 @@
 # }
 
 
-copy-snapshot-changelog
+
+copy-snapshot-changelog()
+{
+
+    # So, git-xxx checks out from Git.
+    # But, before that, git-dch is run, and possibly  debian/changelog
+    # is not commited to git. -- I need to keep it there, to have increasing
+    # version number!
+    # So,  git-xxx would retrieve previous version.
+
+    # Work-around (?) for git-dch not being able to write to a specific file
+
+    # This works together with  ./snap, which creates the changelog!
+
+
+    local_dir=$(pwd)
+    # alternatively: pushd
+    cd $GBP_GIT_DIR/..
+
+    cp debian/changelog $local_dir/debian/changelog
+
+    # popd
+    cd $local_dir
+}
+
+if [ $GBP_GIT_DIR = $(pwd) ]; then
+    echo "Your export-dir of git-buildpackage is unset" >&2
+    echo "So your build directory is the same as (git) Source dir" >&2
+else
+    copy-snapshot-changelog
+fi
 
 # Generate stuff for  ./configure
 if [ -e auto ]
