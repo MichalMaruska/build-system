@@ -190,10 +190,8 @@ then
 	load_distr_version_from_changelog
 	increase_version major
 
-	(echo "Starting a new version $VERSION."
-	 echo "Could have been explicitely specified with the -v option." ) >&2
-    else
-	:
+	( echo "Starting a new version $VERSION."
+	    echo "Could have been explicitely specified with the -v option." ) >&2
     fi
 
     # This is fishy:  should be added only on git-dch invocation.
