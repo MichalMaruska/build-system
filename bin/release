@@ -52,7 +52,7 @@ DCH_OPTIONS=()
 
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,version: \
+    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version: \
     --longoptions force,source,distro: \
     --options a:bfr:T:p:iIv:ous \
     -- "$@" ) || { usage && exit 1 }
