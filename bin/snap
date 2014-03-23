@@ -55,8 +55,8 @@ ARGS=($@)
 
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro: \
-	--options uspifbhv:d:t \
+    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro,verbose: \
+	--options uspifbhv:d:tV \
 	-- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -87,6 +87,9 @@ while (( $# > 0 )) do
 	    ## -i don't upgrade, +i don't install at all.
 	    ## and how to force it? just leave.
 	    INSTALL_IMMEDIATELY=n
+	    ;;
+	--verbose | -V )
+	    GBP_OPTIONS+="--git-verbose"
 	    ;;
 	i)
 	    # remove the --upgrade
