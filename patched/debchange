@@ -207,7 +207,7 @@ EOF
 
 sub version () {
     print <<"EOF";
-This is $progname, from the Debian devscripts package, version 2.11.6ubuntu1.3
+This is $progname, from the Debian devscripts package, version 2.11.6ubuntu1.6
 This code is copyright 1999-2003 by Julian Gilbey, all rights reserved.
 Based on code by Christoph Lameter.
 This program comes with ABSOLUTELY NO WARRANTY.
