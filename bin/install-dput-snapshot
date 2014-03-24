@@ -6,13 +6,14 @@
 
 # This is just a wrapper around debi & dput (or reprepro)
 
-# Normally invoked as a post-build hook by git-buildpackage -- receives variables see bellow
+# 1/ Normally invoked as a post-build hook by git-buildpackage -- receives variables
+# see bellow
 # via `env' variables, it can be tuned:
 # DPUT_TARGETS & DPUT_OPTIONS
 # INSTALL_IMMEDIATELY
 
 
-# When invoked manually, we use:
+# 2/ When invoked manually, we use:
 # MBS_SNAP_TARGETS
 
 # Given as $1 the changes file
