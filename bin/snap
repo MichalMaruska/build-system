@@ -11,7 +11,7 @@ source /usr/share/build-system/functions.sh
 check_getopt
 possibly_trace
 
-export INSTALL_IMMEDIATELY=y
+export INSTALL_IMMEDIATELY=n
 export DEBI_OPTIONS=--upgrade
 
 FORCE=n
@@ -86,14 +86,15 @@ while (( $# > 0 )) do
 	--install | -i)
 	    ## -i don't upgrade, +i don't install at all.
 	    ## and how to force it? just leave.
-	    INSTALL_IMMEDIATELY=n
+	    INSTALL_IMMEDIATELY=y
+	    # remove the --upgrade
+	    DEBI_OPTIONS=""
+	    ;;
+	noinstall | -n)
+	    DEBI_OPTIONS=""
 	    ;;
 	--verbose | -V )
 	    GBP_OPTIONS+="--git-verbose"
-	    ;;
-	i)
-	    # remove the --upgrade
-	    DEBI_OPTIONS=""
 	    ;;
 	--version | -v)
 	    shift
