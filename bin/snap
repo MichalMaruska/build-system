@@ -214,12 +214,15 @@ else
     git-dch --auto --snapshot $DCH_OPTIONS
 fi
 
-
-
-
+# Support for 2 different versions of gbp:
+gbp_version=$(git-buildpackage --version|cut -d ' '  -f 2)
+if dpkg --compare-versions $gbp_version '>' 0.6; then
+    PREVERSION_HOOK_NAME=--git-postexport
+else
+    PREVERSION_HOOK_NAME=--git-prebuild
+fi
 
 cecho red "Starting git-buildpackage, with hooks!"
-
 # --git-sign-tags
 # --color=auto
 # lsb_release -c
@@ -230,7 +233,7 @@ export DPUT_TARGETS=${MBS_SNAP_TARGETS-local}
 set -x
 git-buildpackage \
     --git-ignore-new $GBP_OPTIONS \
-    --git-prebuild=pre-build-hook \
+    $PREVERSION_HOOK_NAME=pre-build-hook \
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
