@@ -1,3 +1,27 @@
+mmc-build-system (2.20) release; urgency=low
+
+  * inform when redoing a release and making git Tag
+  * format .... TABS leaked in!
+  * verbose on error while git-pushing after git tag (during release)
+  * Remove "development" versions of packages from local reprepro
+  * format -- emacs
+  * include copy-snapshot-changelog inside pre-build-hook
+  * Zshell
+  * clean shell
+  * set Distribution to user's preference, before dch &
+  * a bit more Documentation
+  * remove source-pkg code from release
+  * Use postexport or prebuild hook (to support 2 versions of gbp)
+  * snap: support passing --verbose to gbp
+  * fix release  --tag long option.
+  * update patched debchange
+  * For release, after dput on maruska, trigger the processing too.
+  * By default install to MBS_SNAP_TARGETS
+  * comment on 2 modes: interactive or  hook.
+  * less & better verbosity when removing devel packages from reprepro.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 30 Mar 2014 14:56:49 +0200
+
 mmc-build-system (2.17) release; urgency=low
 
   * more getopt fix for snap.
