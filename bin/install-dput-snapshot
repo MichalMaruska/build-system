@@ -56,6 +56,7 @@ typeset -T DPUT_OPTIONS dput_options
 typeset -T MBS_TARGETS mbs_targets ":"
 typeset -T DPUT_TARGETS dput_targets
 
+dput_targets=${MBS_SNAP_TARGETS-}
 
 # make it manually invokable:
 while getopts :ufird: OPT; do
