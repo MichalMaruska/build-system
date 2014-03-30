@@ -48,6 +48,7 @@ else
 fi
 : ${INSTALL_IMMEDIATELY=n}
 DISTRO=${MBS_DISTRO-}
+release=n
 
 typeset -T DPUT_OPTIONS dput_options
 
@@ -70,6 +71,7 @@ while getopts :ufird: OPT; do
 	    ;;
 	r)
 	    dput_targets=($mbs_targets)
+	    release=y
 	    ;;
 	d)
 	    DISTRO=$OPTARG
@@ -160,4 +162,10 @@ else
     echo "** If you want to install:"
     # cecho gray:
     echo "debi --debs-dir $BUILD_AREA"
+fi
+
+
+if [ $release = y ]; then
+    cecho green "processing hardwired reprepro (fixme!)"
+    ssh -Y -A michal@www.ruska.it "reprepro/process-incoming; ls -l reprepro/incoming/"
 fi
