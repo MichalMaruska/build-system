@@ -126,28 +126,6 @@ fi
 
 
 
-if [ -z "${dput_targets}" ]; then
-    cecho green "no Dput targets"
-else
-    for TARGET in ${dput_targets}
-    do
-	cecho blue "Uploading to $TARGET"
-
-	if [ -z ${GBP_CHANGES_FILE-} ]; then
-	    if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
-		(echo "Failed to upload to $TARGET"; echo )>&2
-	    fi
-	else
-	    if ! dput --unchecked $dput_options $TARGET $GBP_CHANGES_FILE;
-	    then
-		cecho yellow "target $TARGET failed, but not fatal!"
-	    fi
-	fi
-    done
-fi
-
-
-
 ## Install  (this is even faster)
 if [ ${INSTALL_IMMEDIATELY} = "y" ]
 then
@@ -165,7 +143,33 @@ else
 fi
 
 
-if [ $release = y ]; then
-    cecho green "processing hardwired reprepro (fixme!)"
-    ssh -Y -A michal@www.ruska.it "reprepro/process-incoming; ls -l reprepro/incoming/"
+# upload
+if [ -z "${dput_targets}" ]; then
+    cecho green "no Dput targets"
+else
+    for TARGET in ${dput_targets}
+    do
+	cecho blue "Uploading to $TARGET"
+
+	if [ -z ${GBP_CHANGES_FILE-} ]; then
+	    if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
+		(echo "Failed to upload to $TARGET"; echo )>&2
+	    fi
+	else
+	    if ! dput --unchecked $dput_options $TARGET $GBP_CHANGES_FILE;
+	    then
+		cecho yellow "target $TARGET failed, but not fatal!"
+	    fi
+	fi
+
+	if [ $TARGET = "maruska" ]; then
+	    if [ $release = y ]; then
+		cecho green "processing hardwired reprepro (fixme!)"
+		ssh -Y -A michal@www.ruska.it "reprepro/process-incoming; ls -l reprepro/incoming/"
+	    fi
+	fi
+    done
 fi
+
+
+
