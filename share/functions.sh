@@ -30,14 +30,12 @@ possibly_trace()
 # GIT_OFFSET
 get_current_tag()
 {
-#    set +e
-# git describe --all -> HEAD or master.
-# I only want tags
     if ! description=$(git describe --tags)
     then
 	if git tag -l |grep . > /dev/null;
 	then
 	    cecho red "not _past_ Git tag. But other tags present"
+	    # fixme:
 	    if [ $FORCE != "y" ]
 	    then
 		exit 1
@@ -46,14 +44,15 @@ get_current_tag()
 	    # fake values.
 	    VERSION=
 	    DISTRIBUTION=
+	    # GIT_OFFSET=$match[3]
 	    return 1
 	fi
     else
 
-    # 2 possibilities:
-    # Either only the tag (possibly name/version),
-    # or name/version-offset-g{hash}
-    #
+	# 2 possibilities:
+	# Either only the tag (possibly name/version),
+	# or name/version-offset-g{hash}
+	#
 	if [[ $description =~ "^(.*)/(.*)-([[:digit:]]+)-g[[:alnum:]]*$" ]]
 	then
 	    DISTRIBUTION=$match[1]
