@@ -34,6 +34,9 @@ dput(1) options basically
 -i install immediatelly
 -d {DISTRO}
 -r release, so use the MBS_TARGETS, and hence dput(1) in those
+
+Environment:
+DPUT_TARGETS
 EOF
 }
 
@@ -57,7 +60,8 @@ typeset -T DPUT_OPTIONS dput_options
 typeset -T MBS_TARGETS mbs_targets ":"
 typeset -T DPUT_TARGETS dput_targets
 
-dput_targets=${MBS_SNAP_TARGETS-}
+# possible input via this variable:
+[ -z "$DPUT_TARGETS" ] && dput_targets=${MBS_SNAP_TARGETS-}
 
 # make it manually invokable:
 while getopts :ufird: OPT; do
