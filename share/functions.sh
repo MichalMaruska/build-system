@@ -67,13 +67,7 @@ get_current_tag()
 	    VERSION=$match[2]
 	    GIT_OFFSET=$match[3]
 	    # ${${description%-g*}#*-}
-	    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^[:digit:]].*)$" ]]
-	    then
-		VERSION="$match[1].$match[2]"
-		if [ -n ${DEBUG-} ]; then
-		    cecho red "Discarding $match[3] from the TAG";
-		fi
-	    fi
+	    sanitize_version
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
 	then
@@ -92,21 +86,29 @@ get_current_tag()
     fi
 }
 
-load_distr_version_from_changelog()
+# modifies the VERSION variable.
+sanitize_version()
 {
-    DISTRIBUTION=$(deb-pkg-distribution debian/changelog)
-    VERSION=$(deb-pkg-version debian/changelog)
-
     # conditionally remove. but this
     # should not remove a middle  a.b.c.
     # 1.2ubuntu ->  1.2
     if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^.[:digit:]].*)$" ]]
+	#                                                 ^??
     then
 	VERSION="$match[1].$match[2]"
-	cecho red "Discarding $match[3]"
+	if [ -n ${DEBUG-} ]; then
+	    cecho red "Discarding $match[3] from the TAG";
+	fi
     fi
 }
 
+
+load_distr_version_from_changelog()
+{
+    DISTRIBUTION=$(deb-pkg-distribution debian/changelog)
+    VERSION=$(deb-pkg-version debian/changelog)
+    sanitize_version
+}
 
 # in VERSION variable.
 increase_version()
