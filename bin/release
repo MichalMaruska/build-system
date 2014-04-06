@@ -326,7 +326,7 @@ git-buildpackage \
     --git-cleaner=/bin/true \
     --git-prebuild=pre-build-hook -sa \
     $TAGOPTIONS \
-    --git-postbuild=install-dput-snapshot \
+    --git-postbuild="install-dput-snapshot -r" \
     --git-builder="debuild -eMAKEFLAGS -nc" \
     $MGB_OPTIONS $GBP_OPTIONS
 
