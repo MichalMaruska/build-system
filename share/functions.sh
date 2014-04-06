@@ -33,12 +33,7 @@ get_current_tag()
 #    set +e
 # git describe --all -> HEAD or master.
 # I only want tags
-    description=$(git describe --tags)
-    git_status=$?
-#    set -e
-
-    # if no tags at all -> exit, or ?
-    if [ $git_status -ne 0 ]
+    if ! description=$(git describe --tags)
     then
 	if git tag -l |grep . > /dev/null;
 	then
