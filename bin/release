@@ -4,6 +4,8 @@ source /usr/share/build-system/functions.sh
 possibly_trace
 check_getopt
 
+check_start_gnupg
+
 function usage()
 {
 cat <<EOF

@@ -131,3 +131,59 @@ increase_version()
 
     VERSION="$major${middle-.${middle}}.$minor"
 }
+
+ssh_works=y
+
+
+# GNU-GPG
+restart_gpg()
+{
+    cecho red restarting >&2
+    if [ $ssh_works = y ]; then
+	ssh_option=
+    else
+	ssh_option="--enable-ssh-support"
+    fi
+    gpg-agent --daemon $ssh_option --default-cache-ttl 1800 \
+	--write-env-file "${HOME}/.gpg-agent-info" >! ~/.gpg-agent-info
+}
+
+load_config()
+{
+    if [ $ssh_works = y ]; then
+	BKP_SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+	BKP_SSH_AGENT_PID=${SSH_AGENT_PID-}
+    fi
+
+    source ~/.gpg-agent-info
+    # since 5/2012 it does the export!
+    export GPG_AGENT_INFO
+
+    if [ $ssh_works = y ]; then
+	# restore
+	SSH_AUTH_SOCK=$BKP_SSH_AUTH_SOCK
+	SSH_AGENT_PID=$BKP_SSH_AGENT_PID
+    else
+	export SSH_AUTH_SOCK
+	export SSH_AGENT_PID
+    fi
+    # but then this, makes it the main one:
+    # which promises USer (X window connection is best)
+}
+
+check_start_gnupg()
+{
+    if ! gpg-connect-agent -q '/bye' || [ $(gpg-connect-agent '/echo  ahoj' '/bye') != "ahoj" ]
+    then
+	cecho yellow "Have to restart gpg" >&2
+	restart_gpg
+	load_config
+    fi
+
+    if gpg-connect-agent -q '/bye' || [ $(gpg-connect-agent '/echo  ahoj' '/bye') != "ahoj" ]
+    then
+	cecho green "gpg is ok on $GPG_AGENT_INFO" >&2
+    fi
+
+    export GPG_TTY=$(tty)
+}
