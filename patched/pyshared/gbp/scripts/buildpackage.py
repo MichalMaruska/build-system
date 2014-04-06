@@ -544,6 +544,7 @@ def main(argv):
                                  extra_env={'GBP_GIT_DIR': repo.git_dir,
                                             'GBP_TMP_DIR': tmp_dir})(dir=tmp_dir)
 
+                source = DebianSource(tmp_dir)
                 major = (source.changelog.debian_version if source.is_native()
                          else source.changelog.upstream_version)
                 export_dir = os.path.join(output_dir, "%s-%s" % (source.sourcepkg, major))
