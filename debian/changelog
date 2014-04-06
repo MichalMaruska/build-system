@@ -1,3 +1,20 @@
+mmc-build-system (2.21) release; urgency=medium
+
+  * Correct the logic for --install and --noinstall options.
+  * Import buildpackage.py
+  * Rescan the debian changelog after "postexport" hook.
+  * Update buildpackage.py from upstream.
+  * New function sanitize_version:
+  * simplify Shell
+  * exit when ... not FORCE & no git tag found.
+  * format
+  * Invoke install-dput-snapshot with  -r (release) option.
+  * Install (locally) before dput. And reprepro on maruska when needed.
+  * use $DPUT_TARGETS when available (broken, -r overrides it)
+  * Start GPG agent on the current terminal.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 06 Apr 2014 20:45:08 +0000
+
 mmc-build-system (2.20) release; urgency=low
 
   * inform when redoing a release and making git Tag
