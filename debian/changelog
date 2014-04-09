@@ -1,3 +1,11 @@
+mmc-build-system (2.22) release; urgency=low
+
+  * set -x when DEBUG variable is set
+  * cdbs->dh
+  * some more fixing  no/install
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 09 Apr 2014 15:16:54 +0200
+
 mmc-build-system (2.21) release; urgency=medium
 
   * Correct the logic for --install and --noinstall options.
