@@ -219,12 +219,12 @@ function generate_commit_changelog()
     else
 	# fixme: here we need to increase (& hence parse) the VERSION:
 	get_new_version;
-	[[ -n $USER_DISTRIBUTION ]] && DISTRIBUTION=$USER_DISTRIBUTION
 	#echo "Starting a new version $VERSION."
 	#echo "Could have been explicitely specified with the -v option.">&2
 	# no need to echo... the user will see it?
     fi
 
+    [[ -n $USER_DISTRIBUTION ]] && DISTRIBUTION=$USER_DISTRIBUTION
     set -x
 
     # todo: if modified, reset it. Saving a copy.
