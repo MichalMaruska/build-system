@@ -322,12 +322,12 @@ echo exporting DPUT_TARGETS $DPUT_TARGETS
 export DPUT_TARGETS
 
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
-#  -sa
+set -x
 git-buildpackage \
     --git-ignore-new \
     --git-cleaner=/bin/true \
     --git-prebuild=pre-build-hook \
-    --git-postbuild="install-dput-snapshot -r" \
+    --git-postbuild="install-dput-snapshot -r" -b \
     $TAGOPTIONS \
     --git-builder="debuild -eMAKEFLAGS -nc" \
     $GBP_OPTIONS
