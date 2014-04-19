@@ -1,23 +1,22 @@
 #! /usr/bin/zsh -feu
 
+# This is just a wrapper around debi & dput (or reprepro)
+
+# 1/ Normally invoked as a post-build hook by git-buildpackage --
+# receives variables (see bellow)
+
+# Via `env' variables, it can be tuned:
+# DPUT_TARGETS & DPUT_OPTIONS
+# INSTALL_IMMEDIATELY
 # todo:
 # could use GBP_CHANGES_FILE even after building with db!
 
-
-# This is just a wrapper around debi & dput (or reprepro)
-
-# 1/ Normally invoked as a post-build hook by git-buildpackage -- receives variables
-# see bellow
-# via `env' variables, it can be tuned:
-# DPUT_TARGETS & DPUT_OPTIONS
-# INSTALL_IMMEDIATELY
-
-
 # 2/ When invoked manually, we use:
 # MBS_SNAP_TARGETS
-
 # Given as $1 the changes file
 # dput it to all in
+
+
 
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
@@ -26,7 +25,7 @@ possibly_trace
 
 
 function usage(){
-cat <<EOF
+    cat <<EOF
 usage: ${0##*/} [+-ufi} [--] ARGS...
 dput(1) options basically
 -u don\'t check the signaure
@@ -40,7 +39,7 @@ DPUT_TARGETS
 EOF
 }
 
-#defaults:
+# defaults:
 # fixme: this is set in ~/.gbp.conf (by git-buildpackage)
 # DEBRELEASE_DEBS_DIR ?
 
@@ -54,8 +53,10 @@ fi
 DISTRO=${MBS_DISTRO-}
 release=n
 
+# we compose options for `dput'
 typeset -T DPUT_OPTIONS dput_options
 
+# in particular the `targets'
 # Convert from MBS_TARGETS into a Zsh array. My standard!
 typeset -T MBS_TARGETS mbs_targets ":"
 typeset -T DPUT_TARGETS dput_targets
@@ -103,7 +104,7 @@ if [ -z "$GBP_CHANGES_FILE" ]; then
 fi
 
 
-# install into (local) reprepro:
+# dput/install into (local) reprepro:
 # $GBP_BUILD_DIR is the build directory: I don't need it.
 if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE}" ]
 then
@@ -147,7 +148,8 @@ else
 fi
 
 
-# upload
+## upload
+# note that  `local' is basically wrong. reprepro is done natively.
 if [ -z "${dput_targets}" ]; then
     cecho green "no Dput targets"
 else
@@ -166,10 +168,12 @@ else
 	    fi
 	fi
 
+	### Invoke remote reprepro:
 	if [ $TARGET = "maruska" ]; then
 	    if [ $release = y ]; then
 		cecho green "processing hardwired reprepro (fixme!)"
-		ssh -Y -A michal@www.ruska.it "reprepro/process-incoming; ls -l reprepro/incoming/"
+		ssh -Y -A michal@www.ruska.it \
+		    "reprepro/process-incoming; ls -l reprepro/incoming/"
 	    fi
 	fi
     done
