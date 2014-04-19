@@ -29,10 +29,10 @@ usage: ${0##*/} [+-upb} [--] ARGS...
 EOF
 }
 
-# this exports to the `install-dput-snapshot'!
+# this exports to the `install-dput-snapshot'! -- mmc: no!
 USER_DISTRIBUTION=""
 : ${DISTRIBUTION=UNRELEASED}
-export DISTRIBUTION
+# export DISTRIBUTION
 
 ### Dput ... avoided
 typeset -a GBP_OPTIONS
