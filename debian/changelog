@@ -1,3 +1,17 @@
+mmc-build-system (2.23) release; urgency=low
+
+  * install-dput-snapshot: reformat & comments
+  * install-dput-snapshot: guess the correct distribution from *.changes
+  * release: reformat
+  * release: always prefer USER_DISTRIBUTION
+  * release: drop MGB_OPTIONS
+  * release: indicate that postbuild is before posttag hook
+  * snap: don't export DISTRIBUTION -- now that install-dput- finds it itself.
+  * Avoid using undefined Shell var.
+  * Release: limit (*.changes) to binary build only.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 20 Apr 2014 01:44:13 +0200
+
 mmc-build-system (2.22) release; urgency=low
 
   * set -x when DEBUG variable is set
