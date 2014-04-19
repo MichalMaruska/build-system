@@ -6,9 +6,10 @@ check_getopt
 
 check_start_gnupg
 
+
 function usage()
 {
-cat <<EOF
+    cat <<EOF
 usage: ${0##*/} [+-r Distro] [+-a arch] [-p dput-target]* [-v version ] [-s] [-o]
 
 by defaut:
