@@ -97,7 +97,7 @@ then
     GBP_CHANGES_FILE=$1
 fi
 
-if [ -z "$GBP_CHANGES_FILE" ]; then
+if [ -z "${GBP_CHANGES_FILE-}" ]; then
     echo "did not provide the Changes file!"
     usage
     exit 2
