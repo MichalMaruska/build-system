@@ -116,16 +116,17 @@ then
 	reprepro remove UNRELEASED $package
     }
 
-    cecho green "Putting into Reprepro: ${GBP_CHANGES_FILE}"
+    # Distribution: release
+    DISTRO=$(sed -n -e '/^Distribution: /{s/Distribution: //;p}' $GBP_CHANGES_FILE)
+
     # fixme: if the distro is not local?
-    if [ -n "$DISTRO" ]; then
-	if grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
-	then
-    # fixme: snapshot -> not a big deal if I still get the dist. wrong?
-	    reprepro --basedir "$REPREPRO_BASE_DIR" \
-		--ignore=wrongdistribution  -V \
-		include "$DISTRO" $GBP_CHANGES_FILE
-	fi
+    if test -n "$DISTRO"  &&
+	## acceptable in reprepro
+	grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
+    then
+	cecho blue "Putting into Reprepro: ${GBP_CHANGES_FILE}"
+	reprepro --basedir "$REPREPRO_BASE_DIR" -V \
+	    include "$DISTRO" $GBP_CHANGES_FILE
     fi
 fi
 
