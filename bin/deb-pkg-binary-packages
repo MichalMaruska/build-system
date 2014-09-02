@@ -6,7 +6,8 @@
 
 use Dpkg::Control::Info;
 
-$file=shift . "/debian/control";
+$file=shift;
+#    . "/debian/control";
 
 unless  (-f $file) {
     $file=$file . ".in";
