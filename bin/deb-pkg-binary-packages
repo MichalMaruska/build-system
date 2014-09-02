@@ -22,6 +22,9 @@ foreach $_ ($p->get_packages())
 {
 #    print "next";
 #    print $_;
+    if ($_->{Architecture} ne "all") {
     print $_->{Package}, "\n";
+#    print $_->{Architecture}, "\n";
+    }
 }
 
