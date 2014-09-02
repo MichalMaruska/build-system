@@ -12,7 +12,9 @@ check_getopt
 eval $(possibly_trace)
 
 export INSTALL_IMMEDIATELY=y
-export DEBI_OPTIONS=--upgrade
+# during development it's better to install.
+export DEBI_OPTIONS=
+# --upgrade
 
 FORCE=n
 
