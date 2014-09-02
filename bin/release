@@ -321,7 +321,7 @@ if git tag -l "$NEWGIT_TAG"|grep "." > /dev/null
 then
     cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
 else
-    GBP_OPTIONS=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
+    GBP_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
 fi
 
 if dpkg --compare-versions $gbp_version '>' 0.6; then
