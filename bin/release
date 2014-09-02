@@ -6,6 +6,9 @@ check_getopt
 
 check_start_gnupg
 
+# Support for 2 different versions of gbp:
+gbp_version=$(git-buildpackage --version|cut -d ' '  -f 2)
+
 
 function usage()
 {
@@ -236,8 +239,12 @@ function generate_commit_changelog()
 	mv debian/changelog debian/changelog.snap
 	git checkout debian/changelog
     fi
-    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION" \
-	--distribution $DISTRIBUTION
+
+    if dpkg --compare-versions $gbp_version '>' 0.6; then
+	DCH_OPTIONS+=(--distribution $DISTRIBUTION)
+    fi
+
+    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
 
     rm -f debian/changelog.snap
     set +x
@@ -317,6 +324,12 @@ else
     GBP_OPTIONS=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
 fi
 
+if dpkg --compare-versions $gbp_version '>' 0.6; then
+    PREVERSION_HOOK_NAME=--git-postexport
+else
+    PREVERSION_HOOK_NAME=--git-prebuild
+fi
+
 
 echo exporting DPUT_TARGETS $DPUT_TARGETS
 export DPUT_TARGETS
@@ -326,7 +339,7 @@ set -x
 git-buildpackage \
     --git-ignore-new \
     --git-cleaner=/bin/true \
-    --git-prebuild=pre-build-hook \
+    $PREVERSION_HOOK_NAME=pre-build-hook \
     --git-postbuild="install-dput-snapshot -r" -b \
     $TAGOPTIONS \
     --git-builder="debuild -eMAKEFLAGS -nc" \
