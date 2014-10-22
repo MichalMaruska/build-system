@@ -1,0 +1,5 @@
+#!/bin/bash -eu
+
+deb-pkg-name $1
+deb-pkg-binary-packages $1
+echo
