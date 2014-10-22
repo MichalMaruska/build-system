@@ -1,0 +1,61 @@
+#! /usr/bin/perl
+
+# dump the Build-deps of a debian/control file.
+
+use Dpkg::Control::Info;
+use Dpkg::Control::Hash;
+use Dpkg::Control::Changelog;
+# ffap?
+# /usr/share/perl5/Dpkg/Deps.pm
+use Dpkg::Deps;
+
+my $verbose=1;
+
+my $file=shift();
+if ( -d $file ) {
+    $file=$file . "/debian/control" ;
+}
+
+unless  (-f $file) {
+    die("non-existent file");
+}
+
+my $control = Dpkg::Control::Info->new($file);
+my $fields = $control->get_source();
+# print $fields->{'Build-Depends'}, "\n";
+
+#   push @bd_list, $fields->{'Build-Depends-Arch'} if not $ignore_bd_arch;
+#   push @bd_list, $fields->{'Build-Depends-Indep'} if not $ignore_bd_indep;
+
+
+my $dep = deps_parse($fields->{'Build-Depends'}
+    # , reduce_restrictions => 1, union => 1,
+    # build_dep => 1, build_profiles => \@build_profiles,
+    # host_arch => $host_arch
+);
+
+my $source_pkg = $fields->{Source};
+
+# print "\npkg: ", $source_pkg, "\n";
+
+sub fun{
+    my ($dep) = @_;
+    # print $dep, "\n";
+    # ignore ' (...)' trailing
+    $dep =~ s/ (.*)$//;
+    print $source_pkg, "\t", $dep, "\n";
+    return 1;
+}
+
+# mapping:  bdep: source -> binary
+#           rel:  binary -> source.
+# from this reorder.  possibly a cycle!
+
+
+deps_iterate($dep, \&fun);
+
+# $dep_list->simplify_deps($facts);
+#print $dep;
+    # error(_g('error occurred while parsing %s'),
+    #       'Build-Conflicts/Build-Conflicts-Arch/Build-Conflicts-Indep')
+    #     unless defined $dep;
