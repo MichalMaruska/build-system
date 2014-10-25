@@ -106,7 +106,7 @@ load_distr_version_from_changelog()
 # in VERSION variable.
 increase_version()
 {
-    step=$1
+    local step=$1
 
     # it can be: (from git)
     # a.b.c~git-offset
@@ -121,10 +121,14 @@ increase_version()
     middle=${tail%.*}
 
     # echo "major=$major  minor=$minor"
-    cecho red "increasing version by $step"
-    if [ step = "major" ]
+    cecho red "increasing version by ... $step"
+    if [ $step = "major" ]
     then
-	major=$(expr $major + 1)
+	if ! major=$(expr $major + 1);
+	then
+	    echo "cannot increase $VERSION"
+	    exit 1
+	fi
 	minor=0
     else
 	minor=$(expr $minor + 1)
