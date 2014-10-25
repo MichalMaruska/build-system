@@ -1,3 +1,21 @@
+mmc-build-system (3.1) release; urgency=medium
+
+  * make simple deb-pkg* tools take the debian/control file as argument
+  * print only Binary deb. packages.
+  * Support 2 different versions of gbp:
+  * fix adding to GBP_OPTIONS  (-b was ignored)
+  * snap: by default do install.
+  * Drop git-builpackage patches from here -- keep them in its git repo.
+  * drop dependency on cdbs
+  * Don't attempt to dput into reprepro=local twice.
+  * New deb-pkg-build-deps:  dump the simple build dependencies to order by tsort.
+  * NEW deb-pkg-source-binary: dump the source-binary relationship.
+  * When unable to increment the version, tell the user the string.
+  * clean up comments & format & ...
+  * Support building of the Work-dir content (i.e. not a git commit)
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 25 Oct 2014 04:01:05 +0200
+
 mmc-build-system (2.23) release; urgency=low
 
   * install-dput-snapshot: reformat & comments
