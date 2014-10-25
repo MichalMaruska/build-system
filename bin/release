@@ -150,7 +150,7 @@ if [ "$dput_targets" = "" ]; then
     if [ -z "${MBS_TARGETS-}" ];
     then
 	cecho red "No targets, only local then"
-	exit
+	exit 1
     else
 	# fixme: since it comes from a generic shell, divide it as such:
 	#dput_targets=${=MBS_TARGETS}
@@ -163,10 +163,11 @@ fi
 # I want to be able to repeat the run.
 # So, update the changelog and git tag only if needed.
 
+## get the current version string.
 set +e
-get_current_tag
-# this sets DISTRIBUTION,VERSION & GIT_OFFSET
 
+# this sets DISTRIBUTION,VERSION & GIT_OFFSET
+get_current_tag
 found_any_tag=$?
 set -e
 
@@ -174,10 +175,10 @@ if [ $found_any_tag != 0 ]
 then
     cecho red "not past Git tag. Taking hint from the debian/changelog"
     # extract the distro from changelog!
-    ls -l debian/changelog
     load_distr_version_from_changelog;
     # DISTRIBUTION & VERSION
-    # fixme: If not even there:
+
+    # todo: further fallback:
     # default version 0.1, distro your current.
 fi
 
@@ -185,14 +186,15 @@ fi
 # Note: maybe a comitted debian/changelog has a higher
 # version n. which was not released with a tag.
 
+# Increase the VERSION, and compara with the one in Changelog.
+# Make sure it's bigger than that.
 function get_new_version()
 {
     increase_version $step
-    git_version=$VERSION
-#fixme:  wtf ^^^^ why?
+    local git_version=$VERSION
+    # git_distro=$DISTRIBUTION
 
-# git_distro=$DISTRIBUTION
-# This should be from
+    # This should be from
     load_distr_version_from_changelog
     if dpkg --compare-versions $VERSION lt $git_version;
     then
@@ -211,25 +213,25 @@ function get_new_version()
 
 
 # That obviously implies the Git-Tag, then, on the new commit.
+# input: USER_VERSION, USER_DISTRIBUTION, DCH_OPTIONS
+# modifies/output: VERSION, DISTRIBUTION,
 function generate_commit_changelog()
 {
-    # fixme: this needs the git-last-tag:
-
     if [ -n "${USER_VERSION:-}" ]
     then
 	echo "overriding the version, as requested" >&2
 	VERSION=${USER_VERSION}
     else
 	# fixme: here we need to increase (& hence parse) the VERSION:
-	get_new_version;
+	get_new_version
 	#echo "Starting a new version $VERSION."
 	#echo "Could have been explicitely specified with the -v option.">&2
 	# no need to echo... the user will see it?
     fi
 
     [[ -n $USER_DISTRIBUTION ]] && DISTRIBUTION=$USER_DISTRIBUTION
-    set -x
 
+    set -x
     # todo: if modified, reset it. Saving a copy.
     # that copy will be then removed, at the end.
     # This, because snap creates sections, which
@@ -246,20 +248,18 @@ function generate_commit_changelog()
 
     git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
 
+    # Do the commit:
     rm -f debian/changelog.snap
     set +x
-    # "--debian-tag=$DISTRIBUTION/%(version)s"
-
     if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
     then
 	git add debian/changelog;
 	# todo: "release $VERSION"
 	git commit -m "release"
+    # else what to do?
     fi
 }
 
-
-# if debian/changelog is up-to-date, skip this:?
 
 # todo:
 # if no debian/changelog or not in Git ->
