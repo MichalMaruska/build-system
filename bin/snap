@@ -235,7 +235,15 @@ cecho red "Starting git-buildpackage, with hooks!"
 # lsb_release -c
 
 export DPUT_OPTIONS=""
-export DPUT_TARGETS=${MBS_SNAP_TARGETS-local}
+
+export DPUT_TARGETS
+
+#    DPUT_TARGETS=${MBS_SNAP_TARGETS-${REPREPRO_BASE_DIR+local}}
+if [ -n "${REPREPRO_BASE_DIR-}" ]; then
+    DPUT_TARGETS=${MBS_SNAP_TARGETS-local}
+else
+    DPUT_TARGETS=${MBS_SNAP_TARGETS-}
+fi
 
 set -x
 git-buildpackage \

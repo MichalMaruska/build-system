@@ -126,7 +126,7 @@ then
     then
 	cecho blue "Putting into Reprepro: ${GBP_CHANGES_FILE}"
 	reprepro --basedir "$REPREPRO_BASE_DIR" -V \
-	    include "$DISTRO" $GBP_CHANGES_FILE
+		 include "$DISTRO" $GBP_CHANGES_FILE
     fi
 fi
 
