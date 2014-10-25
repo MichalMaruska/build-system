@@ -57,8 +57,8 @@ ARGS=($@)
 
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro,verbose: \
-	--options uspifbhv:d:tV \
+    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro,verbose,work: \
+	--options uspifbhv:d:tVw \
 	-- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -114,6 +114,9 @@ while (( $# > 0 )) do
 	    ;;
 	--force | -f )
 	    FORCE=y
+	    ;;
+	--work | -w )
+	    GBP_OPTIONS+=(--git-export=WC)
 	    ;;
     esac
     shift
