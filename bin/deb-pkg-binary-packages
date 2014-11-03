@@ -5,6 +5,25 @@
 # one per line.
 
 use Dpkg::Control::Info;
+use Getopt::Mixed "nextOption";
+
+my $arch_only=0;
+my $debug=0;
+
+#### CMD line processsing:
+my @options=("help archonly verbose debug>verbose d>verbose h>help v>verbose a>archonly");
+Getopt::Mixed::init( @options);
+my ($option, $value, $pretty);
+while (($option, $value, $pretty) = nextOption()) {
+    if ($option eq "archonly") {
+	$arch_only=1;
+	print STDERR "only non arch=all\n";
+    } elsif ($option eq "verbose") {
+	# print STDERR "I'll be verbose!\n";
+	$debug=1;
+    };
+}
+Getopt::Mixed::cleanup();
 
 my $file=shift;
 
@@ -21,12 +40,13 @@ unless  (-f $file) {
 
 $p= Dpkg::Control::Info->new($file);
 $p->get_packages();
+
 foreach $_ ($p->get_packages())
 {
 #    print "next";
 #    print $_;
-    if ($_->{Architecture} ne "all") {
-    print $_->{Package}, "\n";
+    if (! $arch_only || ($_->{Architecture} ne "all")) {
+	print $_->{Package}, "\n";
 #    print $_->{Architecture}, "\n";
     }
 }
