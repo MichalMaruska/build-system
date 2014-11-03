@@ -6,8 +6,11 @@
 
 use Dpkg::Control::Info;
 
-$file=shift;
-#    . "/debian/control";
+my $file=shift;
+
+if ( -d $file ) {
+    $file .= "/debian/control";
+}
 
 unless  (-f $file) {
     $file=$file . ".in";
