@@ -1,3 +1,10 @@
+mmc-build-system (3.2) release; urgency=medium
+
+  * minor version increasal -- by default for snap, for release optional.
+  * handle when debian/changelog is modified but staged (in index).
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 03 Nov 2014 15:02:53 +0100
+
 mmc-build-system (3.1) release; urgency=medium
 
   * make simple deb-pkg* tools take the debian/control file as argument
