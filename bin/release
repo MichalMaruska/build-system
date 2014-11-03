@@ -239,7 +239,7 @@ function generate_commit_changelog()
     # that copy will be then removed, at the end.
     # This, because snap creates sections, which
     # we don't want here.
-    if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
+    if git status --porcelain debian/changelog| grep '^[M ]M' > /dev/null;
     then
 	mv debian/changelog debian/changelog.snap
 	git checkout debian/changelog
@@ -254,7 +254,7 @@ function generate_commit_changelog()
     # Do the commit:
     rm -f debian/changelog.snap
     set +x
-    if git status --porcelain debian/changelog| grep '^ M' > /dev/null;
+    if git status --porcelain debian/changelog| grep '^[M ]M' > /dev/null;
     then
 	git add debian/changelog;
 	# todo: "release $VERSION"
