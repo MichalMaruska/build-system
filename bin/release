@@ -59,8 +59,8 @@ DCH_OPTIONS=()
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version: \
-    --longoptions force,source,distro: \
-    --options a:bfr:T:p:iIv:ous \
+    --longoptions force,source,distro:minor \
+    --options a:bfr:T:p:iIv:ousm \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -116,6 +116,9 @@ while (( $# > 0 )) do
 	--auto | -o)
 	    # non-interactive/offline
 	    DCH_OPTIONS+=("--spawn-editor=snapshot")
+	    ;;
+	--minor | -m)
+	    step=minor
 	    ;;
 	--version | -v)
 	    shift
