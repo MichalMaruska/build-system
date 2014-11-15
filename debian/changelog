@@ -1,3 +1,14 @@
+mmc-build-system (3.3.1) release; urgency=medium
+
+  * deb-pkg-binary-packages: support either dir or control file argument.
+  * deb-pkg-binary-packages: optionally list only arch-dependent packages.
+  * install-dput-snapshot: -I to install but --upgrade only.
+  * add dependency for updated deb-pkg-binary-packages
+  * Increase version: verbose on error. Handle xx.yy-z to just add .... a suffix to z.
+  * fix: options in usage() for release.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 15 Nov 2014 02:51:47 +0100
+
 mmc-build-system (3.2) release; urgency=medium
 
   * minor version increasal -- by default for snap, for release optional.
