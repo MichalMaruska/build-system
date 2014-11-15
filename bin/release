@@ -13,18 +13,20 @@ gbp_version=$(git-buildpackage --version|cut -d ' '  -f 2)
 function usage()
 {
     cat <<EOF
-usage: ${0##*/} [+-r Distro] [+-a arch] [-p dput-target]* [-v version ] [-s] [-o]
+usage: ${0##*/} [+-r Distro] [+-a arch] [-m] [-p dput-target]* [-v version ] [-s] [-o]
 
 by defaut:
 Distro .... previous from debian/changelog or ??
 Tag ... distro/version
 dput-target ... taken from MBS_TARGETS env variable
 
---ignore  | -b  ... ignore Git branch
---install | -i  ...
---source | -s  ... build the tarball/source package too.
---auto | -o  ... don't open the Editor -- Changelog is unverified. DANGEROUS.
---force |  -f  ... regenerate & commit even if apparently debian/changelog ...
+-h --help
+-b --ignore  ... ignore Git branch
+-f --force ... regenerate & commit even if apparently debian/changelog ...
+-i --install ...
+-m --minor  ... increase the version only by minor step.
+-o --auto  ... don't open the Editor -- Changelog is unverified.    DANGEROUS.
+-s --source  ... build the tarball/source package too.
 
 --dput | -p [target] ... add named tput target.
 --distr | -r [distro] ... package for that
@@ -60,7 +62,7 @@ DCH_OPTIONS=()
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version: \
     --longoptions force,source,distro:minor \
-    --options a:bfr:T:p:iIv:ousm \
+    --options ha:bfr:T:p:iIv:ousm \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
