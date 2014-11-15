@@ -121,20 +121,31 @@ increase_version()
     middle=${tail%.*}
 
     # echo "major=$major  minor=$minor"
-    cecho red "increasing version by ... $step"
-    if [ $step = "major" ]
+    cecho red "increasing version by ($major, $middle, $minor)... $step"
+    # if expr match ".-." $minor
+    if expr match "$minor" ".-\(.\)";
     then
-	if ! major=$(expr $major + 1);
-	then
-	    echo "cannot increase $VERSION"
-	    exit 1
-	fi
-	minor=0
+	local postfix=maruska
+	VERSION="$major${middle-.${middle}}.$minor"$postfix
     else
-	minor=$(expr $minor + 1)
-    fi
+	if [ $step = "major" ]
+	then
+	    if ! major=$(expr $major + 1);
+	    then
+		echo "cannot increase $VERSION"
+		exit 1
+	    fi
+	    minor=0
+	else
+	    if ! minor=$(expr $minor + 1)
+	    then
+		echo "cannot increase $VERSION by minor"
+		exit 1
+	    fi
+	fi
 
-    VERSION="$major${middle-.${middle}}.$minor"
+	VERSION="$major${middle-.${middle}}.$minor"
+    fi
 }
 
 ssh_works=y
