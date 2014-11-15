@@ -7,6 +7,6 @@ Standards-Version: 3.7.2
 
 Package: mmc-build-system
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, git-buildpackage, zsh, mmc-shell (>>2.8)
+Depends: ${shlibs:Depends}, ${misc:Depends}, git-buildpackage, zsh, mmc-shell (>>2.8),libgetopt-mixed-perl
 Conflicts: mmc-shell (=2.8)
 Description: collection of shell scripts
