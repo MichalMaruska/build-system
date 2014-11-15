@@ -31,6 +31,7 @@ dput(1) options basically
 -u don\'t check the signaure
 -f force RE-upload
 -i install immediatelly
+-I upgrade only
 -d {DISTRO}
 -r release, so use the MBS_TARGETS, and hence dput(1) in those
 
@@ -65,7 +66,7 @@ typeset -T DPUT_TARGETS dput_targets
 [ -z "$DPUT_TARGETS" ] && dput_targets=${MBS_SNAP_TARGETS-}
 
 # make it manually invokable:
-while getopts :ufird: OPT; do
+while getopts :ufiIrd: OPT; do
     case $OPT in
 	u|+u)
 	    dput_options+=("--unchecked")
@@ -75,6 +76,10 @@ while getopts :ufird: OPT; do
 	    ;;
 	i)
 	    INSTALL_IMMEDIATELY=y
+	    ;;
+	I)
+	    INSTALL_IMMEDIATELY=y
+	    DEBI_OPTIONS+=("--upgrade")
 	    ;;
 	r)
 	    dput_targets=($mbs_targets)
