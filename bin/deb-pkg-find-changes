@@ -1,0 +1,47 @@
+#!/bin/zsh -feu
+
+# common part for ... debsign (taken from there), debi,
+
+PROGNAME=`basename $0`
+for file in /etc/devscripts.conf ~/.devscripts
+do
+    [ -r $file ] && . $file
+done
+
+DEBRELEASE_DEBS_DIR="$(echo "${DEBRELEASE_DEBS_DIR%/}" | sed -e 's%/\+%/%g')"
+
+debsdir="$DEBRELEASE_DEBS_DIR"
+
+mustsetvar () {
+    if [ "x$2" = x ]
+    then
+	echo >&2 "$PROGNAME: unable to determine $3"
+	exit 1
+    else
+	# echo "$PROGNAME: $3 is $2"
+	eval "$1=\"\$2\""
+    fi
+}
+
+
+#set -x
+mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
+	    "source package"
+mustsetvar version "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
+	    "source version"
+
+#mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+#mustsetvar arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
+#mustsetvar arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
+# arch=source
+
+sversion=`echo "$version" | perl -pe 's/^\d+://'`
+pv="${package}_${sversion}"
+pva="${package}_${sversion}_${arch}"
+
+dsc="$debsdir/$pv.dsc"
+changes="$debsdir/$pva.changes"
+
+echo $changes
+
