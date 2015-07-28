@@ -339,6 +339,8 @@ fi
 echo exporting DPUT_TARGETS $DPUT_TARGETS
 export DPUT_TARGETS
 
+BUILDER="debuild -eMAKEFLAGS -nc"
+# BUILDER="pflask-debuild -eMAKEFLAGS -nc"
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 set -x
 gbp buildpackage \
@@ -347,7 +349,7 @@ gbp buildpackage \
     $PREVERSION_HOOK_NAME=pre-build-hook \
     --git-postbuild="install-dput-snapshot -r" -b \
     $TAGOPTIONS \
-    --git-builder="debuild -eMAKEFLAGS -nc" \
+    --git-builder=$BUILDER \
     $GBP_OPTIONS
 
 # todo:
