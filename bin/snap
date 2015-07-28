@@ -28,6 +28,7 @@ usage: ${0##*/} [+-upb} [--] ARGS...
     --install -i ... install immediately
            by default .... update only
     --noinstall
+    --nocheck
 EOF
 }
 
@@ -57,7 +58,7 @@ ARGS=($@)
 
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro,verbose,work: \
+    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro:,verbose,work,nocheck \
 	--options uspifbhv:d:tVw \
 	-- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
@@ -117,6 +118,10 @@ while (( $# > 0 )) do
 	    ;;
 	--work | -w )
 	    GBP_OPTIONS+=(--git-export=WC)
+	    ;;
+	--nocheck )
+	    DEB_BUILD_OPTIONS+=nocheck
+	    export DEB_BUILD_OPTIONS
 	    ;;
     esac
     shift
