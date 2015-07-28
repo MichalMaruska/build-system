@@ -32,7 +32,7 @@ usage: ${0##*/} [+-upb} [--] ARGS...
 EOF
 }
 
-# this exports to the `install-dput-snapshot'! -- mmc: no!
+# this exports to the `dput-install'! -- mmc: no!
 USER_DISTRIBUTION=""
 : ${DISTRIBUTION=UNRELEASED}
 # export DISTRIBUTION
@@ -260,7 +260,7 @@ gbp buildpackage \
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
-    --git-postbuild=install-dput-snapshot \
+    --git-postbuild=dput-install \
     --git-builder="debuild -eMAKEFLAGS -nc" \
     --source-option="--format=\"3.0 (native)\""
 

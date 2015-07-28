@@ -347,7 +347,7 @@ gbp buildpackage \
     --git-ignore-new \
     --git-cleaner=/bin/true \
     $PREVERSION_HOOK_NAME=pre-build-hook \
-    --git-postbuild="install-dput-snapshot -r" -b \
+    --git-postbuild="dput-install -r" -b \
     $TAGOPTIONS \
     --git-builder=$BUILDER \
     $GBP_OPTIONS
