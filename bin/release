@@ -7,7 +7,7 @@ check_getopt
 check_start_gnupg
 
 # Support for 2 different versions of gbp:
-gbp_version=$(git-buildpackage --version|cut -d ' '  -f 2)
+gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
 
 
 function usage()
@@ -251,7 +251,7 @@ function generate_commit_changelog()
 	DCH_OPTIONS+=(--distribution $DISTRIBUTION)
     fi
 
-    git-dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
+    gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
 
     # Do the commit:
     rm -f debian/changelog.snap
@@ -341,7 +341,7 @@ export DPUT_TARGETS
 
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 set -x
-git-buildpackage \
+gbp buildpackage \
     --git-ignore-new \
     --git-cleaner=/bin/true \
     $PREVERSION_HOOK_NAME=pre-build-hook \

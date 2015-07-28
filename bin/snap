@@ -218,7 +218,7 @@ then
     DCH_OPTIONS+="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 
     # Do I have to provide the previous GIT TAG?
-    git-dch --auto --snapshot "--debian-tag=$DISTRIBUTION/%(version)s" $DCH_OPTIONS
+    gbp dch --auto --snapshot "--debian-tag=$DISTRIBUTION/%(version)s" $DCH_OPTIONS
 else
     # cp -v debian/changelog debian/changelog.save
     # Already updated since a release (fixme?). So, the version should be there.
@@ -226,11 +226,11 @@ else
 	DISTRIBUTION=$USER_DISTRIBUTION
     fi
 
-    git-dch --auto --snapshot $DCH_OPTIONS
+    gbp dch --auto --snapshot $DCH_OPTIONS
 fi
 
 # Support for 2 different versions of gbp:
-gbp_version=$(git-buildpackage --version|cut -d ' '  -f 2)
+gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
 if dpkg --compare-versions $gbp_version '>' 0.6; then
     PREVERSION_HOOK_NAME=--git-postexport
 else
@@ -254,7 +254,7 @@ else
 fi
 
 set -x
-git-buildpackage \
+gbp buildpackage \
     --git-ignore-new $GBP_OPTIONS \
     $PREVERSION_HOOK_NAME=pre-build-hook \
     --git-cleaner=/bin/true \
