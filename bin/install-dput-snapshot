@@ -100,6 +100,8 @@ OPTIND=1
 if [ $# -gt 0 ]
 then
     GBP_CHANGES_FILE=$1
+else
+    GBP_CHANGES_FILE=$(deb-pkg-find-changes)
 fi
 
 if [ -z "${GBP_CHANGES_FILE-}" ]; then
