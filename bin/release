@@ -8,6 +8,7 @@ check_start_gnupg
 
 # Support for 2 different versions of gbp:
 gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
+GITSHA=""
 
 
 function usage()
@@ -261,6 +262,7 @@ function generate_commit_changelog()
 	git add debian/changelog;
 	# todo: "release $VERSION"
 	git commit -m "release"
+	GITSHA=$(git rev-list  --max-count=1 HEAD)
     # else what to do?
     fi
 }
@@ -339,7 +341,9 @@ fi
 echo exporting DPUT_TARGETS $DPUT_TARGETS
 export DPUT_TARGETS
 
-BUILDER="debuild -eMAKEFLAGS -nc"
+export GITSHA
+
+BUILDER="debuild -eMAKEFLAGS -eGITSHA -nc"
 # BUILDER="pflask-debuild -eMAKEFLAGS -nc"
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 set -x

@@ -193,7 +193,8 @@ else
 fi
 }
 
-
+GITSHA=$(git rev-list  --max-count=1 HEAD)
+export GITSHA
 
 # The changelog is updated inside the Git repo.
 # After the git checkout, it will be copied.
@@ -261,7 +262,7 @@ gbp buildpackage \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild=dput-install \
-    --git-builder="debuild -eMAKEFLAGS -nc" \
+    --git-builder="debuild -eMAKEFLAGS -eGITSHA -nc" \
     --source-option="--format=\"3.0 (native)\""
 
 set +x
