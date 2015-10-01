@@ -198,7 +198,7 @@ check_start_gnupg()
 
     if gpg-connect-agent -q '/bye' || [ $(gpg-connect-agent '/echo  ahoj' '/bye') != "ahoj" ]
     then
-	cecho green "gpg is ok on $GPG_AGENT_INFO" >&2
+	cecho green "gpg is ok on ${GPG_AGENT_INFO-}" >&2
     fi
 
     export GPG_TTY=$(tty)
