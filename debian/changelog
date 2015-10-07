@@ -1,3 +1,19 @@
+mmc-build-system (3.5) release; urgency=medium
+
+  * new tool: deb-pkg-find-changes finds  the *.changes file
+  * use the deb-pkg-find-changes
+  * --nocheck for snap
+  * git-xxx now replaced by "gbp xxx"
+  * start to support pflask.
+  * deb-pkg-build-deps: optionally dump plain Deps, and --verbose
+  * Rename install-dput-snapshot to dput-install
+  * Export GITSHA env. var. during builds.
+  * Stop passing info via env.var. INSTALL_IMMEDIATELY
+  * stop relying on GPG_AGENT_INFO
+  * spaces
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 07 Oct 2015 13:40:45 +0200
+
 mmc-build-system (3.3.1) release; urgency=medium
 
   * deb-pkg-binary-packages: support either dir or control file argument.
