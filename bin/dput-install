@@ -66,13 +66,16 @@ typeset -T DPUT_TARGETS dput_targets
 [ -z "$DPUT_TARGETS" ] && dput_targets=${MBS_SNAP_TARGETS-}
 
 # make it manually invokable:
-while getopts :ufiIrd: OPT; do
+while getopts :ufiIrd:n OPT; do
     case $OPT in
 	u|+u)
 	    dput_options+=("--unchecked")
 	    ;;
 	f)
 	    dput_options+=("--force")
+	    ;;
+	n)
+	    INSTALL_IMMEDIATELY=n
 	    ;;
 	i)
 	    INSTALL_IMMEDIATELY=y

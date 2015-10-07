@@ -261,7 +261,7 @@ gbp buildpackage \
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
-    --git-postbuild=dput-install \
+    --git-postbuild="dput-install -I" \
     --git-builder="debuild -eMAKEFLAGS -eGITSHA -nc" \
     --source-option="--format=\"3.0 (native)\""
 

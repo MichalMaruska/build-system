@@ -47,7 +47,7 @@ FORCE=n
 
 
 # this is for the (pre/post) hooks
-export INSTALL_IMMEDIATELY=y
+POSTBUILD_INSTALL_OPTIONS="-I"
 
 ### Dput
 # same what I use in zlogin for MBS_TARGETS!
@@ -110,11 +110,14 @@ while (( $# > 0 )) do
 	    # fixme:
 	    GBP_OPTIONS+=("-i")
 	    ;;
-	--install | -I)
-	    INSTALL_IMMEDIATELY="y"
+	--install | -i)
+	    POSTBUILD_INSTALL_OPTIONS="-i"
 	    ;;
-	--noinstall | +I)
-	    INSTALL_IMMEDIATELY="n"
+	--upgrade | -I)
+	    POSTBUILD_INSTALL_OPTIONS="-I"
+	    ;;
+	--noinstall | +n)
+	    POSTBUILD_INSTALL_OPTIONS="-n"
 	    ;;
 	--auto | -o)
 	    # non-interactive/offline
@@ -351,7 +354,7 @@ gbp buildpackage \
     --git-ignore-new \
     --git-cleaner=/bin/true \
     $PREVERSION_HOOK_NAME=pre-build-hook \
-    --git-postbuild="dput-install -r" -b \
+    --git-postbuild="dput-install -r $POSTBUILD_INSTALL_OPTIONS" -b \
     $TAGOPTIONS \
     --git-builder=$BUILDER \
     $GBP_OPTIONS
