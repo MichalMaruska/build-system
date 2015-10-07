@@ -95,7 +95,6 @@ while (( $# > 0 )) do
 	    USER_DISTRIBUTION="$1"
 	    GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
 	    ;;
-
 	--tag | -T )
 	    shift
 	    git_tag=$1
@@ -119,6 +118,7 @@ while (( $# > 0 )) do
 	--noinstall | +n)
 	    POSTBUILD_INSTALL_OPTIONS="-n"
 	    ;;
+
 	--auto | -o)
 	    # non-interactive/offline
 	    DCH_OPTIONS+=("--spawn-editor=snapshot")
@@ -349,6 +349,7 @@ export GITSHA
 BUILDER="debuild -eMAKEFLAGS -eGITSHA -nc"
 # BUILDER="pflask-debuild -eMAKEFLAGS -nc"
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
+
 set -x
 gbp buildpackage \
     --git-ignore-new \
