@@ -50,7 +50,12 @@ if [[ -n ${GBP_BUILD_DIR-} ]]; then
 else
     BUILD_AREA=../_build-area/
 fi
-: ${INSTALL_IMMEDIATELY=n}
+
+# I like these defaults better:
+: ${INSTALL_IMMEDIATELY=y}
+DEBI_OPTIONS+=("--upgrade")
+
+
 DISTRO=${MBS_DISTRO-}
 release=n
 
@@ -79,8 +84,10 @@ while getopts :ufiIrd:n OPT; do
 	    ;;
 	i)
 	    INSTALL_IMMEDIATELY=y
+	    # fixme: just remove "--upgrade"
+	    DEBI_OPTIONS+=()
 	    ;;
-	I)
+	I) # useless?
 	    INSTALL_IMMEDIATELY=y
 	    DEBI_OPTIONS+=("--upgrade")
 	    ;;
