@@ -135,7 +135,7 @@ then
 	grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
     then
 	cecho blue "Putting into Reprepro: ${GBP_CHANGES_FILE}"
-	reprepro --basedir "$REPREPRO_BASE_DIR" -V \
+	reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
 		 include "$DISTRO" $GBP_CHANGES_FILE
     fi
 fi
