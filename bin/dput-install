@@ -121,10 +121,8 @@ if [ -z "${GBP_CHANGES_FILE-}" ]; then
 fi
 
 
-# dput/install into (local) reprepro:
-# $GBP_BUILD_DIR is the build directory: I don't need it.
-if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE}" ]
-then
+upload_to_reprepro()
+{
     cecho green "first remove development packages"
     # first remove ... If I decided for only a minor version bump
     # todo: improve this somehow?
@@ -145,6 +143,13 @@ then
 	reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
 		 include "$DISTRO" $GBP_CHANGES_FILE
     fi
+}
+
+# dput/install into (local) reprepro:
+# $GBP_BUILD_DIR is the build directory: I don't need it.
+if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE}" ]
+then
+    upload_to_reprepro
 fi
 
 
