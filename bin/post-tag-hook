@@ -13,6 +13,7 @@ then
     else
 	# only 1 line?
 	# don't fail for this?  Or should fail?
+	echo "no central repository defined, so cannot push anywhere" >&2
 	exit 1;
     fi
 fi
