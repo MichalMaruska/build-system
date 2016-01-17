@@ -121,10 +121,11 @@ if [ -z "${GBP_CHANGES_FILE-}" ]; then
     exit 2
 fi
 
+REPREPRO_COLOR=blue
 
 upload_to_reprepro()
 {
-    cecho green "first remove development packages"
+    cecho $REPREPRO_COLOR "first remove development packages"
     # first remove ... If I decided for only a minor version bump
     # todo: improve this somehow?
     packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $GBP_CHANGES_FILE))
@@ -140,7 +141,7 @@ upload_to_reprepro()
 	## acceptable in reprepro
 	grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
     then
-	cecho blue "Putting into Reprepro: ${GBP_CHANGES_FILE}"
+	cecho $REPREPRO_COLOR "Putting into Reprepro: ${GBP_CHANGES_FILE}"
 	reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
 		 include "$DISTRO" $GBP_CHANGES_FILE
     fi
@@ -179,7 +180,7 @@ if [ -z "${dput_targets}" ]; then
 else
     for TARGET in ${dput_targets}
     do
-	cecho blue "Uploading to $TARGET"
+	cecho $REPREPRO_COLOR "Uploading to $TARGET"
 
 	if [ -z ${GBP_CHANGES_FILE-} ]; then
 	    if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
