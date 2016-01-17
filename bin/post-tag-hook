@@ -1,7 +1,7 @@
 #! /bin/bash -eu
 
 # This can be run manually inside the (git) source tree.
-
+# push to ...$CENTRALREPO
 
 
 if [ ${CENTRALREPO-x} = x ];
@@ -21,9 +21,8 @@ fi
 # : ${CENTRALREPO=origin}
 
 : ${GBP_TAG=$(git describe)}
-: ${GBP_BRANCH=$(git name-rev --name-only  HEAD)}
+: ${GBP_BRANCH=$(git name-rev --name-only HEAD)}
 
 git push $CENTRALREPO $GBP_TAG || echo "'git push' failed for the tag $GBP_TAG"
 git push $CENTRALREPO $GBP_BRANCH || echo "'git push' failed for the branch $GBP_BRANCH"
-#GBP_BRANCH
 #GBP_SHA1
