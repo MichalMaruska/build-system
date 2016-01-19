@@ -1,11 +1,14 @@
 
 
-SHAREDIR=/usr/share/build-system/
-INSTALL=install
-BIN_INSTALL_DIR = /usr/bin
+SHAREDIR := /usr/share/build-system/
+INSTALL := install
+BIN_INSTALL_DIR := /usr/bin
 
-BINFILES=$(wildcard bin/*)
-SHARED_FILES=$(wildcard share/*)
+ZSH_COMPLETION_DIR := /usr/share/zsh/vendor-completions/
+
+BINFILES:=$(wildcard bin/*)
+SHARED_FILES:=$(wildcard share/*)
+COMPLETION_FILES := $(wildcard zsh/_*)
 
 all:
 	echo ""
@@ -26,13 +29,10 @@ install-functions:
 
 # zsh infrastructure to better use the provided commands!
 install-zsh:
-	$(INSTALL) -v -D --directory $(DESTDIR)/usr/share/zsh/site-functions/
-	for dir in $$(cd  zsh;find . -mindepth 1  -type d ); do \
-		mkdir -vp $(DESTDIR)/usr/share/zsh/site-functions/$$dir; done
-	for file in $$(cd  zsh;find . -type f ); do \
-		install -v -m 444 zsh/$$file $(DESTDIR)/usr/share/zsh/site-functions/$$file; done
-
-
+	$(INSTALL) -v -D --directory $(DESTDIR)$(ZSH_COMPLETION_DIR)/
+	for p in $(COMPLETION_FILES); do \
+	  $(INSTALL) -v -m 444 $$p $(DESTDIR)$(ZSH_COMPLETION_DIR) ; \
+	done
 
 clean:
 

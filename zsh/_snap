@@ -1,0 +1,5 @@
+#compdef snap
+_arguments \
+    '-b[--ignore]' \
+    '{-i,--install}[install all]' \
+    '--nocheck[skip signing]'
