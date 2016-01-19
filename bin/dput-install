@@ -48,8 +48,7 @@ EOF
 if [[ -n ${GBP_BUILD_DIR-} ]]; then
     BUILD_AREA=${GBP_BUILD_DIR%/*}
 else
-    echo "don't know where is the build area, .changes file"
-    exit 1
+    BUILD_AREA=/run/tmp
 fi
 
 # I like these defaults better:
