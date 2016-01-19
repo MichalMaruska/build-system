@@ -33,6 +33,7 @@ EOF
 }
 
 # this exports to the `dput-install'! -- mmc: no!
+DPUT_OPTIONS="-I"
 USER_DISTRIBUTION=""
 : ${DISTRIBUTION=UNRELEASED}
 # export DISTRIBUTION
@@ -91,11 +92,13 @@ while (( $# > 0 )) do
 	    ## and how to force it? just leave.
 	    INSTALL_IMMEDIATELY=y
 	    # fixme: remove the --upgrade
+	    DPUT_OPTIONS="-i" # not only upgrade!
 	    DEBI_OPTIONS=""
 	    ;;
 	noinstall | -n)
 	    DEBI_OPTIONS=""
-	    INSTALL_IMMEDIATELY=n
+	    # INSTALL_IMMEDIATELY=n
+	    DPUT_OPTIONS=""
 	    ;;
 	--verbose | -V )
 	    GBP_OPTIONS+="--git-verbose"
@@ -261,7 +264,7 @@ gbp buildpackage \
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
-    --git-postbuild="dput-install -I" \
+    --git-postbuild="dput-install $DPUT_OPTIONS" \
     --git-builder="debuild -eMAKEFLAGS -eGITSHA -nc"
 
     # --source-option="--format=\"3.0 (native)\""
