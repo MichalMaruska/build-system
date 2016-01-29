@@ -1,0 +1,41 @@
+#!/bin/zsh -euf
+
+
+usage()
+{
+setopt POSIX_ARGZERO
+    cat <<EOF
+usage: ${0##*/} [+-h} [--] {REPO} {CHANGES-file}
+EOF
+unsetopt POSIX_ARGZERO
+}
+
+while getopts :h OPT; do
+    case $OPT in
+	h|+h)
+	    usage
+	    exit 0
+	    ;;
+	*)
+	    usage
+	    exit 2
+    esac
+done
+shift OPTIND-1
+OPTIND=1
+
+
+if [ $# -lt 2 ]; then
+    usage
+    exit 1
+fi
+
+REPO=$1
+#GBP_CHANGES_FILE
+CHANGES_FILE=$2
+
+
+packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $CHANGES_FILE))
+foreach package ($packages) {
+    reprepro remove $REPO $package
+}

@@ -127,10 +127,7 @@ upload_to_reprepro()
     cecho $REPREPRO_COLOR "first remove development packages"
     # first remove ... If I decided for only a minor version bump
     # todo: improve this somehow?
-    packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $GBP_CHANGES_FILE))
-    foreach package ($packages) {
-	reprepro remove UNRELEASED $package
-    }
+    reprepro-remove-obsolete "UNRELEASED" $GBP_CHANGES_FILE
 
     # Distribution: release
     DISTRO=$(sed -n -e '/^Distribution: /{s/Distribution: //;p}' $GBP_CHANGES_FILE)
