@@ -40,7 +40,7 @@ EOF
 # defaults for options:
 USER_DISTRIBUTION=""
 DISTRIBUTION=""
-step=major
+step=minor
 build_source=no
 FORCE=n
 # ARCH
@@ -62,8 +62,8 @@ DCH_OPTIONS=()
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version: \
-    --longoptions force,source,distro:minor \
-    --options ha:bfr:T:p:iIv:ousm \
+    --longoptions force,source,distro:minor,major \
+    --options ha:bfr:T:p:iIv:ousmM \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -125,6 +125,9 @@ while (( $# > 0 )) do
 	    ;;
 	--minor | -m)
 	    step=minor
+	    ;;
+	--major | -M)
+	    step=major
 	    ;;
 	--version | -v)
 	    shift
