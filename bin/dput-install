@@ -26,11 +26,12 @@ possibly_trace
 
 function usage(){
     cat <<EOF
-usage: ${0##*/} [+-ufi} [--] ARGS...
+usage: ${0##*/} [+-ufin] [--] ARGS...
 dput(1) options basically
 -u don\'t check the signaure
 -f force RE-upload
 -i install immediatelly
+-n do not install
 -I upgrade only
 -d {DISTRO}
 -r release, so use the MBS_TARGETS, and hence dput(1) in those
