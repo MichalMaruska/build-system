@@ -1,3 +1,26 @@
+mmc-build-system (3.6) release; urgency=medium
+
+  * Use reprepro with --ignore=surprisingbinary to work-around dbgsym packages. Fixme!
+  * dput-install: dwim about installing.
+  * dput-install: Have $TERM inside ssh
+  * upload_to_reprepro() function
+  * [FIX] Stop snap from pretending format 3.0 native.
+  * drop support for obsolete _build-area
+  * post-tag-hook: exit with error message.
+  * clean up
+  * dput-install: REPREPRO_COLOR
+  * Install Zsh completion files.
+  * After all I do have preference for a build area /run/tmp
+  * snap: DPUT_OPTIONS
+  * dput-install: fix the no-upgrade option.
+  * reprepro-remove-obsolete: formalize the act of removing development packages
+  * relase: by default a minor increase of version.
+  * dput-install: -n to skip installing.
+  * snap:  -k --keep option
+  * release: update dpkg --compare-versions syntax.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 09 Apr 2016 20:29:13 +0200
+
 mmc-build-system (3.5) release; urgency=medium
 
   * new tool: deb-pkg-find-changes finds  the *.changes file
