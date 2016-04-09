@@ -254,7 +254,7 @@ function generate_commit_changelog()
 	git checkout debian/changelog
     fi
 
-    if dpkg --compare-versions $gbp_version '>' 0.6; then
+    if dpkg --compare-versions $gbp_version gt 0.6; then
 	DCH_OPTIONS+=(--distribution $DISTRIBUTION)
     fi
 
