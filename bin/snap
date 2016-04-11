@@ -185,19 +185,21 @@ set -e
 # dubious:
 # todo: but, maybe it WAS committed in the last commit & nothing has changed!
 
-# Return 0 iff needs update, 1 if does not!
+# Return 0 iff last Changelog item is UNRELEASED.
 changelog_needs_new_section() {
-if git status --porcelain debian/changelog |grep --silent '^ M'; then
-    return 1;
-elif git status --porcelain  |grep --silent '^ M'; then
-    # something changed, (but _not_ debian/changelog)
-    return 0
-elif git diff --name-only HEAD~1 | grep 'debian/changelog'; then
-    # so nothing changed, was it changed in the previous commit?
-    return 1;
-else
-    return 0
-fi
+    local FILE="debian/changelog"
+    if git status --porcelain $FILE |grep --silent '^ M'; then
+	# it's modified already.
+	return 1;
+    elif git status --porcelain  |grep --silent '^ M'; then
+	# something changed, (but _not_ debian/changelog)  fixme!
+	return 0
+    elif git diff --name-only HEAD~1 | grep $FILE; then
+	# so nothing changed, was it changed in the previous commit?
+	return 1;
+    else
+	return 0
+    fi
 }
 
 GITSHA=$(git rev-list  --max-count=1 HEAD)

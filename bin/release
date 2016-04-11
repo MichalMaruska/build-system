@@ -273,30 +273,39 @@ function generate_commit_changelog()
     fi
 }
 
+# return 0 iff debian/changelog should be updated:
+changelog_needs_new_section() {
+    local FILE="debian/changelog"
+    if git status --porcelain $FILE | grep '^ M' > /dev/null
+    then
+	cecho yellow "$FILE is dirty, so let's review it"
+	return 0 # yes
+    elif [ $(git log --pretty=%P -n 1 |wc -w) -gt 1 ]
+    then
+	cecho yellow "$FILE is clean but now we Merged"
+	return 0
+    elif ! git diff HEAD~1 --name-status $FILE | grep '^M' > /dev/null
+    then
+	cecho yellow "$FILE was not updated during the last commit"
+	return 0
+    elif [ ${FORCE-n} = "y" ]; then
+	return 0
+    fi
+
+    return 1
+}
+
 
 # todo:
 # if no debian/changelog or not in Git ->
 #  --create
 
 # if status OR not updated!
-if git status --porcelain debian/changelog | grep '^ M' > /dev/null
-then
-    cecho yellow "debian/changelog is dirty, so let's review it"
-    generate_commit_changelog
-
-elif [ $(git log --pretty=%P -n 1 |wc -w) -gt 1 ]
-then
-    cecho yellow "debian/changelog is clean but now we merged"
-    generate_commit_changelog
-
-elif ! git diff HEAD~1 --name-status debian/changelog | grep '^M' > /dev/null
-then
-    cecho yellow "debian/changelog is NOT up-to-date"
-    generate_commit_changelog
-elif [ $FORCE = "y" ] ;
+if changelog_needs_new_section
 then
     generate_commit_changelog
 fi
+
 
 
 # at this point I have the last commit, but maybe not a tag.
