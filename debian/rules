@@ -3,9 +3,10 @@
 %:
 	dh $@
 
-ifdef GITSHA
-FLAGS+=--  -Ddgit=$(GITSHA)
-override_dh_gencontrol:
-	# dpkg-gencontrol
-	dh_gencontrol $(FLAGS)
-endif
+
+# ifdef GITSHA
+# FLAGS+=--  -Ddgit=$(GITSHA)
+# override_dh_gencontrol:
+# 	# dpkg-gencontrol
+# 	dh_gencontrol $(FLAGS)
+# endif
