@@ -8,8 +8,8 @@
 
 #source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
-check_getopt
 eval $(possibly_trace)
+check_getopt
 
 export INSTALL_IMMEDIATELY=y
 # during development it's better to install.
@@ -109,6 +109,7 @@ while (( $# > 0 )) do
 	    ;;
 	--version | -v)
 	    shift
+	    FORCE=y
 	    DEFAULT_NEW_VERSION=$1
 	    ;;
 	--distro | -d )
@@ -151,12 +152,6 @@ done
 	#     usage
 	#     exit 2
 
-
-#shift $(( OPTIND - 1 ))
-# OPTIND=1
-
-
-
 if [ $ignore_branch = "y" ];then
     DCH_OPTIONS+=("--ignore-branch")
     GBP_OPTIONS+=("--git-ignore-branch")
@@ -169,12 +164,6 @@ fi
 if [ $do_sign = "n" ]; then
     GBP_OPTIONS+=(-us -uc)
 fi
-
-
-set +e
-get_current_tag
-found_any_tag=$?
-set -e
 
 
 GITSHA=$(git rev-list  --max-count=1 HEAD)
@@ -203,7 +192,9 @@ then
     DCH_OPTIONS+="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 
     # Do I have to provide the previous GIT TAG?
+    set -x
     gbp dch --auto --snapshot "--debian-tag=$DISTRIBUTION/%(version)s" $DCH_OPTIONS
+    set +x
 else
     # cp -v debian/changelog debian/changelog.save
     # Already updated since a release (fixme?). So, the version should be there.
@@ -211,7 +202,9 @@ else
 	DISTRIBUTION=$USER_DISTRIBUTION
     fi
 
+    set -x
     gbp dch --auto --snapshot $DCH_OPTIONS
+    set +x
 fi
 
 # Support for 2 different versions of gbp:
