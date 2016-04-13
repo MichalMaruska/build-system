@@ -176,38 +176,13 @@ get_current_tag
 found_any_tag=$?
 set -e
 
-# todo: in-place if "git status" says clean
-
-# keep changelog out:
-# create it in a hook!
-
-# for release: --git-builder /usr/bin/git-pbuilder
-# dubious:
-# todo: but, maybe it WAS committed in the last commit & nothing has changed!
-
-# Return 0 iff last Changelog item is UNRELEASED.
-changelog_needs_new_section() {
-    local FILE="debian/changelog"
-    if git status --porcelain $FILE |grep --silent '^ M'; then
-	# it's modified already.
-	return 1;
-    elif git status --porcelain  |grep --silent '^ M'; then
-	# something changed, (but _not_ debian/changelog)  fixme!
-	return 0
-    elif git diff --name-only HEAD~1 | grep $FILE; then
-	# so nothing changed, was it changed in the previous commit?
-	return 1;
-    else
-	return 0
-    fi
-}
 
 GITSHA=$(git rev-list  --max-count=1 HEAD)
 export GITSHA
 
 # The changelog is updated inside the Git repo.
 # After the git checkout, it will be copied.
-if changelog_needs_new_section
+if changelog_needs_new_section "snap"
 then
     # get the current version & increase. The major maybe.
     if [[ -z ${DEFAULT_NEW_VERSION-} ]]

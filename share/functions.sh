@@ -21,6 +21,24 @@ possibly_trace()
 }
 
 
+# modifies the VERSION variable.
+# Drops the letter-suffix, after 2-number version  NN.MMsuffix
+drop_verbal_suffix()
+{
+    # conditionally remove. but this
+    # should not remove a middle  a.b.c.
+    # 1.2ubuntu ->  1.2
+    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^.[:digit:]].*)$" ]]
+	#                                                 ^??
+    then
+	if [ -n ${DEBUG-} ]; then
+	    cecho red "drop_verbal_suffix: Discarding $match[3] from the $VERSION";
+	fi
+	VERSION="$match[1].$match[2]"
+    fi
+}
+
+
 # I want to detect a current git tag & reuse it, ie. not recreate it.
 
 ## return 0 & set the variables if successul.
@@ -60,7 +78,7 @@ get_current_tag()
 	    VERSION=$match[2]
 	    GIT_OFFSET=$match[3]
 	    # ${${description%-g*}#*-}
-	    sanitize_version
+	    drop_verbal_suffix
 
 	elif [[ $description =~ "^(.*)/(.*)$" ]]
 	then
@@ -79,28 +97,62 @@ get_current_tag()
     fi
 }
 
-# modifies the VERSION variable.
-sanitize_version()
-{
-    # conditionally remove. but this
-    # should not remove a middle  a.b.c.
-    # 1.2ubuntu ->  1.2
-    if [[ $VERSION =~ "^([[:digit:]]+)\\.([[:digit:]]+)([^.[:digit:]].*)$" ]]
-	#                                                 ^??
-    then
-	VERSION="$match[1].$match[2]"
-	if [ -n ${DEBUG-} ]; then
-	    cecho red "Discarding $match[3] from the TAG";
+
+# decide, whether debian/changelog needs a new `section'
+# todo: in-place if "git status" says clean
+# keep changelog out:
+# create it in a hook!
+
+# for release: --git-builder /usr/bin/git-pbuilder
+# dubious:
+# todo: but, maybe it WAS committed in the last commit & nothing has changed!
+
+# Return 0 iff last Changelog item is UNRELEASED.
+# ENV: $FORCE
+changelog_needs_new_section() {
+    type=$1
+    local FILE="debian/changelog"
+
+    if [ ${FORCE-n} = "y" ]; then
+	return 0
+    elif git status --porcelain $FILE |grep --silent '^ M'; then
+	# it's modified already.
+	cecho yellow "$FILE is dirty, so let's review it"
+	# mmc: for release this is 0, for snap it's 1....
+	if [ $type = "release" ]; then
+	    return 0;
+	else
+	    return 1;
 	fi
+    elif [ $(git log --pretty=%P -n 1 |wc -w) -gt 1 ]
+    then
+	cecho yellow "$FILE is clean but now we Merged"
+	return 0
+
+    elif ! git diff HEAD~1 --name-status $FILE | grep '^M' > /dev/null
+    then
+	cecho yellow "$FILE was not updated during the last commit"
+	return 0
+
+    elif git status --porcelain  |grep --silent '^ M'; then
+	# fixme!  something changed, (but _not_ debian/changelog)
+	return 0
+    elif git diff --name-only HEAD~1 | grep $FILE; then
+	# so nothing changed, was it changed in the previous commit?
+	return 1;
+    else
+	return 0
     fi
 }
 
 
+# Using external tools, parse "debian/changelog"
 load_distr_version_from_changelog()
 {
-    DISTRIBUTION=$(deb-pkg-distribution debian/changelog)
-    VERSION=$(deb-pkg-version debian/changelog)
-    sanitize_version
+    local FILE="debian/changelog"
+    DISTRIBUTION=$(deb-pkg-distribution $FILE)
+    VERSION=$(deb-pkg-version $FILE)
+    drop_verbal_suffix
 }
 
 # in VERSION variable.
