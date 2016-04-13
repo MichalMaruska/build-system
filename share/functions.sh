@@ -155,7 +155,10 @@ load_distr_version_from_changelog()
     drop_verbal_suffix
 }
 
-# in VERSION variable.
+# rewrites the VERSION env-variable.
+#
+# todo: if suffix is "maruska" then I want to keep it.
+# if the author of previous was not me, I want to suffix "maruska".
 increase_version()
 {
     local step=$1
@@ -166,10 +169,10 @@ increase_version()
     then
 	VERSION="$match[1]"
     fi
-    major=${VERSION%%.*}
-    minor=${VERSION##*.}
+    major=${VERSION%%.*} # longest matching is dropped. So this is beginning up to first "."
+    minor=${VERSION##*.} # longest dropped ->  from the last "." to the end.
 
-    tail=.${VERSION#*.}
+    tail=.${VERSION#*.} # shortest at the beginning is dropped.
     middle=${tail%.*}
 
     # echo "major=$major  minor=$minor"
