@@ -45,11 +45,13 @@ EOF
 # fixme: this is set in ~/.gbp.conf (by git-buildpackage)
 # DEBRELEASE_DEBS_DIR ?
 
-
+# fixme: /run/tmp !!!
 if [[ -n ${GBP_BUILD_DIR-} ]]; then
     BUILD_AREA=${GBP_BUILD_DIR%/*}
 else
     BUILD_AREA=/run/tmp
+    #echo "don't know where is the build area, .changes file"
+    #exit 1
 fi
 
 # I like these defaults better:
@@ -158,6 +160,7 @@ if [ ${INSTALL_IMMEDIATELY} = "y" ]
 then
     cecho green "installing immediately ${GBP_CHANGES_FILE}"
     if [ -n "${GBP_CHANGES_FILE}" ]; then
+	set -x
 	debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
     else
 	debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
@@ -184,6 +187,7 @@ else
 		(echo "Failed to upload to $TARGET"; echo )>&2
 	    fi
 	else
+	    set -x
 	    if ! dput --unchecked $dput_options $TARGET $GBP_CHANGES_FILE;
 	    then
 		cecho yellow "target $TARGET failed, but not fatal!"

@@ -1,5 +1,7 @@
 #! /usr/bin/perl
 
+# $0 debian/control
+
 # Given path to the debian/control file, ...
 # parse it & dump (on stdout) the name of the Maintainer.
 

@@ -1,5 +1,7 @@
 #! /usr/bin/perl
 
+# grep-status   -F package   --regex "gauche-mmc-2"
+
 # Given a package name ...
 # dump the version installed   (like dpkg -l xxx)
 # output:

@@ -3,6 +3,9 @@
 # Given source-packages as paths to dirs, output the list of those
 # that are NOT installed at the version in the directory (debian/changelog).
 
+# usage:
+# $  $0 srcpkg
+#
 use AptPkg::Cache;
 
 use Dpkg::Control::Info;
@@ -36,17 +39,13 @@ sub decide_if_obsolete
 	}
     }
 
-    # |
-    # v
+## testing the Perl API:
+##
     my $p = Dpkg::Control::Info->new($file);
-    # $p->get_packages();
 
-
-    # ---->
-    my $filename=$dir . "/debian/changelog";
     my $c = Dpkg::Changelog::Debian->new();
-    $c->load($filename);
-    # my $c = Dpkg::Control::Changelog->new();
+    $c->load($dir . "/debian/changelog");
+
     my $control = $c->dpkg({});
     my $s= $p->get_source();
 
@@ -67,6 +66,11 @@ sub decide_if_obsolete
     # print $c->{};
     # my $c = Dpkg::Changelog->new(%options)
 
+
+
+
+
+# Get the packages (from debian/control)
     foreach $_ ($p->get_packages())
     {
 #    print "next";
@@ -131,7 +135,7 @@ sub decide_if_obsolete
 }
 
 
-# accept -h option!
+# todo: accept -h option!
 
 if (@ARGV < 1)
 {
@@ -147,7 +151,7 @@ while (my $dir = shift)
 }
 
 
-# print "outdated :=\t";
+# if (human) print "outdated :=\t";
 foreach $_ (@obsolete)
 {print $_, "\n"};
 # print join (" ", @obsolete);
