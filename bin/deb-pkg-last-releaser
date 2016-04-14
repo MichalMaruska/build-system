@@ -1,0 +1,16 @@
+#! /usr/bin/perl
+
+# usage $0 debian/changelog
+# print the author of the last release section in a given debian/changelog
+
+use Dpkg::Changelog::Debian;
+
+#my $dir="."; . "/debian/changelog"
+my $filename = shift();
+my $c = Dpkg::Changelog::Debian->new();
+$c->load($filename);
+
+my $control = $c->dpkg({});
+print $ver, $control->{Maintainer}, "\n";
+
+exit(0);
