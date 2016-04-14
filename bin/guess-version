@@ -1,0 +1,52 @@
+#! /bin/zsh -eu
+
+USER_DISTRIBUTION=""
+
+source /usr/share/build-system/functions.sh
+
+if changelog_needs_new_section "snap"
+then
+    # get the current version & increase. The major maybe.
+    if [[ -z ${DEFAULT_NEW_VERSION-} ]]
+    then
+	cecho blue "load_distr_version_from_changelog"
+	load_distr_version_from_changelog
+
+	if [ -n "$USER_DISTRIBUTION" ]; then
+	    DISTRIBUTION=$USER_DISTRIBUTION
+	fi
+
+	if expr match "$(deb-pkg-maintainer debian/control)"  "maruska"
+	then
+	    cecho blue "My native package -- no need ti mark the version as mine"
+	    # keep on going ... it's my pkg, so no need for a distinguished version.
+	    increase_version minor
+	elif expr match "$(deb-pkg-last-releaser debian/changelog)"  "maruska"
+	then
+	    cecho blue "I already adopted this version"
+	    # keep on going with the current version.
+	    increase_version minor
+	else
+	    cecho blue "Have to mark with my suffix"
+	    # just add a maruska suffix.
+	    VERSION+=".maruska"
+	fi
+
+	( echo "Starting a new version $VERSION."
+	  echo "Could have been explicitely specified with the -v option." ) >&2
+    fi
+
+    # This is fishy:  should be added only on git-dch invocation.
+    # not _forever_ into the variable!
+    DCH_OPTIONS+="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
+
+    # Do I have to provide the previous GIT TAG?
+    echo "would suggest $DISTRIBUTION/%(version)"
+else
+    # cp -v debian/changelog debian/changelog.save
+    # Already updated since a release (fixme?). So, the version should be there.
+    if [ -n "$USER_DISTRIBUTION" ]; then
+	DISTRIBUTION=$USER_DISTRIBUTION
+    fi
+    echo "would leave dch to suggest"
+fi
