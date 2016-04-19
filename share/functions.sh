@@ -87,7 +87,7 @@ get_current_tag()
 	    #VERSION=${description#*/}
 	    #DISTRIBUTION=${description%/*}
 	else
-	    echo "cannot find a git tag? wrong format of: $description" >&2
+	    echo "Found a non-release git tag: $description. So ignoring it." >&2
 	    return 1
 	fi
     fi

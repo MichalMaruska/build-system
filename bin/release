@@ -309,14 +309,14 @@ fi
 # fatal: No names found, cannot describe anything.
 
 NEED_TAG="n"
-if [ "${GIT_OFFSET:-}" != "" ]
+if [ $found_any_tag = 0 -a  "${GIT_OFFSET:-}" = "" ]
 then
+    TAGOPTIONS=()
+    cecho red "will not create git tag! HEAD already tagged"
+else
     NEED_TAG="y"
     # don't use the version!
     TAGOPTIONS=(--git-posttag=post-tag-hook)
-else
-    TAGOPTIONS=()
-    cecho red "will not create git tag! HEAD already tagged"
 fi
 
 # *now* the default value:
@@ -328,7 +328,7 @@ load_distr_version_from_changelog
 : ${NEWGIT_TAG:=$DISTRIBUTION/$VERSION}
 NEWGIT_TAG=${NEWGIT_TAG/:/%}
 
-cecho green "git tag is $NEWGIT_TAG"
+cecho green "Will git tag after successful build: $NEWGIT_TAG"
 
 
 ## fixme: 1/ grep  2/ the tag might have ":" converted to %.
