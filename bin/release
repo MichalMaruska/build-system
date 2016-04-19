@@ -142,21 +142,18 @@ while (( $# > 0 )) do
 done
 
 
+# No source package -> optimize
 if [ $build_source != yes ]; then
     GBP_OPTIONS+=(--git-no-create-orig -b)
-
-    # for more architectures:
-    # could be -B
-    # then I need to build also -A build.
 fi
 
-# we always sign.
-
-if [ "$DISTRIBUTION" = "" ]; then
-    DISTRIBUTION=${MBS_DISTRO:-release}
-fi
+#todo: I could build arch-dependent & independent separately.
+# -A build.
+# for more architectures: -B builds.
 
 
+
+## Check all data is ready/consistent. (Before invoking manual interaction).
 # fallback on env-var value:
 if [ "$dput_targets" = "" ]; then
     if [ -z "${MBS_TARGETS-}" ];
@@ -171,6 +168,17 @@ if [ "$dput_targets" = "" ]; then
 fi
 
 
+
+
+
+## Prepare for the debian/changelog entry:
+
+if [ "$DISTRIBUTION" = "" ]; then
+    # todo:
+    # when archi  ALL -> release
+    # otherwise   lsb_release --short --codename
+    DISTRIBUTION=${MBS_DISTRO:-release}
+fi
 
 # I want to be able to repeat the run.
 # So, update the changelog and git tag only if needed.
