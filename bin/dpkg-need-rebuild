@@ -1,0 +1,98 @@
+#!/bin/zsh -feu
+
+# See if the source package should be recompiled, to produce deb packages.
+# possibly limited to a `reprepro' distro.
+
+usage()
+{
+cat <<EOF
+usage: ${0##*/} [+-hd] [-r repository][--] source-package
+-d     debug
+-r     repository/distribution
+EOF
+}
+
+if [[ -z ${REPREPRO_BASE_DIR-} ]]; then
+    cecho red "REPREPRO_BASE_DIR undefined"
+    exit 1
+fi
+
+# todo:
+# I should take the `suite' from the debian/changelog.
+# and GIT obviously.
+reprepro-distros()
+{
+    db5.3_dump -l $REPREPRO_BASE_DIR/db/release.caches.db
+}
+
+reprepro-packages()
+{
+    distro=$1
+    ARCH=$2
+    echo $REPREPRO_BASE_DIR/dists/$distro/main/binary-$ARCH/Packages
+}
+
+ARCH=$(dpkg-architecture --query DEB_BUILD_ARCH)
+DEBUG=n
+#file=()
+typeset -a distros
+distros=()
+while getopts :hr:d OPT; do
+    case $OPT in
+	h|+h)
+	    usage
+	    exit 0
+	    ;;
+	r)
+	    distros+=($OPTARG)
+	    ;;
+	d)
+	    DEBUG=y
+	    ;;
+	*)
+	    usage
+	    exit 2
+    esac
+done
+shift OPTIND-1
+OPTIND=1
+
+if [ $# -lt 1 ]; then
+    srcpkg=$(deb-pkg-name .)
+else
+    srcpkg=$1;
+    shift
+fi
+
+if [[ -z $distros ]]; then
+    distros=( $(reprepro-distros) )
+fi
+
+sha=$(git rev-parse HEAD)
+echo "git: $sha" >&2
+#set -x
+
+foreach distro ($distros) {
+    echo "looking at $distro, searching for $srcpkg" >&2
+    file=$(reprepro-packages $distro $ARCH)
+    # grep Dgit /home/michal/reprepro/dists/gauche-new/main/binary-amd64/Packages
+    # -FSource:Package  ...... hey what is that?
+    # for reprepro there is alternative:
+    #         reprepro listfilter gauche-new '$Source (==gauche)'
+    if [ $DEBUG = y ]; then set -x;fi
+    command=(grep-available --field=Source:Package --show-field=Package,Version,Dgit --exact-match $srcpkg $file)
+    if [ $DEBUG = y ]; then set +x;fi
+
+    # set -x
+    output=$(eval $command) || :
+    echo $output >&2
+    version_sha=$(echo $output |sed -n  -e  '/Dgit: /s///p' )
+    if [  $version_sha = $sha ]; then
+	exit 0
+    fi
+    # found=$status
+    # not found => exit 5
+}
+# compare with the local/git version:
+exit 1
+# return yes/no  = 0 1
