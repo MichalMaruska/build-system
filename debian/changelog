@@ -1,3 +1,20 @@
+mmc-build-system (3.7) release; urgency=medium
+
+  * prepare changelog_needs_new_section() to be merged.
+  * debian: drop override_dh_gencontrol, as my dh_gencontrol should do it by itself.
+  * little comments
+  * Move & improve  changelog_needs_new_section
+  * document shell
+  * clean up
+  * Tools to decide whether I released the previous version.
+  * new test tool: guess-version
+  * New tool: dpkg-need-rebuild
+  * release: function reset_changelog
+  * release: comments & reshuffle to make clear the dependency of steps.
+  * release: fix detection of need to tag the commit as release/*
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 20 Apr 2016 02:00:44 +0200
+
 mmc-build-system (3.6) release; urgency=medium
 
   * Use reprepro with --ignore=surprisingbinary to work-around dbgsym packages. Fixme!
