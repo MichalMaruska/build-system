@@ -267,7 +267,10 @@ function generate_commit_changelog()
     reset_changelog
 
     if dpkg --compare-versions $gbp_version gt 0.6; then
-	DCH_OPTIONS+=(--distribution $DISTRIBUTION)
+	# old did not support it.
+	if [ -n "$DISTRIBUTION" ]; then
+	    DCH_OPTIONS+=(--distribution $DISTRIBUTION)
+	fi
     fi
 
     gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
