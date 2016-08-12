@@ -362,7 +362,7 @@ function decide_git_tag()
 decide_git_tag
 
 
-if dpkg --compare-versions $gbp_version '>' 0.6; then
+if dpkg --compare-versions $gbp_version 'gt' 0.6; then
     PREVERSION_HOOK_NAME=--git-postexport
 else
     PREVERSION_HOOK_NAME=--git-prebuild
