@@ -22,7 +22,8 @@ if ( -d $filename ) {
 my $c = Dpkg::Changelog::Debian->new();
 $c->load($filename);
 
-my $control = $c->dpkg({});
-my $dist = $control->{Distribution};
+# my $control = $c->dpkg({});
+my @control = $c->format_range("dpkg", {count => 1} );
+my $dist = $control[0]->{Distribution};
 
 print $dist,"\n";
