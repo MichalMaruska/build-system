@@ -9,6 +9,7 @@ cat <<EOF
 usage: ${0##*/} [+-hd] [-r repository][--] source-package
 -d     debug
 -r     repository/distribution
+-i     installed
 EOF
 }
 
@@ -37,11 +38,14 @@ DEBUG=n
 #file=()
 typeset -a distros
 distros=()
-while getopts :hr:d OPT; do
+while getopts :hir:d OPT; do
     case $OPT in
 	h|+h)
 	    usage
 	    exit 0
+	    ;;
+	i)
+	    distros=("installed")
 	    ;;
 	r)
 	    distros+=($OPTARG)
@@ -74,7 +78,12 @@ echo "git: $sha" >&2
 
 foreach distro ($distros) {
     echo "looking at $distro, searching for $srcpkg" >&2
-    file=$(reprepro-packages $distro $ARCH)
+    if [ $distro = "installed" ]; then
+	file=/var/lib/dpkg/status
+	# /var/lib/dpkg/available
+    else
+	    file=$(reprepro-packages $distro $ARCH)
+    fi
     # grep Dgit /home/michal/reprepro/dists/gauche-new/main/binary-amd64/Packages
     # -FSource:Package  ...... hey what is that?
     # for reprepro there is alternative:
