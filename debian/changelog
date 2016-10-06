@@ -1,3 +1,12 @@
+mmc-build-system (3.8) release; urgency=medium
+
+  * use --distribution only when one is known.
+  * split new function: decide_git_tag()
+  * Dpkg::Control::Changelog: migrate to use format_range
+  * Stop using wrong/obsoletet ops for dpkg --compare-versions
+
+ -- Michal Maruska <michal@ubuntu>  Thu, 06 Oct 2016 14:10:05 +0200
+
 mmc-build-system (3.7) release; urgency=medium
 
   * prepare changelog_needs_new_section() to be merged.
