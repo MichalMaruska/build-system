@@ -13,7 +13,6 @@ check_getopt
 
 export INSTALL_IMMEDIATELY=y
 # during development it's better to install.
-export DEBI_OPTIONS=
 # --upgrade
 
 FORCE=n
@@ -94,12 +93,10 @@ while (( $# > 0 )) do
 	    INSTALL_IMMEDIATELY=y
 	    # fixme: remove the --upgrade
 	    DPUT_OPTIONS="-i" # not only upgrade!
-	    DEBI_OPTIONS=""
 	    ;;
 	--keep | -k )
 	    GBP_OPTIONS+=("--git-no-purge")
 	    ;;
-	    DEBI_OPTIONS=""
 	--noinstall | -n)
 	    # INSTALL_IMMEDIATELY=n
 	    DPUT_OPTIONS="-n"
