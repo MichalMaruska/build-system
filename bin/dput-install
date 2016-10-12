@@ -152,6 +152,7 @@ if [ -n "${REPREPRO_BASE_DIR-}" -a -n "${GBP_CHANGES_FILE}" ]
 then
     upload_to_reprepro
 fi
+# todo: remove local from dput_targets!
 
 
 

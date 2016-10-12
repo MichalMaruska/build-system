@@ -147,6 +147,7 @@ changelog_needs_new_section() {
 
 
 # Using external tools, parse "debian/changelog"
+# and set: DISTRIBUTION, VERSION
 load_distr_version_from_changelog()
 {
     local FILE="debian/changelog"
