@@ -99,10 +99,10 @@ while (( $# > 0 )) do
 	--keep | -k )
 	    GBP_OPTIONS+=("--git-no-purge")
 	    ;;
-	noinstall | -n)
 	    DEBI_OPTIONS=""
+	--noinstall | -n)
 	    # INSTALL_IMMEDIATELY=n
-	    DPUT_OPTIONS=""
+	    DPUT_OPTIONS="-n"
 	    ;;
 	--verbose | -V )
 	    GBP_OPTIONS+="--git-verbose"
@@ -220,7 +220,6 @@ cecho red "Starting git-buildpackage, with hooks!"
 # --color=auto
 # lsb_release -c
 
-export DPUT_OPTIONS=""
 
 export DPUT_TARGETS
 
