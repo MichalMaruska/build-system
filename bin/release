@@ -61,7 +61,7 @@ DCH_OPTIONS=()
 
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version: \
+    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version:,nocheck \
     --longoptions force,source,distro:minor,major \
     --options ha:bfr:T:p:iIv:ousmM \
     -- "$@" ) || { usage && exit 1 }
@@ -136,6 +136,10 @@ while (( $# > 0 )) do
 	-u)
 	    # don't sign??
 	    GBP_OPTIONS+=("-us"  "-uc")
+	    ;;
+	--nocheck )
+	    DEB_BUILD_OPTIONS+=nocheck
+	    export DEB_BUILD_OPTIONS
 	    ;;
     esac
     shift
