@@ -34,8 +34,14 @@ REPO=$1
 #GBP_CHANGES_FILE
 CHANGES_FILE=$2
 
-
-packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $CHANGES_FILE))
-foreach package ($packages) {
-    reprepro remove $REPO $package
-}
+if false;
+then
+    packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $CHANGES_FILE))
+    foreach package ($packages) {
+	reprepro remove $REPO $package
+    }
+else
+    # remove by source pkg name:
+    source=($(sed --quiet -e '/^Source:/{s/Source: //;p}' $CHANGES_FILE))
+    reprepro removefilter $REPO "\$Source (==$source)"
+fi
