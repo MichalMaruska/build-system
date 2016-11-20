@@ -156,7 +156,7 @@ load_distr_version_from_changelog()
     drop_verbal_suffix
 }
 
-# rewrites the VERSION env-variable.
+# rewrites the @VERSION env-variable, which was taken from ? (changelog or git tag?)
 #
 # todo: if suffix is "maruska" then I want to keep it.
 # if the author of previous was not me, I want to suffix "maruska".
@@ -177,9 +177,9 @@ increase_version()
     middle=${tail%.*}
 
     # echo "major=$major  minor=$minor"
-    cecho red "increasing version by ($major, $middle, $minor)... $step"
+    cecho red "increasing version($major, $middle, $minor) by step: $step"
     # if expr match ".-." $minor
-    if expr match "$minor" ".-\(.\)";
+    if expr match "$minor" ".\+-.\+" >/dev/null
     then
         local postfix=maruska
         VERSION="$major${middle-.${middle}}.$minor"$postfix
