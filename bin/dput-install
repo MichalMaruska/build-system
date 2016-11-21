@@ -76,34 +76,34 @@ typeset -T DPUT_TARGETS dput_targets
 # make it manually invokable:
 while getopts :ufiIrd:n OPT; do
     case $OPT in
-	u|+u)
-	    dput_options+=("--unchecked")
-	    ;;
-	f)
-	    dput_options+=("--force")
-	    ;;
-	n)
-	    INSTALL_IMMEDIATELY=n
-	    ;;
-	i)
-	    INSTALL_IMMEDIATELY=y
-	    # fixme: just remove "--upgrade"
-	    DEBI_OPTIONS=()
-	    ;;
-	I) # useless?
-	    INSTALL_IMMEDIATELY=y
-	    DEBI_OPTIONS+=("--upgrade")
-	    ;;
-	r)
-	    dput_targets=($mbs_targets)
-	    release=y
-	    ;;
-	d)
-	    DISTRO=$OPTARG
-	    ;;
-	*)
-	    usage
-	    exit 2
+        u|+u)
+            dput_options+=("--unchecked")
+            ;;
+        f)
+            dput_options+=("--force")
+            ;;
+        n)
+            INSTALL_IMMEDIATELY=n
+            ;;
+        i)
+            INSTALL_IMMEDIATELY=y
+            # fixme: just remove "--upgrade"
+            DEBI_OPTIONS=()
+            ;;
+        I) # useless?
+            INSTALL_IMMEDIATELY=y
+            DEBI_OPTIONS+=("--upgrade")
+            ;;
+        r)
+            dput_targets=($mbs_targets)
+            release=y
+            ;;
+        d)
+            DISTRO=$OPTARG
+            ;;
+        *)
+            usage
+            exit 2
     esac
 done
 shift $(( OPTIND - 1 ))
@@ -137,12 +137,12 @@ upload_to_reprepro()
 
     # fixme: if the distro is not local?
     if test -n "$DISTRO"  &&
-	## acceptable in reprepro
-	grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
+        ## acceptable in reprepro
+        grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
     then
-	cecho $REPREPRO_COLOR "Putting into Reprepro: ${GBP_CHANGES_FILE}"
-	reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
-		 include "$DISTRO" $GBP_CHANGES_FILE
+        cecho $REPREPRO_COLOR "Putting into Reprepro: ${GBP_CHANGES_FILE}"
+        reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
+                 include "$DISTRO" $GBP_CHANGES_FILE
     fi
 }
 
@@ -161,10 +161,10 @@ if [ ${INSTALL_IMMEDIATELY} = "y" ]
 then
     cecho green "installing immediately ${GBP_CHANGES_FILE}"
     if [ -n "${GBP_CHANGES_FILE}" ]; then
-	set -x
-	debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
+        set -x
+        debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
     else
-	debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
+        debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
     fi
 else
     cecho green "not requested to install immediately"
@@ -181,35 +181,32 @@ if [ -z "${dput_targets}" ]; then
 else
     for TARGET in ${dput_targets}
     do
-	if [ $TARGET = local -a -n "${REPREPRO_BASE_DIR-}" ]; then
-	   continue
-	fi
-	cecho $REPREPRO_COLOR "Uploading to $TARGET"
+        if [ $TARGET = local -a -n "${REPREPRO_BASE_DIR-}" ]; then
+           continue
+        fi
+        cecho $REPREPRO_COLOR "Uploading to $TARGET"
 
-	if [ -z ${GBP_CHANGES_FILE-} ]; then
-	    if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
-		(echo "Failed to upload to $TARGET"; echo )>&2
-	    fi
-	else
-	    set -x
-	    if ! dput --unchecked $dput_options $TARGET $GBP_CHANGES_FILE;
-	    then
-		cecho yellow "target $TARGET failed, but not fatal!"
-	    fi
-	fi
+        if [ -z ${GBP_CHANGES_FILE-} ]; then
+            if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
+                (echo "Failed to upload to $TARGET"; echo )>&2
+            fi
+        else
+            set -x
+            if ! dput --unchecked $dput_options $TARGET $GBP_CHANGES_FILE;
+            then
+                cecho yellow "target $TARGET failed, but not fatal!"
+            fi
+        fi
 
-	### Invoke remote reprepro:
-	if [ $TARGET = "maruska" ]; then
-	    if [ $release = y ]; then
-		cecho green "processing hardwired reprepro (fixme!)"
+        ### Invoke remote reprepro:
+        if [ $TARGET = "maruska" ]; then
+            if [ $release = y ]; then
+                cecho green "processing hardwired reprepro (fixme!)"
 
-		# -t ... PTY allocation: the inside will have a $TERM.
-		ssh -Y -A michal@www.ruska.it -t \
-		    zsh --login -c "./reprepro/process-incoming; ls -l reprepro/incoming/"
-	    fi
-	fi
+                # -t ... PTY allocation: the inside will have a $TERM.
+                ssh -Y -A michal@www.ruska.it -t \
+                    zsh --login -c "./reprepro/process-incoming; ls -l reprepro/incoming/"
+            fi
+        fi
     done
 fi
-
-
-
