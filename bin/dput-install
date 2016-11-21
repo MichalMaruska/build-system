@@ -205,7 +205,9 @@ else
 
                 # -t ... PTY allocation: the inside will have a $TERM.
                 ssh -Y -A michal@www.ruska.it -t \
-                    zsh --login -c "./reprepro/process-incoming; ls -l reprepro/incoming/"
+                    zsh --login -c "./reprepro/schroot-reprepro"\
+                    ## todo: schroot --run-session --chroot $ID
+                    ## "./reprepro/process-incoming; ls -l reprepro/incoming/"
             fi
         fi
     done
