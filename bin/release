@@ -13,6 +13,7 @@ GITSHA=""
 
 function usage()
 {
+    setopt POSIX_ARGZERO
     cat <<EOF
 usage: ${0##*/} [+-r Distro] [+-a arch] [-m] [-p dput-target]* [-v version ] [-s] [-o]
 
@@ -35,6 +36,7 @@ dput-target ... taken from MBS_TARGETS env variable
 
 -u         don't sign
 EOF
+    unsetopt POSIX_ARGZERO
 }
 
 # defaults for options:

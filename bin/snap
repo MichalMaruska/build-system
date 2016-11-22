@@ -18,7 +18,8 @@ export INSTALL_IMMEDIATELY=y
 FORCE=n
 
 function usage(){
-cat >&2 <<EOF
+    setopt POSIX_ARGZERO
+    cat >&2 <<EOF
 usage: ${0##*/} [+-upb} [--] ARGS...
     --ignore -b  ... ignore branch
     --nosign -u  ... do not sign!
@@ -30,6 +31,7 @@ usage: ${0##*/} [+-upb} [--] ARGS...
     --nocheck
     --keep -k       ... keep the build directory
 EOF
+    unsetopt POSIX_ARGZERO
 }
 
 # this exports to the `dput-install'! -- mmc: no!

@@ -25,6 +25,7 @@ possibly_trace
 
 
 function usage(){
+    setopt POSIX_ARGZERO
     cat <<EOF
 usage: ${0##*/} [+-ufin] [--] ARGS...
 dput(1) options basically
@@ -39,6 +40,7 @@ dput(1) options basically
 Environment:
 DPUT_TARGETS
 EOF
+    unsetopt POSIX_ARGZERO
 }
 
 # defaults:
