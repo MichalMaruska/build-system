@@ -33,6 +33,41 @@ reprepro-packages()
     echo $REPREPRO_BASE_DIR/dists/$distro/main/binary-$ARCH/Packages
 }
 
+
+# Given a file which can be queried by grep-available(1),
+# compare the given @git-sha and the one of the package inside (its dgit field).
+function check_packages_file()
+{
+    local srcpkg=$1
+    local file=$2
+    local sha=$3
+    # grep Dgit /home/michal/reprepro/dists/gauche-new/main/binary-amd64/Packages
+    # -FSource:Package  ...... hey what is that?
+    # for reprepro there is alternative:
+    #         reprepro listfilter gauche-new '$Source (==gauche)'
+    # if [ $DEBUG = y ]; then set -x;fi
+    command=(grep-available --field=Source:Package --show-field=Package,Version,Dgit \
+             --exact-match $srcpkg $file)
+    if [ $DEBUG = y ]; then set +x;fi
+
+    # set -x
+    output=$(eval $command) || :
+    # echo $output >&2
+    version_sha=$(echo $output |sed -n  -e  '/Dgit: /s///p' )
+
+    if [ $DEBUG = y ]; then echo $version_sha >&2; fi
+    if [ -n "$version_sha" -a "$version_sha" = $sha ]; then
+        return 0
+    fi
+    # found=$status
+    # not found => exit 5
+    if [ -n "$version_sha" ]; then
+        cecho yellow "dgit: $version_sha"
+    fi
+    [ $DEBUG = y ] && echo $output >&2
+    return 1
+}
+
 ARCH=$(dpkg-architecture --query DEB_BUILD_ARCH)
 DEBUG=n
 #file=()
@@ -84,20 +119,10 @@ foreach distro ($distros) {
     else
 	    file=$(reprepro-packages $distro $ARCH)
     fi
-    # grep Dgit /home/michal/reprepro/dists/gauche-new/main/binary-amd64/Packages
-    # -FSource:Package  ...... hey what is that?
-    # for reprepro there is alternative:
-    #         reprepro listfilter gauche-new '$Source (==gauche)'
-    if [ $DEBUG = y ]; then set -x;fi
-    command=(grep-available --field=Source:Package --show-field=Package,Version,Dgit --exact-match $srcpkg $file)
-    if [ $DEBUG = y ]; then set +x;fi
 
-    # set -x
-    output=$(eval $command) || :
-    echo $output >&2
-    version_sha=$(echo $output |sed -n  -e  '/Dgit: /s///p' )
-    if [  $version_sha = $sha ]; then
-	exit 0
+    if check_packages_file $srcpkg $file $sha; then
+        cecho green "found identical"
+        exit 0
     fi
     # found=$status
     # not found => exit 5
