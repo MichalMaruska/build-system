@@ -163,8 +163,7 @@ if [ $do_sign = "n" ]; then
 fi
 
 
-GITSHA=$(git rev-list  --max-count=1 HEAD)
-export GITSHA
+export GITSHA=$(git rev-list --max-count=1 HEAD)
 
 # The changelog is updated inside the Git repo.
 # After the git checkout, it will be copied.
