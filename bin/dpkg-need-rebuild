@@ -3,6 +3,9 @@
 # See if the source package should be recompiled, to produce deb packages.
 # possibly limited to a `reprepro' distro.
 
+# todo:
+# if only 1 reprepro has it, I'm fine. don't list the others.
+
 usage()
 {
 cat <<EOF
