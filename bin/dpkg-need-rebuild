@@ -108,11 +108,11 @@ if [[ -z $distros ]]; then
 fi
 
 sha=$(git rev-parse HEAD)
-echo "git: $sha" >&2
+[ $DEBUG = y ] && cecho red "git: $sha $srcpkg" >&2
 #set -x
 
 foreach distro ($distros) {
-    echo "looking at $distro, searching for $srcpkg" >&2
+    [ $DEBUG = y ] && cecho blue "looking at $distro, searching for $srcpkg" >&2
     if [ $distro = "installed" ]; then
 	file=/var/lib/dpkg/status
 	# /var/lib/dpkg/available
