@@ -12,13 +12,13 @@ unsetopt POSIX_ARGZERO
 
 while getopts :h OPT; do
     case $OPT in
-	h|+h)
-	    usage
-	    exit 0
-	    ;;
-	*)
-	    usage
-	    exit 2
+        h|+h)
+            usage
+            exit 0
+            ;;
+        *)
+            usage
+            exit 2
     esac
 done
 shift OPTIND-1
@@ -38,10 +38,12 @@ if false;
 then
     packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $CHANGES_FILE))
     foreach package ($packages) {
-	reprepro remove $REPO $package
+        reprepro remove $REPO $package
     }
 else
     # remove by source pkg name:
     source=($(sed --quiet -e '/^Source:/{s/Source: //;p}' $CHANGES_FILE))
+    # if DEBUG reprepro listfilter UNRELEASED '$Source (==apt)'
     reprepro removefilter $REPO "\$Source (==$source)"
+    # reprepro removefilter  UNRELEASED '$Source (==apt)'
 fi
