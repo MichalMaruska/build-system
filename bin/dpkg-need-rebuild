@@ -75,22 +75,22 @@ typeset -a distros
 distros=()
 while getopts :hir:d OPT; do
     case $OPT in
-	h|+h)
-	    usage
-	    exit 0
-	    ;;
-	i)
-	    distros=("installed")
-	    ;;
-	r)
-	    distros+=($OPTARG)
-	    ;;
-	d)
-	    DEBUG=y
-	    ;;
-	*)
-	    usage
-	    exit 2
+        h|+h)
+            usage
+            exit 0
+            ;;
+        i)
+            distros=("installed")
+            ;;
+        r)
+            distros+=($OPTARG)
+            ;;
+        d)
+            DEBUG=y
+            ;;
+        *)
+            usage
+            exit 2
     esac
 done
 shift OPTIND-1
@@ -114,10 +114,10 @@ sha=$(git rev-parse HEAD)
 foreach distro ($distros) {
     [ $DEBUG = y ] && cecho blue "looking at $distro, searching for $srcpkg" >&2
     if [ $distro = "installed" ]; then
-	file=/var/lib/dpkg/status
-	# /var/lib/dpkg/available
+        file=/var/lib/dpkg/status
+        # /var/lib/dpkg/available
     else
-	    file=$(reprepro-packages $distro $ARCH)
+            file=$(reprepro-packages $distro $ARCH)
     fi
 
     if check_packages_file $srcpkg $file $sha; then
