@@ -6,7 +6,7 @@
 usage()
 {
 cat <<EOF
-usage: ${0##*/} [+-hd] [-r repository][--] source-package
+usage: ${0##*/} [+-hdi] [-r repository][--] source-package
 -d     debug
 -r     repository/distribution
 -i     installed
