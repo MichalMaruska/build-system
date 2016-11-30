@@ -60,94 +60,94 @@ ARGS=($@)
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro:,verbose,work,nocheck,keep \
-	--options uspifbhv:d:tVwk \
-	-- "$@" ) || { usage && exit 1 }
+        --options uspifbhv:d:tVwk \
+        -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
 while (( $# > 0 )) do
     case $1 in
 
-	--help | -h)
-	    usage
-	    exit 0;;
-	## how to invert:  i.e. remove from a Zsh array?
-	--ignore | -b)
-	    ignore_branch=n
-	    ;;
-	# useless:
-	--sign | -s)
-	    do_sign=y
-	    ;;
-	--nosign | -u)
-	    # fixme: should use arrays
-	    # prepend!
-	    do_sign=n
-	    ;;
-	--pbuilder | -p)
-	    # /usr/bin/
-	    GBP_OPTIONS+="--git-builder=git-pbuilder"
-	    ;;
-	--install | -i)
-	    ## -i don't upgrade, +i don't install at all.
-	    ## and how to force it? just leave.
-	    INSTALL_IMMEDIATELY=y
-	    # fixme: remove the --upgrade
-	    DPUT_OPTIONS="-i" # not only upgrade!
-	    ;;
-	--keep | -k )
-	    GBP_OPTIONS+=("--git-no-purge")
-	    ;;
-	--noinstall | -n)
-	    # INSTALL_IMMEDIATELY=n
-	    DPUT_OPTIONS="-n"
-	    ;;
-	--verbose | -V )
-	    GBP_OPTIONS+="--git-verbose"
-	    ;;
-	--version | -v)
-	    shift
-	    FORCE=y
-	    DEFAULT_NEW_VERSION=$1
-	    ;;
-	--distro | -d )
-	    shift
-	    USER_DISTRIBUTION=$1
-	    ;;
-	--source| -t )
-	    # still  dpkg-buildpackage will call dpkg-source --before-build
-	    # which does not do harm, though.
-	    build_source=yes
-	    ;;
-	--force | -f )
-	    FORCE=y
-	    ;;
-	--work | -w )
-	    GBP_OPTIONS+=(--git-export=WC)
-	    ;;
-	--nocheck )
-	    DEB_BUILD_OPTIONS+=nocheck
-	    export DEB_BUILD_OPTIONS
-	    ;;
+        --help | -h)
+            usage
+            exit 0;;
+        ## how to invert:  i.e. remove from a Zsh array?
+        --ignore | -b)
+            ignore_branch=n
+            ;;
+        # useless:
+        --sign | -s)
+            do_sign=y
+            ;;
+        --nosign | -u)
+            # fixme: should use arrays
+            # prepend!
+            do_sign=n
+            ;;
+        --pbuilder | -p)
+            # /usr/bin/
+            GBP_OPTIONS+="--git-builder=git-pbuilder"
+            ;;
+        --install | -i)
+            ## -i don't upgrade, +i don't install at all.
+            ## and how to force it? just leave.
+            INSTALL_IMMEDIATELY=y
+            # fixme: remove the --upgrade
+            DPUT_OPTIONS="-i" # not only upgrade!
+            ;;
+        --keep | -k )
+            GBP_OPTIONS+=("--git-no-purge")
+            ;;
+        --noinstall | -n)
+            # INSTALL_IMMEDIATELY=n
+            DPUT_OPTIONS="-n"
+            ;;
+        --verbose | -V )
+            GBP_OPTIONS+="--git-verbose"
+            ;;
+        --version | -v)
+            shift
+            FORCE=y
+            DEFAULT_NEW_VERSION=$1
+            ;;
+        --distro | -d )
+            shift
+            USER_DISTRIBUTION=$1
+            ;;
+        --source| -t )
+            # still  dpkg-buildpackage will call dpkg-source --before-build
+            # which does not do harm, though.
+            build_source=yes
+            ;;
+        --force | -f )
+            FORCE=y
+            ;;
+        --work | -w )
+            GBP_OPTIONS+=(--git-export=WC)
+            ;;
+        --nocheck )
+            DEB_BUILD_OPTIONS+=nocheck
+            export DEB_BUILD_OPTIONS
+            ;;
     esac
     shift
 done
 
 # the rest are options for git-buildpackage
 
-	# ?)
-	#     echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
-	#     case $ARGS[$OPTIND] in
-	# 	--git*)
-	# 	    GBP_OPTIONS+=$ARGS[$OPTIND]
-	# 	    OPTIND=$(expr $OPTIND + 1)
-	# 	    ;;
-	# 	*)
-	# 	    echo "$OPTIND -> $ARGS[$OPTIND] $OPTARG"
-	# 	    exit 3;;
-	#     esac ;;
-	# *)
-	#     usage
-	#     exit 2
+        # ?)
+        #     echo "problem: $OPT / $OPTIND:  $ARGS[$OPTIND]"
+        #     case $ARGS[$OPTIND] in
+        #       --git*)
+        #           GBP_OPTIONS+=$ARGS[$OPTIND]
+        #           OPTIND=$(expr $OPTIND + 1)
+        #           ;;
+        #       *)
+        #           echo "$OPTIND -> $ARGS[$OPTIND] $OPTARG"
+        #           exit 3;;
+        #     esac ;;
+        # *)
+        #     usage
+        #     exit 2
 
 if [ $ignore_branch = "y" ];then
     DCH_OPTIONS+=("--ignore-branch")
@@ -172,15 +172,15 @@ then
     # get the current version & increase. The major maybe.
     if [[ -z ${DEFAULT_NEW_VERSION-} ]]
     then
-	load_distr_version_from_changelog
+        load_distr_version_from_changelog
 
-	if [ -n "$USER_DISTRIBUTION" ]; then
-	    DISTRIBUTION=$USER_DISTRIBUTION
-	fi
-	increase_version minor
+        if [ -n "$USER_DISTRIBUTION" ]; then
+            DISTRIBUTION=$USER_DISTRIBUTION
+        fi
+        increase_version minor
 
-	( echo "Starting a new version $VERSION."
-	    echo "Could have been explicitely specified with the -v option." ) >&2
+        ( echo "Starting a new version $VERSION."
+            echo "Could have been explicitely specified with the -v option." ) >&2
     fi
 
     # This is fishy:  should be added only on git-dch invocation.
@@ -195,7 +195,7 @@ else
     # cp -v debian/changelog debian/changelog.save
     # Already updated since a release (fixme?). So, the version should be there.
     if [ -n "$USER_DISTRIBUTION" ]; then
-	DISTRIBUTION=$USER_DISTRIBUTION
+        DISTRIBUTION=$USER_DISTRIBUTION
     fi
 
     set -x
@@ -246,3 +246,5 @@ set +x
 # psnap... using cow-builder
 # release
 #
+
+# fixme: how to clean after the build? and after a failed one?
