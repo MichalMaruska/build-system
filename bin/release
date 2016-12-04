@@ -146,10 +146,17 @@ while (( $# > 0 )) do
     esac
     shift
 done
+DEBUG=y
+
+info()
+{
+    cecho yellow $1 >&2
+}
 
 
 # No source package -> optimize
 if [ $build_source != yes ]; then
+    if [ $DEBUG = y ]; then info "not building source package";fi
     GBP_OPTIONS+=(--git-no-create-orig -b)
 fi
 
@@ -162,6 +169,7 @@ fi
 ## Check all data is ready/consistent. (Before invoking manual interaction).
 # fallback on env-var value:
 if [ "$dput_targets" = "" ]; then
+    if [ $DEBUG = y ]; then info "checking dput targets";fi
     if [ -z "${MBS_TARGETS-}" ];
     then
         cecho red "No targets, only local then"
@@ -176,6 +184,7 @@ fi
 
 
 
+if [ $DEBUG = y ]; then info "guessing distribution";fi
 
 ## Prepare for the debian/changelog entry:
 
@@ -214,6 +223,7 @@ fi
 # todo:
 # if no debian/changelog or not in Git ->
 #  --create
+if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
 
 # if status OR not updated!
 if changelog_needs_new_section "release"
