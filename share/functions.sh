@@ -153,7 +153,6 @@ load_distr_version_from_changelog()
     local FILE="debian/changelog"
     DISTRIBUTION=$(deb-pkg-distribution $FILE)
     VERSION=$(deb-pkg-version $FILE)
-    drop_verbal_suffix
 }
 
 # rewrites the @VERSION env-variable, which was taken from ? (changelog or git tag?)

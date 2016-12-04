@@ -202,6 +202,7 @@ then
     cecho red "not past Git tag. Taking hint from the debian/changelog"
     # extract the distro from changelog!
     load_distr_version_from_changelog;
+    drop_verbal_suffix
     # DISTRIBUTION & VERSION
 
     # todo: further fallback:
@@ -222,6 +223,7 @@ function get_new_version()
 
     # This should be from
     load_distr_version_from_changelog
+    drop_verbal_suffix
     if dpkg --compare-versions $VERSION lt $git_version;
     then
         # increase_version $step
@@ -347,6 +349,7 @@ function decide_git_tag()
 
     # fixme: this only after `generate_commit_changelog' ...
     # DISTRIBUTION, VERSION
+    # notice: without     drop_verbal_suffix
     load_distr_version_from_changelog
     # if different &
     local NEWGIT_TAG
