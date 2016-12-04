@@ -70,81 +70,80 @@ cmd_options=$(getopt --name $0 --shell bash \
 eval set -- "$cmd_options"
 
 while (( $# > 0 )) do
+      case $1 in
+          --help | -h)
+              usage
+              exit 0
+              ;;
+          --arch | -a)
+              shift
+              ARCH="$1"
+              ;;
+          --ignore | -b)
+              DCH_OPTIONS+=("--ignore-branch")
+              GBP_OPTIONS+=("--git-ignore-branch")
+              ;;
+          --force | -f)
+              FORCE=y
+              ;;
+          --dput | -p)
+              shift
+              dput_targets+=($1)
+              ;;
 
-    case $1 in
-        --help | -h)
-            usage
-            exit 0
-            ;;
-        --arch | -a)
-            shift
-            ARCH="$1"
-            ;;
-        --ignore | -b)
-            DCH_OPTIONS+=("--ignore-branch")
-            GBP_OPTIONS+=("--git-ignore-branch")
-            ;;
-        --force | -f)
-            FORCE=y
-            ;;
-        --dput | -p)
-            shift
-            dput_targets+=($1)
-            ;;
+          --distro | -r)
+              shift
+              USER_DISTRIBUTION="$1"
+              GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
+              ;;
+          --tag | -T )
+              shift
+              git_tag=$1
+              ;;
+          --source | -s)
+              # still  dpkg-buildpackage will call dpkg-source --before-build
+              # which does not do harm, though.
+              build_source=yes
+              ;;
+          ##  which is?  install the package?
+          --install | -i)
+              # fixme:
+              GBP_OPTIONS+=("-i")
+              ;;
+          --install | -i)
+              POSTBUILD_INSTALL_OPTIONS="-i"
+              ;;
+          --upgrade | -I)
+              POSTBUILD_INSTALL_OPTIONS="-I"
+              ;;
+          --noinstall | +n)
+              POSTBUILD_INSTALL_OPTIONS="-n"
+              ;;
 
-        --distro | -r)
-            shift
-            USER_DISTRIBUTION="$1"
-            GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
-            ;;
-        --tag | -T )
-            shift
-            git_tag=$1
-            ;;
-        --source | -s)
-            # still  dpkg-buildpackage will call dpkg-source --before-build
-            # which does not do harm, though.
-            build_source=yes
-            ;;
-        ##  which is?  install the package?
-        --install | -i)
-            # fixme:
-            GBP_OPTIONS+=("-i")
-            ;;
-        --install | -i)
-            POSTBUILD_INSTALL_OPTIONS="-i"
-            ;;
-        --upgrade | -I)
-            POSTBUILD_INSTALL_OPTIONS="-I"
-            ;;
-        --noinstall | +n)
-            POSTBUILD_INSTALL_OPTIONS="-n"
-            ;;
-
-        --auto | -o)
-            # non-interactive/offline
-            DCH_OPTIONS+=("--spawn-editor=snapshot")
-            ;;
-        --minor | -m)
-            step=minor
-            ;;
-        --major | -M)
-            step=major
-            ;;
-        --version | -v)
-            shift
-            USER_VERSION=$1
-            ;;
-        -u)
-            # don't sign??
-            GBP_OPTIONS+=("-us"  "-uc")
-            ;;
-        --nocheck )
-            DEB_BUILD_OPTIONS+=nocheck
-            export DEB_BUILD_OPTIONS
-            ;;
-    esac
-    shift
+          --auto | -o)
+              # non-interactive/offline
+              DCH_OPTIONS+=("--spawn-editor=snapshot")
+              ;;
+          --minor | -m)
+              step=minor
+              ;;
+          --major | -M)
+              step=major
+              ;;
+          --version | -v)
+              shift
+              USER_VERSION=$1
+              ;;
+          -u)
+              # don't sign??
+              GBP_OPTIONS+=("-us"  "-uc")
+              ;;
+          --nocheck )
+              DEB_BUILD_OPTIONS+=nocheck
+              export DEB_BUILD_OPTIONS
+              ;;
+      esac
+      shift
 done
 DEBUG=y
 
