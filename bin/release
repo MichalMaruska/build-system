@@ -70,77 +70,77 @@ eval set -- "$cmd_options"
 while (( $# > 0 )) do
 
     case $1 in
-	--help | -h)
-	    usage
-	    exit 0
-	    ;;
-	--arch | -a)
-	    shift
-	    ARCH="$1"
-	    ;;
-	--ignore | -b)
-	    DCH_OPTIONS+=("--ignore-branch")
-	    GBP_OPTIONS+=("--git-ignore-branch")
-	    ;;
-	--force | -f)
-	    FORCE=y
-	    ;;
-	--dput | -p)
-	    shift
-	    dput_targets+=($1)
-	    ;;
+        --help | -h)
+            usage
+            exit 0
+            ;;
+        --arch | -a)
+            shift
+            ARCH="$1"
+            ;;
+        --ignore | -b)
+            DCH_OPTIONS+=("--ignore-branch")
+            GBP_OPTIONS+=("--git-ignore-branch")
+            ;;
+        --force | -f)
+            FORCE=y
+            ;;
+        --dput | -p)
+            shift
+            dput_targets+=($1)
+            ;;
 
-	--distro | -r)
-	    shift
-	    USER_DISTRIBUTION="$1"
-	    GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
-	    ;;
-	--tag | -T )
-	    shift
-	    git_tag=$1
-	    ;;
-	--source | -s)
-	    # still  dpkg-buildpackage will call dpkg-source --before-build
-	    # which does not do harm, though.
-	    build_source=yes
-	    ;;
-	##  which is?  install the package?
-	--install | -i)
-	    # fixme:
-	    GBP_OPTIONS+=("-i")
-	    ;;
-	--install | -i)
-	    POSTBUILD_INSTALL_OPTIONS="-i"
-	    ;;
-	--upgrade | -I)
-	    POSTBUILD_INSTALL_OPTIONS="-I"
-	    ;;
-	--noinstall | +n)
-	    POSTBUILD_INSTALL_OPTIONS="-n"
-	    ;;
+        --distro | -r)
+            shift
+            USER_DISTRIBUTION="$1"
+            GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
+            ;;
+        --tag | -T )
+            shift
+            git_tag=$1
+            ;;
+        --source | -s)
+            # still  dpkg-buildpackage will call dpkg-source --before-build
+            # which does not do harm, though.
+            build_source=yes
+            ;;
+        ##  which is?  install the package?
+        --install | -i)
+            # fixme:
+            GBP_OPTIONS+=("-i")
+            ;;
+        --install | -i)
+            POSTBUILD_INSTALL_OPTIONS="-i"
+            ;;
+        --upgrade | -I)
+            POSTBUILD_INSTALL_OPTIONS="-I"
+            ;;
+        --noinstall | +n)
+            POSTBUILD_INSTALL_OPTIONS="-n"
+            ;;
 
-	--auto | -o)
-	    # non-interactive/offline
-	    DCH_OPTIONS+=("--spawn-editor=snapshot")
-	    ;;
-	--minor | -m)
-	    step=minor
-	    ;;
-	--major | -M)
-	    step=major
-	    ;;
-	--version | -v)
-	    shift
-	    USER_VERSION=$1
-	    ;;
-	-u)
-	    # don't sign??
-	    GBP_OPTIONS+=("-us"  "-uc")
-	    ;;
-	--nocheck )
-	    DEB_BUILD_OPTIONS+=nocheck
-	    export DEB_BUILD_OPTIONS
-	    ;;
+        --auto | -o)
+            # non-interactive/offline
+            DCH_OPTIONS+=("--spawn-editor=snapshot")
+            ;;
+        --minor | -m)
+            step=minor
+            ;;
+        --major | -M)
+            step=major
+            ;;
+        --version | -v)
+            shift
+            USER_VERSION=$1
+            ;;
+        -u)
+            # don't sign??
+            GBP_OPTIONS+=("-us"  "-uc")
+            ;;
+        --nocheck )
+            DEB_BUILD_OPTIONS+=nocheck
+            export DEB_BUILD_OPTIONS
+            ;;
     esac
     shift
 done
@@ -162,12 +162,12 @@ fi
 if [ "$dput_targets" = "" ]; then
     if [ -z "${MBS_TARGETS-}" ];
     then
-	cecho red "No targets, only local then"
-	exit 1
+        cecho red "No targets, only local then"
+        exit 1
     else
-	# fixme: since it comes from a generic shell, divide it as such:
-	#dput_targets=${=MBS_TARGETS}
-	DPUT_TARGETS=${MBS_TARGETS}
+        # fixme: since it comes from a generic shell, divide it as such:
+        #dput_targets=${=MBS_TARGETS}
+        DPUT_TARGETS=${MBS_TARGETS}
     fi
 fi
 
@@ -222,12 +222,12 @@ function get_new_version()
     load_distr_version_from_changelog
     if dpkg --compare-versions $VERSION lt $git_version;
     then
-	# increase_version $step
-	VERSION=$git_version
-	# so the changelog contains a higher
-	# version. git-dch would notice it.
-	#
-	# So, increase more.
+        # increase_version $step
+        VERSION=$git_version
+        # so the changelog contains a higher
+        # version. git-dch would notice it.
+        #
+        # So, increase more.
     fi
 
     echo $DISTRIBUTION $VERSION
@@ -243,8 +243,8 @@ function reset_changelog()
     # we don't want here.
     if git status --porcelain $FILE| grep '^[M ]M' > /dev/null;
     then
-	mv $FILE $FILE.pre-release
-	git checkout $FILE
+        mv $FILE $FILE.pre-release
+        git checkout $FILE
     fi
 }
 
@@ -255,14 +255,14 @@ function generate_commit_changelog()
 {
     if [ -n "${USER_VERSION:-}" ]
     then
-	echo "overriding the version, as requested" >&2
-	VERSION=${USER_VERSION}
+        echo "overriding the version, as requested" >&2
+        VERSION=${USER_VERSION}
     else
-	# fixme: here we need to increase (& hence parse) the VERSION:
-	get_new_version
-	#echo "Starting a new version $VERSION."
-	#echo "Could have been explicitely specified with the -v option.">&2
-	# no need to echo... the user will see it?
+        # fixme: here we need to increase (& hence parse) the VERSION:
+        get_new_version
+        #echo "Starting a new version $VERSION."
+        #echo "Could have been explicitely specified with the -v option.">&2
+        # no need to echo... the user will see it?
     fi
 
     [[ -n $USER_DISTRIBUTION ]] && DISTRIBUTION=$USER_DISTRIBUTION
@@ -271,10 +271,10 @@ function generate_commit_changelog()
     reset_changelog
 
     if dpkg --compare-versions $gbp_version gt 0.6; then
-	# old did not support it.
-	if [ -n "$DISTRIBUTION" ]; then
-	    DCH_OPTIONS+=(--distribution $DISTRIBUTION)
-	fi
+        # old did not support it.
+        if [ -n "$DISTRIBUTION" ]; then
+            DCH_OPTIONS+=(--distribution $DISTRIBUTION)
+        fi
     fi
 
     gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
@@ -286,10 +286,10 @@ function generate_commit_changelog()
     set +x
     if git status --porcelain debian/changelog| grep '^[M ]M' > /dev/null;
     then
-	git add debian/changelog;
-	# todo: "release $VERSION"
-	git commit -m "release"
-	GITSHA=$(git rev-list  --max-count=1 HEAD)
+        git add debian/changelog;
+        # todo: "release $VERSION"
+        git commit -m "release"
+        GITSHA=$(git rev-list  --max-count=1 HEAD)
     # else what to do?
     fi
 }
@@ -328,12 +328,12 @@ function decide_git_tag()
     local NEED_TAG="n"
     if [ $found_any_tag = 0 -a  "${GIT_OFFSET:-}" = "" ]
     then
-	TAGOPTIONS=()
-	cecho red "will not create git tag! HEAD already tagged"
+        TAGOPTIONS=()
+        cecho red "will not create git tag! HEAD already tagged"
     else
-	NEED_TAG="y"
-	# don't use the version!
-	TAGOPTIONS=(--git-posttag=post-tag-hook)
+        NEED_TAG="y"
+        # don't use the version!
+        TAGOPTIONS=(--git-posttag=post-tag-hook)
     fi
 
     if [ $NEED_TAG = "n" ]; then
@@ -357,9 +357,9 @@ function decide_git_tag()
     ## fixme: 1/ grep  2/ the tag might have ":" converted to %.
     if git tag -l "$NEWGIT_TAG"|grep "." > /dev/null
     then
-	cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
+        cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
     else
-	GBP_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
+        GBP_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
     fi
 }
 
