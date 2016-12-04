@@ -201,33 +201,33 @@ fi
 ## get the current version string.
 set +e
 
-# this sets DISTRIBUTION,VERSION & GIT_OFFSET
-get_current_tag
-found_any_tag=$?
-set -e
-
-if [ $found_any_tag != 0 ]
-then
-    cecho red "not past Git tag. Taking hint from the debian/changelog"
-    # extract the distro from changelog!
-    load_distr_version_from_changelog;
-    drop_verbal_suffix
-    # DISTRIBUTION & VERSION
-
-    # todo: further fallback:
-    # default version 0.1, distro your current.
-fi
-
-
 
 # todo:
 # if no debian/changelog or not in Git ->
 #  --create
 if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
 
+get_current_tag
+found_any_tag=$?
 # if status OR not updated!
 if changelog_needs_new_section "release"
 then
+    set -x
+    # this sets DISTRIBUTION,VERSION & GIT_OFFSET
+    set -e
+
+    if [ $found_any_tag != 0 ]
+    then
+        cecho red "not past Git tag. Taking hint from the debian/changelog"
+        # extract the distro from changelog!
+        load_distr_version_from_changelog;
+        drop_verbal_suffix
+        # DISTRIBUTION & VERSION
+
+        # todo: further fallback:
+        # default version 0.1, distro your current.
+    fi
+
     generate_commit_changelog
 fi
 
