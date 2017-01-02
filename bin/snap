@@ -20,7 +20,7 @@ FORCE=n
 function usage(){
     setopt POSIX_ARGZERO
     cat >&2 <<EOF
-usage: ${0##*/} [+-upb} [--] ARGS...
+usage: ${0##*/} [+-upbw] [--] ARGS...
     --ignore -b  ... ignore branch
     --nosign -u  ... do not sign!
     --version -v  ... new version
@@ -30,6 +30,7 @@ usage: ${0##*/} [+-upb} [--] ARGS...
     --noinstall
     --nocheck
     --keep -k       ... keep the build directory
+    --work -w  ... use the work-directory of git.
 EOF
     unsetopt POSIX_ARGZERO
 }
