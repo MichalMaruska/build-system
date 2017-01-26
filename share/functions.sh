@@ -266,8 +266,7 @@ increase_version()
     # if expr match ".-." $minor
     if expr match "$minor" ".\+-.\+" >/dev/null
     then
-        local postfix=maruska
-        VERSION="$major${middle-.${middle}}.$minor"$postfix
+        VERSION="$major${middle-.${middle}}.${minor}maruska"
     else
         if [ $step = "major" ]
         then
