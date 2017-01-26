@@ -39,11 +39,9 @@ drop_verbal_suffix()
 }
 
 
-# I want to detect a current git tag & reuse it, ie. not recreate it.
-
-## return 0 & set the variables if successul.
-# variables:
-
+# I want to detect a current git tag on HEAD, to not recreate it.
+# return 1 if no such tag exists.
+# return 0 & set the following variables if successul:
 # VERSION
 # DISTRIBUTION
 # GIT_OFFSET
@@ -51,6 +49,7 @@ get_current_tag()
 {
     if ! description=$(git describe --tags)
     then
+        # are there any tags at all:
         if git tag -l |grep . > /dev/null;
         then
             cecho red "not _past_ Git tag. But other tags present"
@@ -70,8 +69,7 @@ get_current_tag()
 
         # 2 possibilities:
         # Either only the tag (possibly name/version),
-        # or name/version-offset-g{hash}
-        #
+        # or name/version-offset-g{hash} eg.  release|debian/3.4-2568-g59abc
         if [[ $description =~ "^(.*)/(.*)-([[:digit:]]+)-g[[:alnum:]]*$" ]]
         then
             DISTRIBUTION=$match[1]
