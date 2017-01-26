@@ -115,7 +115,7 @@ changelog_needs_new_section() {
         return 0
     elif git status --porcelain $FILE |grep --silent '^ M'; then
         # it's modified already.
-        cecho yellow "$FILE is dirty, so let's review it"
+        cecho yellow "$FILE is dirty"
         # mmc: for release this is 0, for snap it's 1....
         if [ $type = "release" ]; then
             return 0;
