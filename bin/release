@@ -199,7 +199,7 @@ fi
 
 ## get the current version string.
 set +e
-
+if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
 
 # todo:
 # if no debian/changelog or not in Git ->
@@ -262,6 +262,7 @@ function decide_git_tag()
     fi
 }
 
+if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
 decide_git_tag
 
 
