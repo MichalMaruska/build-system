@@ -204,29 +204,15 @@ set +e
 # todo:
 # if no debian/changelog or not in Git ->
 #  --create
-if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
 
-get_current_tag
-found_any_tag=$?
 # if status OR not updated!
 if changelog_needs_new_section "release"
 then
-    set -x
-    # this sets DISTRIBUTION,VERSION & GIT_OFFSET
-    set -e
+    cecho red "Taking hint on VERSION from the debian/changelog"
+    load_distr_version_from_changelog
+    drop_verbal_suffix
 
-    if [ $found_any_tag != 0 ]
-    then
-        cecho red "not past Git tag. Taking hint from the debian/changelog"
-        # extract the distro from changelog!
-        load_distr_version_from_changelog;
-        drop_verbal_suffix
-        # DISTRIBUTION & VERSION
-
-        # todo: further fallback:
-        # default version 0.1, distro your current.
-    fi
-
+    # invokes: gbp dch
     generate_commit_changelog
 fi
 
@@ -249,20 +235,8 @@ function decide_git_tag()
     # fatal: No names found, cannot describe anything.
 
     # global TAGOPTIONS
-    local NEED_TAG="n"
-    if [ $found_any_tag = 0 -a  "${GIT_OFFSET:-}" = "" ]
-    then
-        TAGOPTIONS=()
-        cecho red "will not create git tag! HEAD already tagged"
-    else
-        NEED_TAG="y"
-        # don't use the version!
-        TAGOPTIONS=(--git-posttag=post-tag-hook)
-    fi
-
-    if [ $NEED_TAG = "n" ]; then
-       return
-    fi
+    # don't use the version!
+    TAGOPTIONS=(--git-posttag=post-tag-hook)
 
     # *now* the default value:
     # : ${GIT_TAG:=$DISTRIBUTION/$VERSION}
