@@ -262,7 +262,7 @@ increase_version()
     middle=${tail%.*}
 
     # echo "major=$major  minor=$minor"
-    cecho red "increasing version($major, $middle, $minor) by step: $step"
+    cecho red "increasing version($major, $middle, $minor, $tail) by step: $step"
     # if expr match ".-." $minor
     if expr match "$minor" ".\+-.\+" >/dev/null
     then
