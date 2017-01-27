@@ -1,3 +1,36 @@
+mmc-build-system (3.10) release; urgency=medium
+
+  * reprepro-remove-obsolete: remove all by source package, not current binaries.
+  * untabify
+  * Match double-digit minor versions
+  * tab cleanup
+  * adapt to reprepro inside schroot
+  * dpkg-need-rebuild: update usage() -i
+  * dpkg-need-rebuild: split into new function: check_packages_file
+  * dpkg-need-rebuild: DEBUG
+  * dpkg-need-rebuild: TABS
+  * todo
+  * snap: shell optimize
+  * snap: TABs
+  * reprepro-remove-obsolete: TABs + 2 todo comments
+  * TABs
+  * POSIX_ARGZERO
+  * Do no apply drop_verbal_suffix when loading version from debian/changelog as Git tag.
+  * move functions into share/functions.sh
+  * Info on steps taken
+  * Generate the new version only if debian/changelog needs it.
+  * re-indent
+  * try to upgrade to debian/compat 9
+  * snap: document the -w option
+  * Stop consulting git tags for the debian/changelog version.
+  * Document now unused get_current_tag()
+  * always suffix by "maruska"
+  * debug: report the "tail" of version string too
+  * drop confusing debug.
+  * release: provide more debug.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Fri, 27 Jan 2017 09:41:37 +0100
+
 mmc-build-system (3.9) release; urgency=medium
 
   * dpkg-need-rebuild: work with installed (available) too.
