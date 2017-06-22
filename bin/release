@@ -198,7 +198,6 @@ fi
 # So, update the changelog and git tag only if needed.
 
 ## get the current version string.
-set +e
 if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
 
 # todo:
@@ -213,7 +212,7 @@ then
     drop_verbal_suffix
 
     # invokes: gbp dch
-    generate_commit_changelog
+    generate_commit_changelog $step
 fi
 
 # generate_commit_changelog -> get_new_version
