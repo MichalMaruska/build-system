@@ -209,7 +209,7 @@ if changelog_needs_new_section "release"
 then
     cecho red "Taking hint on VERSION from the debian/changelog"
     load_distr_version_from_changelog
-    drop_verbal_suffix
+    # drop_verbal_suffix
 
     # invokes: gbp dch
     generate_commit_changelog $step
