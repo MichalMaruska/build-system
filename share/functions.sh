@@ -76,7 +76,6 @@ get_current_tag()
             VERSION=$match[2]
             GIT_OFFSET=$match[3]
             # ${${description%-g*}#*-}
-            drop_verbal_suffix
 
         elif [[ $description =~ "^(.*)/(.*)$" ]]
         then
@@ -149,8 +148,10 @@ changelog_needs_new_section() {
 
 # Increase the VERSION, and compara with the one in Changelog.
 # Make sure it's bigger than that.
-function get_new_version()
+# private/static
+function _get_new_version()
 {
+    local step=$1
     increase_version $step
     local git_version=$VERSION
     # git_distro=$DISTRIBUTION
@@ -191,13 +192,14 @@ function reset_changelog()
 # modifies/output: VERSION, DISTRIBUTION,
 function generate_commit_changelog()
 {
+    local step=$1
     if [ -n "${USER_VERSION:-}" ]
     then
         echo "overriding the version, as requested" >&2
         VERSION=${USER_VERSION}
     else
         # fixme: here we need to increase (& hence parse) the VERSION:
-        get_new_version
+        _get_new_version $step
         #echo "Starting a new version $VERSION."
         #echo "Could have been explicitely specified with the -v option.">&2
         # no need to echo... the user will see it?
