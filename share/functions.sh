@@ -146,7 +146,7 @@ changelog_needs_new_section() {
 # Note: maybe a comitted debian/changelog has a higher
 # version n. which was not released with a tag.
 
-# Increase the VERSION, and compara with the one in Changelog.
+# Increase the VERSION, and compare with the one in debian/changelog.
 # Make sure it's bigger than that.
 # private/static
 function _get_new_version()
@@ -156,12 +156,16 @@ function _get_new_version()
     local git_version=$VERSION
     # git_distro=$DISTRIBUTION
 
+    # fixme: why? increase_version only rewrote VERSION!
+
     # This should be from
     load_distr_version_from_changelog
     # drop_verbal_suffix
 
     if dpkg --compare-versions $VERSION lt $git_version;
     then
+        # so this is expected, and here we `return' to the calculated VERSION value.
+        # not very nice.
         # increase_version $step
         VERSION=$git_version
         # so the changelog contains a higher
@@ -230,7 +234,7 @@ function generate_commit_changelog()
         git add debian/changelog;
         # todo: "release $VERSION"
         git commit -m "release"
-        GITSHA=$(git rev-list  --max-count=1 HEAD)
+        GITSHA=$(git rev-list --max-count=1 HEAD)
     # else what to do?
     fi
 }
@@ -247,7 +251,11 @@ load_distr_version_from_changelog()
 # rewrites the @VERSION env-variable, which was taken from ? (changelog or git tag?)
 #
 # todo: if suffix is "maruska" then I want to keep it.
+# ~/repo/build-system/bin/deb-pkg-maintainer debian/control
+
 # if the author of previous was not me, I want to suffix "maruska".
+# fixme: why does `release' use generate_commit_changelog while snap increase_version?
+# generate_commit_changelog -> _get_new_version -> increase_version
 increase_version()
 {
     local step=$1
