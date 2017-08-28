@@ -158,7 +158,8 @@ function _get_new_version()
 
     # This should be from
     load_distr_version_from_changelog
-    drop_verbal_suffix
+    # drop_verbal_suffix
+
     if dpkg --compare-versions $VERSION lt $git_version;
     then
         # increase_version $step
