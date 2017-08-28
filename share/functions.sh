@@ -248,37 +248,53 @@ load_distr_version_from_changelog()
     VERSION=$(deb-pkg-version $FILE)
 }
 
-# rewrites the @VERSION env-variable, which was taken from ? (changelog or git tag?)
-#
-# todo: if suffix is "maruska" then I want to keep it.
-# ~/repo/build-system/bin/deb-pkg-maintainer debian/control
 
-# if the author of previous was not me, I want to suffix "maruska".
+# rewrites the @VERSION env-variable.
+# If the author of previous release was not me, just add the suffix "maruska",
+# otherwise increase the first of last numeric value.
+
 # fixme: why does `release' use generate_commit_changelog while snap increase_version?
 # generate_commit_changelog -> _get_new_version -> increase_version
 increase_version()
 {
     local step=$1
-
-    # it can be: (from git)
+    set -x
+    # fixme: it can be: (from git)
     # a.b.c~git-offset
-    if [[ $VERSION =~ "(.*)~.*$" ]]
-    then
-        VERSION="$match[1]"
+    if false; then
+        if [[ $VERSION =~ "(.*)~.*$" ]]
+        then
+            VERSION="$match[1]"
+        fi
     fi
-    major=${VERSION%%.*} # longest matching is dropped. So this is beginning up to first "."
-    minor=${VERSION##*.} # longest dropped ->  from the last "." to the end.
-
-    tail=.${VERSION#*.} # shortest at the beginning is dropped.
-    middle=${tail%.*}
-
-    # echo "major=$major  minor=$minor"
-    cecho red "increasing version($major, $middle, $minor, $tail) by step: $step"
-    # if expr match ".-." $minor
-    if expr match "$minor" ".\+-.\+" >/dev/null
+    local prefix
+    local major
+    local middle
+    local minor
+    local tail
+    # non-digit(digit).*non-digit(digit*)non-digit*
+    #           major     middle  minor  tail
+    if [[ "$VERSION"  =~ '([^0-9]*)([0-9]+)(.*[^0-9])([0-9]+)([^0-9]*)' ]];
     then
-        VERSION="$major${middle-.${middle}}.${minor}maruska"
+        prefix=$match[1]
+        major=$match[2]
+        middle=$match[3]
+        minor=$match[4]
+        tail=$match[5]
     else
+        # major. minor the last number!
+        prefix=""
+        major=${VERSION%%.*} # longest matching is dropped. So this is beginning up to first "."
+        minor=${VERSION##*.} # longest dropped ->  from the last "." to the end.
+
+        tail=.${VERSION#*.} # shortest at the beginning is dropped.
+        middle=${tail%.*}
+    fi
+    cecho red "increasing version($prefix, $major, $middle, $minor, $tail) by step: $step"
+
+
+    if expr match "$(deb-pkg-maintainer debian/control)" ".*maruska.*" >/dev/null
+    then
         if [ $step = "major" ]
         then
             if ! major=$(expr $major + 1);
@@ -294,8 +310,9 @@ increase_version()
                 exit 1
             fi
         fi
-
-        VERSION="$major${middle-.${middle}}.$minor"
+        VERSION="$prefix$major${middle}$minor$tail"
+    else
+        VERSION="$prefix$major$middle${minor}-maruska"
     fi
 }
 
