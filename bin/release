@@ -8,8 +8,6 @@ check_start_gnupg
 
 # Support for 2 different versions of gbp:
 gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
-GITSHA=""
-
 
 function usage()
 {
@@ -39,6 +37,9 @@ EOF
     unsetopt POSIX_ARGZERO
 }
 
+GITSHA=""
+DEBUG=y
+
 # defaults for options:
 USER_DISTRIBUTION=""
 DISTRIBUTION=""
@@ -58,6 +59,8 @@ dput_targets=()
 
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
+typeset -a DEBUILD_OPTIONS
+DEBUILD_OPTIONS=()
 typeset -a DCH_OPTIONS
 DCH_OPTIONS=()
 
@@ -145,13 +148,12 @@ while (( $# > 0 )) do
       esac
       shift
 done
-DEBUG=y
-
 
 # No source package -> optimize
 if [ $build_source != yes ]; then
     if [ $DEBUG = y ]; then info "not building source package";fi
-    GBP_OPTIONS+=(--git-no-create-orig -b)
+    GBP_OPTIONS+=(--git-no-create-orig)
+    DEBUILD_OPTIONS+=(-b)
 fi
 
 #todo: I could build arch-dependent & independent separately.
@@ -273,6 +275,7 @@ export DPUT_TARGETS
 export GITSHA
 
 BUILDER="debuild -eMAKEFLAGS -eGITSHA -nc"
+# $DEBUILD_OPTIONS
 # BUILDER="pflask-debuild -eMAKEFLAGS -nc"
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 
@@ -284,7 +287,7 @@ gbp buildpackage \
     --git-postbuild="dput-install -r $POSTBUILD_INSTALL_OPTIONS" -b \
     $TAGOPTIONS \
     --git-builder=$BUILDER \
-    $GBP_OPTIONS
+    $GBP_OPTIONS $DEBUILD_OPTIONS
 
 # todo:
 # --git-builder /usr/bin/git-pbuilder
