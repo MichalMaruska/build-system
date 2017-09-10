@@ -1,6 +1,10 @@
 #! /usr/bin/zsh
 
 # Common functions for the scripts
+info()
+{
+    cecho yellow $1 >&2
+}
 
 check_getopt()
 {

@@ -147,11 +147,6 @@ while (( $# > 0 )) do
 done
 DEBUG=y
 
-info()
-{
-    cecho yellow $1 >&2
-}
-
 
 # No source package -> optimize
 if [ $build_source != yes ]; then
