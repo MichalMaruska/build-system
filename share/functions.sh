@@ -267,8 +267,14 @@ load_distr_version_from_changelog()
 }
 
 
-# rewrites the @VERSION env-variable.
 # If the author of previous release was not me, just add the suffix "maruska",
+my_own_project()
+{
+    expr match "$(deb-pkg-maintainer debian/control)" ".*maruska.*" >/dev/null
+}
+
+# rewrites the @VERSION env-variable.
+
 # otherwise increase the first of last numeric value.
 
 # fixme: why does `release' use generate_commit_changelog while snap increase_version?
@@ -310,8 +316,7 @@ increase_version()
     fi
     cecho red "increasing version($prefix, $major, $middle, $minor, $tail) by step: $step"
 
-
-    if expr match "$(deb-pkg-maintainer debian/control)" ".*maruska.*" >/dev/null
+    if my_own_project;
     then
         if [ $step = "major" ]
         then

@@ -61,6 +61,13 @@ DEBUILD_OPTIONS=()
 typeset -a DCH_OPTIONS
 DCH_OPTIONS=()
 
+# fixme: will be doubled
+if ! my_own_project;
+then
+    DCH_OPTIONS+=("--ignore-branch")
+    GBP_OPTIONS+=("--git-ignore-branch")
+fi
+
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version:,nocheck \
