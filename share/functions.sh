@@ -14,6 +14,19 @@ check_getopt()
     fi
 }
 
+
+prepare_hook_name()
+{
+    # Support for 2 different versions of gbp:
+    local gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
+
+    if dpkg --compare-versions $gbp_version 'gt' 0.6; then
+        PREVERSION_HOOK_NAME=--git-postexport
+    else
+        PREVERSION_HOOK_NAME=--git-prebuild
+    fi
+}
+
 possibly_trace()
 {
     if [ -n "${DEBUG-}" ]; then
@@ -219,6 +232,7 @@ function generate_commit_changelog()
     set -x
     reset_changelog
 
+    local gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
     if dpkg --compare-versions $gbp_version gt 0.6; then
         # old did not support it.
         if [ -n "$DISTRIBUTION" ]; then

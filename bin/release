@@ -6,9 +6,6 @@ check_getopt
 
 check_start_gnupg
 
-# Support for 2 different versions of gbp:
-gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
-
 function usage()
 {
     setopt POSIX_ARGZERO
@@ -262,13 +259,6 @@ if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
 decide_git_tag
 
 
-if dpkg --compare-versions $gbp_version 'gt' 0.6; then
-    PREVERSION_HOOK_NAME=--git-postexport
-else
-    PREVERSION_HOOK_NAME=--git-prebuild
-fi
-
-
 echo exporting DPUT_TARGETS $DPUT_TARGETS
 export DPUT_TARGETS
 
@@ -278,6 +268,9 @@ BUILDER="debuild -eMAKEFLAGS -eGITSHA -nc"
 # $DEBUILD_OPTIONS
 # BUILDER="pflask-debuild -eMAKEFLAGS -nc"
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
+
+# set PREVERSION_HOOK_NAME
+prepare_hook_name
 
 set -x
 gbp buildpackage \
