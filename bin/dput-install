@@ -206,8 +206,9 @@ else
                 cecho green "processing hardwired reprepro (fixme!)"
 
                 # -t ... PTY allocation: the inside will have a $TERM.
-                ssh -Y -A michal@www.ruska.it -t \
-                    zsh --login -c "./reprepro/schroot-reprepro"\
+                ssh -Y -A michal@www.ruska.it -t -p 1022 "~/reprepro/process-incoming; ls -l reprepro/incoming/"
+
+#                ssh -Y -A michal@www.ruska.it -t  zsh --login -c "./reprepro/schroot-reprepro"\
                     ## todo: schroot --run-session --chroot $ID
                     ## "./reprepro/process-incoming; ls -l reprepro/incoming/"
             fi
