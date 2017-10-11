@@ -1,3 +1,13 @@
+mmc-build-system (3.12) release; urgency=medium
+
+  * Move info() to functions
+  * Isolate DEBUILD_OPTIONS & move GITSHA/DEBUG
+  * hide the PREVERSION_HOOK_NAME detail in function
+  * Formalize my_own_project and use it to be more permissive on the current git-branch.
+  * push into my VM on the server.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 11 Oct 2017 11:03:51 +0200
+
 mmc-build-system (3.11) release; urgency=medium
 
   * stop ignoring errors
