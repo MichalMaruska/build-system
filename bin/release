@@ -280,14 +280,19 @@ BUILDER="debuild -eMAKEFLAGS -eGITSHA -nc"
 prepare_hook_name
 
 set -x
-gbp buildpackage \
-    --git-ignore-new \
-    --git-cleaner=/bin/true \
-    $PREVERSION_HOOK_NAME=pre-build-hook \
-    --git-postbuild="dput-install -r $POSTBUILD_INSTALL_OPTIONS" -b \
-    $TAGOPTIONS \
-    --git-builder=$BUILDER \
-    $GBP_OPTIONS $DEBUILD_OPTIONS
 
+args=(
+    --git-ignore-new
+    --git-cleaner=/bin/true
+    # this could be inside the container, partly
+    $PREVERSION_HOOK_NAME="pre-build-hook -a $ARCH"
+    # this inside the container:
+    --git-builder=$BUILDER
+    --git-postbuild="dput-install -r $POSTBUILD_INSTALL_OPTIONS" -b
+    $GBP_OPTIONS $DEBUILD_OPTIONS
+)
+
+# note: additional options come from ~/.gbp.conf
+gbp buildpackage $args
 # todo:
 # --git-builder /usr/bin/git-pbuilder

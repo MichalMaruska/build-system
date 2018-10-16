@@ -37,6 +37,20 @@ copy-snapshot-changelog()
     cd $local_dir
 }
 
+arch=""
+while getopts :a: OPT; do
+    case $OPT in
+        a|+a)
+            arch="$OPTARG"
+            ;;
+        *)
+            echo "usage: ${0##*/} [+-a ARG} [--] ARGS..."
+            exit 2
+    esac
+done
+shift $(( OPTIND - 1 ))
+OPTIND=1
+
 if [ $GBP_GIT_DIR = $(pwd) ]; then
     echo "Your export-dir of git-buildpackage is unset" >&2
     echo "So your build directory is the same as (git) Source dir" >&2
