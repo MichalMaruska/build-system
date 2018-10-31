@@ -1,0 +1,45 @@
+#!/bin/zsh -eu
+
+cecho green "cmdline args: $@"
+cecho red "vars:"
+pwd
+
+usage()
+{
+    cat <<EOF
+
+usage: ${0##*/} [+-a ARG] [--] ARGS...
+
+EOF
+}
+
+arch=""
+while getopts :a: OPT; do
+    case $OPT in
+        a|+a)
+            arch="$OPTARG"
+            ;;
+        *)
+            usage >&2
+            exit 2
+    esac
+done
+shift OPTIND-1
+OPTIND=1
+
+set -x
+# I need the parent of PWD
+
+# export some variables: $MAKEFLAGS
+# --setenv="MAKEFLAGS=$MAKEFLAGS"
+# echo
+DISTRO=sid
+
+enter-container --distro $DISTRO --arch $arch \
+                --chdir $PWD --bind $(realpath $PWD/..) -- \
+                /bin/bash -c "/usr/bin/debuild $* -- binary-arch && dpkg-genchanges -B"
+# name_version_arch.changes
+# shell_2.24_amd64.changes
+# dpkg-genchanges -O
+
+# dpkg-binary-hook
