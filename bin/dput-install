@@ -1,20 +1,24 @@
 #! /usr/bin/zsh -feu
 
+# Given a .changes file, upload & install it (partially).
+
 # This is just a wrapper around debi & dput (or reprepro)
 
-# 1/ Normally invoked as a post-build hook by git-buildpackage --
-# receives variables (see bellow)
+# 1/ Normally invoked as a post-build hook by git-buildpackage.
+# The cmdline is not user-controllable, hence only via env. variables.
 
-# Via `env' variables, it can be tuned:
-# DPUT_TARGETS & DPUT_OPTIONS
-# INSTALL_IMMEDIATELY
+# It receives GBP_* vars, though.
+
+# The following `env' variables can specify the behaviour:
+# DPUT_TARGETS & DPUT_OPTIONS ... passed to dput(1) maybe with addition of more options.
+# INSTALL_IMMEDIATELY ...  whether to invoke debi(1).
+
 # todo:
 # could use GBP_CHANGES_FILE even after building with db!
 
 # 2/ When invoked manually, we use:
-# MBS_SNAP_TARGETS
-# Given as $1 the changes file
-# dput it to all in
+# MBS_SNAP_TARGETS in place of DPUT_TARGETS
+
 
 
 
