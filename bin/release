@@ -76,6 +76,7 @@ cmd_options=$(getopt --name $0 --shell bash \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
+ARCH=""
 while (( $# > 0 )) do
       case $1 in
           --help | -h)
@@ -271,28 +272,44 @@ export DPUT_TARGETS
 
 export GITSHA
 
-BUILDER="debuild -eMAKEFLAGS -eGITSHA -nc"
-# $DEBUILD_OPTIONS
-# BUILDER="pflask-debuild -eMAKEFLAGS -nc"
+
+pre_build_hook=(pre-build-hook)
+debuild_flags=(-eMAKEFLAGS -eGITSHA -nc)
+
+if [ "$ARCH" != "" ]; then
+    # this receives all args from gbp buildpackage  unless --git- prefix.
+    BUILDER="nspawn-debuild -a $ARCH -- $debuild_flags"
+    export DEB_HOST_ARCH=$ARCH
+    pre_build_hook+=( -a $ARCH)
+else
+    BUILDER="debuild $debuild_flags"
+fi
+
+# fixme: this install should be done as part of the builder.
+if [ "$ARCH" != "" ]; then
+    POSTBUILD="dput-install -r $POSTBUILD_INSTALL_OPTIONS"
+else
+    POSTBUILD="dput-install -r $POSTBUILD_INSTALL_OPTIONS"
+fi
+
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
 
 # set PREVERSION_HOOK_NAME
 prepare_hook_name
 
-set -x
-
 args=(
     --git-ignore-new
     --git-cleaner=/bin/true
     # this could be inside the container, partly
-    $PREVERSION_HOOK_NAME="pre-build-hook -a $ARCH"
+    $PREVERSION_HOOK_NAME="$pre_build_hook"
     # this inside the container:
-    --git-builder=$BUILDER
-    --git-postbuild="dput-install -r $POSTBUILD_INSTALL_OPTIONS" -b
+    --git-builder="$BUILDER"
+    --git-postbuild="$POSTBUILD"
     $GBP_OPTIONS $DEBUILD_OPTIONS
+    # repeated!
+    # -b
 )
 
+set -x
 # note: additional options come from ~/.gbp.conf
 gbp buildpackage $args
-# todo:
-# --git-builder /usr/bin/git-pbuilder
