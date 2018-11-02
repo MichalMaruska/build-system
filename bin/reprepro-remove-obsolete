@@ -1,13 +1,16 @@
 #!/bin/zsh -euf
 
+# Remove from reprepro (must be configured, maybe via env) the .deb files
+# which are provided by the given .changes file.
+# Based on the source pkg name!
 
 usage()
 {
-setopt POSIX_ARGZERO
+    setopt POSIX_ARGZERO
     cat <<EOF
-usage: ${0##*/} [+-h} [--] {REPO} {CHANGES-file}
+usage: ${0##*/} [+-h] [--] {REPO} {CHANGES-file}
 EOF
-unsetopt POSIX_ARGZERO
+    unsetopt POSIX_ARGZERO
 }
 
 while getopts :h OPT; do
@@ -31,7 +34,6 @@ if [ $# -lt 2 ]; then
 fi
 
 REPO=$1
-#GBP_CHANGES_FILE
 CHANGES_FILE=$2
 
 if false;
@@ -45,5 +47,4 @@ else
     source=($(sed --quiet -e '/^Source:/{s/Source: //;p}' $CHANGES_FILE))
     # if DEBUG reprepro listfilter UNRELEASED '$Source (==apt)'
     reprepro removefilter $REPO "\$Source (==$source)"
-    # reprepro removefilter  UNRELEASED '$Source (==apt)'
 fi
