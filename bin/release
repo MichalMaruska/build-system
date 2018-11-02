@@ -1,6 +1,7 @@
 #! /bin/zsh -euf
 
 source /usr/share/build-system/functions.sh
+# set -x cannot be done in a functions?
 eval $(possibly_trace)
 check_getopt
 
@@ -40,11 +41,10 @@ DEBUG=y
 # defaults for options:
 USER_DISTRIBUTION=""
 DISTRIBUTION=""
+
 step=minor
 build_source=no
 FORCE=n
-# ARCH
-
 
 # this is for the (pre/post) hooks
 POSTBUILD_INSTALL_OPTIONS="-I"
@@ -76,6 +76,7 @@ cmd_options=$(getopt --name $0 --shell bash \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
+# $DEB_BUILD_ARCH
 ARCH=""
 while (( $# > 0 )) do
       case $1 in
@@ -259,7 +260,9 @@ function decide_git_tag()
     then
         cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
     else
-        GBP_OPTIONS+=(--git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s")
+        GBP_OPTIONS+=(
+            # --git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s"
+        )
     fi
 }
 

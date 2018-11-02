@@ -1,3 +1,16 @@
+mmc-build-system (3.13) release; urgency=medium
+
+  * print the version in color
+  * pass the arch to pre-build-hook
+  * new: nspawn-debuild -- use it as a debuild trampoline!
+  * pre-build-hook: use trampoline (enter-container) to prepare inside container.
+  * release: Use arch-dependent pre_build_hook & builder.
+  * dput-install: improve the documentation
+  * Try the set -x inside () trick.
+  * reprepro-remove-obsolete: document & clean up
+
+ -- Michal Maruska <mmaruska@gmail.com>  Fri, 02 Nov 2018 10:23:49 +0100
+
 mmc-build-system (3.12) release; urgency=medium
 
   * Move info() to functions

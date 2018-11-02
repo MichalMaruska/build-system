@@ -133,9 +133,10 @@ REPREPRO_COLOR=blue
 
 upload_to_reprepro()
 {
-    cecho $REPREPRO_COLOR "first remove development packages"
+    cecho $REPREPRO_COLOR "First remove development packages"
     # first remove ... If I decided for only a minor version bump
     # todo: improve this somehow?
+    # fixme: if only an ARCH specific changes file, then don't do this:
     reprepro-remove-obsolete "UNRELEASED" $GBP_CHANGES_FILE
 
     # Distribution: release

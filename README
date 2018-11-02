@@ -1,15 +1,15 @@
-* todo
+* Todo:
 
-avoid stripping & gdb:
+** avoid stripping & gdb:
 
 CFLAGS to ./configure "CFLAGS=-O0 -ggdb"
 DEB_BUILD_OPTIONS=nostrip fmb
 
 
 
-** snap cares about tarbal ! ... only matter of #tarball-dir = ../tarballs/ in ~/.gbp.conf
+** `snap' cares about tarbal ! 
 gbp:info: Orig tarball 'gauche_0.9.4.orig.tar.gz' not found at '../tarballs/'
-
+-> only matter of #tarball-dir = ../tarballs/ in ~/.gbp.conf
 
 
 * Relevant Variables (for your env)
@@ -112,3 +112,34 @@ dunno!
 
 
 
+* Building for x32 !
+** how to build ... inside container?
+#    $TAGOPTIONS \
+# todo:
+# --git-builder /usr/bin/git-pbuilder
+
+
+dpkg-buildpackage -rfakeroot -us -uc -ui -nc -b -b
+~/bin/enter-build-32 -r -- -E "GBP_TMP_DIR=$GBP_TMP_DIR" --chdir $GBP_TMP_DIR
+
+~/bin/enter-build-32 -r  -- --chdir /run/tmp/libx11-1.6.7-1  dpkg-buildpackage -rfakeroot -us -uc -ui -nc -b -b
+
+# todo:
+
+debuild --rootcmd=fakeroot --no-tgz-check -e MAKEFLAGS -b -- build   binary-arch; debsign
+dpkg-genchanges -B
+
+
+debuild  (reads ~/.devscripts) --preserve-envvar
+-> dpkg-buildpackage ....  hooks?
+   -> debian/rules build-target
+
+DEBUILD_DPKG_BUILDPACKAGE_OPTS
+
+
+
+File "pool/main/libx/libx11/libx11-doc_1.6.7-1-maruska_all.deb" is already registered with different checksums!
+md5 expected: 345e8ad985066e873c67e0f72f12645a, got: 94f9200ed3d8e0b1129159ffca162e79
+sha1 expected: 51ba57da35b7eaa7b5eff43d94cef2bd9ed39d90, got: 51065427418eb8cd724b4a23c8c56c7a60a702b7
+sha256 expected: 0e21a1c961355756ff44375aa6c6e8afc03b96d69d738b3e77b858059d338595, got: f0851755380369f15b4e5a1fde592aacfbaa60e8ec40d             eb04f6322d442bb17b1
+size expected: 2217388, got: 2211812

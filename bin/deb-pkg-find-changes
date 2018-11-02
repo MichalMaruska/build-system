@@ -12,23 +12,26 @@ DEBRELEASE_DEBS_DIR="$(echo "${DEBRELEASE_DEBS_DIR%/}" | sed -e 's%/\+%/%g')"
 
 debsdir="$DEBRELEASE_DEBS_DIR"
 
+
+# mustsetvar var-name value explanation
+# verify that value (of var) is non-empty.
 mustsetvar () {
     if [ "x$2" = x ]
     then
-	echo >&2 "$PROGNAME: unable to determine $3"
-	exit 1
+        echo >&2 "$PROGNAME: unable to determine $3"
+        exit 1
     else
-	# echo "$PROGNAME: $3 is $2"
-	eval "$1=\"\$2\""
+        # echo "$PROGNAME: $3 is $2"
+        eval "$1=\"\$2\""
     fi
 }
 
 
 #set -x
 mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
-	    "source package"
+            "source package"
 mustsetvar version "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
-	    "source version"
+            "source version"
 
 #mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
 #mustsetvar arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
@@ -44,4 +47,3 @@ dsc="$debsdir/$pv.dsc"
 changes="$debsdir/$pva.changes"
 
 echo $changes
-
