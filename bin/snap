@@ -191,9 +191,10 @@ then
     DCH_OPTIONS+="--new-version=${DEFAULT_NEW_VERSION:-$VERSION}"
 
     # Do I have to provide the previous GIT TAG?
-    set -x
-    gbp dch --auto --snapshot "--debian-tag=$DISTRIBUTION/%(version)s" $DCH_OPTIONS
-    set +x
+    (
+        set -x
+        gbp dch --auto --snapshot "--debian-tag=$DISTRIBUTION/%(version)s" $DCH_OPTIONS
+    )
 else
     # cp -v debian/changelog debian/changelog.save
     # Already updated since a release (fixme?). So, the version should be there.
@@ -201,9 +202,10 @@ else
         DISTRIBUTION=$USER_DISTRIBUTION
     fi
 
-    set -x
-    gbp dch --auto --snapshot $DCH_OPTIONS
-    set +x
+    (
+        set -x
+        gbp dch --auto --snapshot $DCH_OPTIONS
+    )
 fi
 
 # Support for 2 different versions of gbp:
@@ -229,6 +231,7 @@ else
     DPUT_TARGETS=${MBS_SNAP_TARGETS-}
 fi
 
+(
 set -x
 gbp buildpackage \
     --git-ignore-new $GBP_OPTIONS \
@@ -240,8 +243,7 @@ gbp buildpackage \
     --git-builder="debuild -eMAKEFLAGS -eGITSHA -nc"
 
     # --source-option="--format=\"3.0 (native)\""
-
-set +x
+)
 
 
 # snap     fast, without any cow. Doesn't verify dependencies
