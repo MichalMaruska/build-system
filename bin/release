@@ -281,7 +281,9 @@ debuild_flags=(-eMAKEFLAGS -eGITSHA -nc)
 
 if [ "$ARCH" != "" ]; then
     # this receives all args from gbp buildpackage  unless --git- prefix.
-    BUILDER="nspawn-debuild -a $ARCH -- $debuild_flags"
+    name=$(deb-pkg-name  debian/control)
+    changesfile="/run/tmp/${name+$name-}$ARCH.changes"
+    BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $debuild_flags"
     export DEB_HOST_ARCH=$ARCH
     pre_build_hook+=( -a $ARCH)
 else
@@ -290,7 +292,7 @@ fi
 
 # fixme: this install should be done as part of the builder.
 if [ "$ARCH" != "" ]; then
-    POSTBUILD="dput-install -r $POSTBUILD_INSTALL_OPTIONS"
+    POSTBUILD="dput-install -r -n $changesfile"
 else
     POSTBUILD="dput-install -r $POSTBUILD_INSTALL_OPTIONS"
 fi

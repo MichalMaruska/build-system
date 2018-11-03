@@ -8,17 +8,24 @@ usage()
 {
     cat <<EOF
 
-usage: ${0##*/} [+-a ARG] [--] ARGS...
+usage: ${0##*/} [+-a {architecture}] [ -n {changes-file} [--] ARGS...
 
+-a architecture
+-n where to store genchanges.
 EOF
 }
 
 arch=""
-while getopts :a: OPT; do
+changesfile=""
+while getopts :a:n: OPT; do
     case $OPT in
         a|+a)
             arch="$OPTARG"
             ;;
+        n)
+            changesfile="$OPTARG"
+            ;;
+
         *)
             usage >&2
             exit 2
@@ -37,7 +44,7 @@ DISTRO=sid
 
 enter-container --distro $DISTRO --arch $arch \
                 --chdir $PWD --bind $(realpath $PWD/..) -- \
-                /bin/bash -c "/usr/bin/debuild $* -- binary-arch && dpkg-genchanges -B"
+                /bin/bash -c "/usr/bin/debuild $* -- binary-arch && dpkg-genchanges --build=any ${changesfile+-O$changesfile}"
 # name_version_arch.changes
 # shell_2.24_amd64.changes
 # dpkg-genchanges -O
