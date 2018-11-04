@@ -150,7 +150,7 @@ changelog_needs_new_section() {
 
     elif git status --porcelain  |grep --silent '^ M'; then
         # fixme!  something changed, (but _not_ debian/changelog)
-        return 0
+        return 1
     elif git diff --name-only HEAD~1 | grep $FILE; then
         # so nothing changed, was it changed in the previous commit?
         return 1;
