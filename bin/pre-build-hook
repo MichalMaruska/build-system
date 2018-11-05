@@ -75,10 +75,12 @@ DISTRO=sid
 if [ -n "$arch" ]
 then
     enter-container --distro $DISTRO --arch $arch/ \
-                    --root --chdir $GBP_TMP_DIR --bind $GBP_TMP_DIR  -- \
-                    mk-build-deps --install --remove --tool="apt --no-install-recommends -y"
-    # -- -E "GBP_TMP_DIR=$GBP_TMP_DIR" \
-    # --root-cmd=sudo
+                    --bind $(realpath $GBP_TMP_DIR/..) \
+                    --root --chdir $GBP_TMP_DIR \
+                    --verbose -- \
+                    mk-build-deps --install --remove --root-cmd=sudo \
+                    --tool="apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y"
+    # -- -E "GBP_TMP_DIR=$GBP_TMP_DIR"
 else
     mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y"
 fi
