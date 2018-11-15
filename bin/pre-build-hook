@@ -74,11 +74,11 @@ echo GBP_TMP_DIR = $GBP_TMP_DIR
 DISTRO=sid
 if [ -n "$arch" ]
 then
-    enter-container --distro $DISTRO --arch $arch/ \
+    enter-container --distro $DISTRO --arch $arch \
                     --bind $(realpath $GBP_TMP_DIR/..) \
                     --root --chdir $GBP_TMP_DIR \
                     --verbose -- \
-                    mk-build-deps --install --remove --root-cmd=sudo \
+                    /usr/bin/mk-build-deps --install --remove \
                     --tool="apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y"
     # -- -E "GBP_TMP_DIR=$GBP_TMP_DIR"
 else
