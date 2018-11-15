@@ -18,6 +18,7 @@ Distro .... previous from debian/changelog or ??
 Tag ... distro/version
 dput-target ... taken from MBS_TARGETS env variable
 
+-a --arch    architecture
 -h --help
 -b --ignore  ... ignore Git branch
 -f --force ... regenerate & commit even if apparently debian/changelog ...
