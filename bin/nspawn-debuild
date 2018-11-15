@@ -42,9 +42,19 @@ set -x
 # echo
 DISTRO=sid
 
+
+# not starting, just using:
 enter-container --distro $DISTRO --arch $arch \
-                --chdir $PWD --bind $(realpath $PWD/..) -- \
-                /bin/bash -c "/usr/bin/debuild $* -- binary-arch && dpkg-genchanges --build=any ${changesfile+-O$changesfile}"
+                --verbose \
+                --chdir $PWD \
+                --bind $(realpath $PWD/..) -- \
+                /usr/bin/debuild $* -- binary-arch
+
+enter-container --distro $DISTRO --arch $arch \
+                --verbose \
+                --chdir $PWD \
+                -- /usr/bin/dpkg-genchanges --build=any ${changesfile+-O$changesfile}
+
 # name_version_arch.changes
 # shell_2.24_amd64.changes
 # dpkg-genchanges -O
