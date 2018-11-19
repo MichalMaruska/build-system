@@ -262,7 +262,7 @@ function decide_git_tag()
         cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
     else
         GBP_OPTIONS+=(
-            # --git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s"
+            --git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s"
         )
     fi
 }
@@ -311,6 +311,7 @@ args=(
     # this inside the container:
     --git-builder="$BUILDER"
     --git-postbuild="$POSTBUILD"
+    $TAGOPTIONS
     $GBP_OPTIONS $DEBUILD_OPTIONS
     # repeated!
     # -b
