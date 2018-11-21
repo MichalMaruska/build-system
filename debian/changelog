@@ -1,3 +1,16 @@
+mmc-build-system (4.0) release; urgency=medium
+
+  * Use a changesfile for other arch builds.  and don't install
+  * Don't generate debian/changelog just because git working-dir is dirty
+  * pre-build-hook: fix the bound-mounts for enter-container (no more implicit), use it & mk-build-deps verbosely
+  * pre-build-hook: use abs/full path to command for the enter-container invocation
+  * pre-build-hook fix shell
+  * nspawn-debuild: enter twice, to avoid using shell.
+  * release: document the -a option
+  * Try to restore the git Tagging.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Wed, 21 Nov 2018 18:53:13 +0100
+
 mmc-build-system (3.13) release; urgency=medium
 
   * print the version in color
