@@ -79,7 +79,7 @@ then
                     --root --chdir $GBP_TMP_DIR \
                     --verbose -- \
                     /usr/bin/mk-build-deps --install --remove \
-                    --tool="apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y"
+                    "--tool=\"apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y\""
     # -- -E "GBP_TMP_DIR=$GBP_TMP_DIR"
 else
     mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y"
