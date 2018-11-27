@@ -48,7 +48,7 @@ enter-container --distro $DISTRO --arch $arch \
                 --verbose \
                 --chdir $PWD \
                 --bind $(realpath $PWD/..) -- \
-                /usr/bin/debuild $* -- binary-arch
+                /usr/bin/debuild $* -- build-arch binary-arch
 
 enter-container --distro $DISTRO --arch $arch \
                 --verbose \
