@@ -105,6 +105,7 @@ while (( $# > 0 )) do
           --distro | -r)
               shift
               USER_DISTRIBUTION="$1"
+              # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
               GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
               ;;
           --tag | -T )
@@ -190,7 +191,6 @@ fi
 if [ $DEBUG = y ]; then info "guessing distribution";fi
 
 ## Prepare for the debian/changelog entry:
-
 if [ "$DISTRIBUTION" = "" ]; then
     # todo:
     # when archi  ALL -> release
@@ -218,9 +218,6 @@ then
     # invokes: gbp dch
     generate_commit_changelog $step
 fi
-
-# generate_commit_changelog -> get_new_version
-#                                 -> load_distr_version_from_changelog
 
 # input: $found_any_tag, GIT_OFFSET (from git-describe(1) )
 # side-effects:
