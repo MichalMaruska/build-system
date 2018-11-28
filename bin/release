@@ -57,8 +57,9 @@ dput_targets=()
 
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
+
 typeset -a DEBUILD_OPTIONS
-DEBUILD_OPTIONS=()
+DEBUILD_OPTIONS=(-eMAKEFLAGS -eGITSHA)
 typeset -a DCH_OPTIONS
 DCH_OPTIONS=()
 
@@ -160,7 +161,6 @@ done
 if [ $build_source != yes ]; then
     if [ $DEBUG = y ]; then info "not building source package";fi
     GBP_OPTIONS+=(--git-no-create-orig)
-    DEBUILD_OPTIONS+=(-b)
 fi
 
 #todo: I could build arch-dependent & independent separately.
@@ -278,17 +278,19 @@ export GITSHA
 
 
 pre_build_hook=(pre-build-hook)
-debuild_flags=(-eMAKEFLAGS -eGITSHA -nc)
+dpkg_buildpackage_flags=(-nc)
 
 if [ "$ARCH" != "" ]; then
+    dpkg_buildpackage_flags+=(-B)
     # this receives all args from gbp buildpackage  unless --git- prefix.
     name=$(deb-pkg-name  debian/control)
     changesfile="/run/tmp/${name+$name-}$ARCH.changes"
-    BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $debuild_flags"
+    BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
     export DEB_HOST_ARCH=$ARCH
     pre_build_hook+=( -a $ARCH)
 else
-    BUILDER="debuild $debuild_flags"
+    dpkg_buildpackage_flags+=(-b)
+    BUILDER="debuild $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
 fi
 
 # fixme: this install should be done as part of the builder.
@@ -312,7 +314,7 @@ args=(
     --git-builder="$BUILDER"
     --git-postbuild="$POSTBUILD"
     $TAGOPTIONS
-    $GBP_OPTIONS $DEBUILD_OPTIONS
+    $GBP_OPTIONS
     # repeated!
     # -b
 )
