@@ -21,7 +21,7 @@ fi
 
 # : ${CENTRALREPO=origin}
 
-: ${GBP_TAG=$(git describe)}
+: ${GBP_TAG=$(git describe --tags)}
 : ${GBP_BRANCH=$(git name-rev --name-only HEAD)}
 
 git push $CENTRALREPO $GBP_TAG || echo "'git push' failed for the tag $GBP_TAG"
