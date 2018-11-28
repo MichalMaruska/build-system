@@ -1,20 +1,21 @@
 #! /bin/bash -eu
 
+# Git-push to ...$CENTRALREPO
+
 # This can be run manually inside the (git) source tree.
-# push to ...$CENTRALREPO
 
 
 if [ ${CENTRALREPO-x} = x ];
 then
     if git remote show | grep origin; then
-	CENTRALREPO=origin;
+        CENTRALREPO=origin;
     elif git remote show | grep maruska; then
-	CENTRALREPO=maruska;
+        CENTRALREPO=maruska;
     else
-	# only 1 line?
-	# don't fail for this?  Or should fail?
-	echo "no central repository defined, so cannot push anywhere" >&2
-	exit 1;
+        # only 1 line?
+        # don't fail for this?  Or should fail?
+        echo "no central repository defined, so cannot push anywhere" >&2
+        exit 1;
     fi
 fi
 
