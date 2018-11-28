@@ -71,7 +71,7 @@ get_current_tag()
         then
             cecho red "not _past_ Git tag. But other tags present"
             # fixme:
-            if [ $FORCE != "y" ]
+            if [ $FORCE != "y" ] # ???
             then
                 exit 1
             fi
