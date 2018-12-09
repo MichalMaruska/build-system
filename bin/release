@@ -250,14 +250,12 @@ function decide_git_tag()
     : ${NEWGIT_TAG:=$DISTRIBUTION/$VERSION}
     NEWGIT_TAG=${NEWGIT_TAG/:/%}
 
-    cecho green "Will git tag after successful build: $NEWGIT_TAG"
-
-
     ## fixme: 1/ grep  2/ the tag might have ":" converted to %.
     if git tag -l "$NEWGIT_TAG"|grep "." > /dev/null
     then
         cecho red "the tag $NEWGIT_TAG already exists! not re-creating it now"
     else
+        cecho green "Will git tag after successful build: $NEWGIT_TAG"
         GBP_OPTIONS+=(
             --git-tag "--git-debian-tag=$DISTRIBUTION/%(version)s"
         )
@@ -265,7 +263,14 @@ function decide_git_tag()
 }
 
 if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
-decide_git_tag
+
+{set -x
+ if [[ -z "$ARCH" ]]; then
+    decide_git_tag
+ else
+     TAGOPTIONS=()
+ fi
+}
 
 
 echo exporting DPUT_TARGETS $DPUT_TARGETS
