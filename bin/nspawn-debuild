@@ -48,7 +48,9 @@ enter-container --distro $DISTRO --arch $arch \
                 --verbose \
                 --chdir $PWD \
                 --bind $(realpath $PWD/..) -- \
-                /usr/bin/debuild $* -- build-arch binary-arch
+                /usr/bin/debuild $* --
+# --dpkg-genchanges-hook=true
+# build binary-arch
 
 enter-container --distro $DISTRO --arch $arch \
                 --verbose \
