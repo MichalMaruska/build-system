@@ -1,3 +1,16 @@
+mmc-build-system (4.1) release; urgency=medium
+
+  * Invoke debuild(1) with correct order of options: first debuild, then dpkg-buildpackage ones.
+  * nspawn-debuild: invoke build-arch also.
+  * clean up
+  * spaces
+  * Improve the git tag query.
+  * more cleanup
+  * Correct the git-tag decision: don't tag at all for other architectures.
+  * Drop the limitation on "build-arch binary-arch". We build all, but limit in the .changes file.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Fri, 14 Dec 2018 08:09:32 +0100
+
 mmc-build-system (4.0) release; urgency=medium
 
   * Use a changesfile for other arch builds.  and don't install
