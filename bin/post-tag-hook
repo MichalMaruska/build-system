@@ -3,27 +3,22 @@
 # Git-push to ...$CENTRALREPO
 
 # This can be run manually inside the (git) source tree.
-
-
-if [ ${CENTRALREPO-x} = x ];
-then
-    if git remote show | grep origin; then
-        CENTRALREPO=origin;
-    elif git remote show | grep maruska; then
-        CENTRALREPO=maruska;
-    else
-        # only 1 line?
-        # don't fail for this?  Or should fail?
-        echo "no central repository defined, so cannot push anywhere" >&2
-        exit 1;
-    fi
-fi
-
-# : ${CENTRALREPO=origin}
-
 : ${GBP_TAG=$(git describe --tags)}
 : ${GBP_BRANCH=$(git name-rev --name-only HEAD)}
 
-git push $CENTRALREPO $GBP_TAG || echo "'git push' failed for the tag $GBP_TAG"
-git push $CENTRALREPO $GBP_BRANCH || echo "'git push' failed for the branch $GBP_BRANCH"
+
+possibly_push_into()
+{
+    remote=$1
+    if git remote get-url $remote; then
+        git push $remote $GBP_TAG || echo "'git push' failed for the tag $GBP_TAG"
+        git push $remote $GBP_BRANCH || echo "'git push' failed for the branch $GBP_BRANCH"
+    fi
+}
+
+
+possibly_push_into "maruska"
+possibly_push_into "origin"
+possibly_push_into "github"
+
 #GBP_SHA1
