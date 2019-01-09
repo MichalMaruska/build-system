@@ -240,7 +240,7 @@ gbp buildpackage \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
     --git-postbuild="dput-install $DPUT_OPTIONS" \
-    --git-builder="debuild -eMAKEFLAGS -eGITSHA -nc"
+    --git-builder="debuild -eMAKEFLAGS -eGITSHA -nc --no-check-builddeps"
 
     # --source-option="--format=\"3.0 (native)\""
 )
