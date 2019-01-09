@@ -38,10 +38,14 @@ copy-snapshot-changelog()
 }
 
 arch=""
-while getopts :a: OPT; do
+skip_build_depends=n
+while getopts :a:s OPT; do
     case $OPT in
         a|+a)
             arch="$OPTARG"
+            ;;
+        s)
+            skip_build_depends=y
             ;;
         *)
             echo "usage: ${0##*/} [+-a ARG} [--] ARGS..."
@@ -70,19 +74,27 @@ then
 fi
 
 
-echo GBP_TMP_DIR = $GBP_TMP_DIR
-DISTRO=sid
-if [ -n "$arch" ]
+if [[ $skip_build_depends != y ]]
 then
-    enter-container --distro $DISTRO --arch $arch \
-                    --bind $(realpath $GBP_TMP_DIR/..) \
-                    --root --chdir $GBP_TMP_DIR \
-                    --verbose -- \
-                    /usr/bin/mk-build-deps --install --remove \
-                    "--tool=\"apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y\""
-else
-    mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y"
+    echo GBP_TMP_DIR = $GBP_TMP_DIR
+    DISTRO=sid
+    if [ -n "$arch" ]
+    then
+        enter-container --distro $DISTRO --arch $arch \
+                        --bind $(realpath $GBP_TMP_DIR/..) \
+                        --root --chdir $GBP_TMP_DIR \
+                        --verbose -- \
+                        /usr/bin/mk-build-deps --install --remove \
+                        "--tool=\"apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y\""
+        # debpkg -i /run/tmp/apt-tmp/apt-build-deps_1.8.0\~alpha3-maruska\~1.gbp342225_amd64.deb
+    else
+        # why not debi --with-depends --tool ?
+        /usr/bin/mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y -f install"
+        #"echo --"
+        # debpkg -i   -> conflict with -f option
+        # -- -f install
+        #
+    fi
 fi
-
 
 echo "------------------- pre-build-hook finished ----------"
