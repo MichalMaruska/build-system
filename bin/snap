@@ -235,7 +235,7 @@ fi
 set -x
 gbp buildpackage \
     --git-ignore-new $GBP_OPTIONS \
-    $PREVERSION_HOOK_NAME=pre-build-hook \
+    $PREVERSION_HOOK_NAME="pre-build-hook -s"\
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
