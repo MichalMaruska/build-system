@@ -195,7 +195,7 @@ function _get_new_version()
 }
 
 
-function reset_changelog()
+function git_reset_changelog()
 {
     local FILE=debian/changelog
     # todo: if modified, reset it. Saving a copy.
@@ -230,7 +230,7 @@ function generate_commit_changelog()
     [[ -n $USER_DISTRIBUTION ]] && DISTRIBUTION=$USER_DISTRIBUTION
 
     set -x
-    reset_changelog
+    git_reset_changelog
 
     local gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
     if dpkg --compare-versions $gbp_version gt 0.6; then
@@ -244,7 +244,7 @@ function generate_commit_changelog()
 
     # Do the commit:
 
-    # fixme: part of reset_changelog !
+    # fixme: part of git_reset_changelog !
     rm -f debian/changelog.pre-release
     set +x
     if git status --porcelain debian/changelog| grep '^[M ]M' > /dev/null;
