@@ -9,7 +9,14 @@ use Dpkg::Control::Hash;
 
 my $file=shift();
 if ( -d $file ) {
-    $file=$file . "/debian/control" ;
+
+    if ( -f $file . "/debian/control" )
+    {
+        $file=$file . "/debian/control" ;
+    } elsif ( -f $file . "/debian/control.in")
+    {
+        $file=$file . "/debian/control.in" ;
+    };
 }
 
 unless  (-f $file) {
