@@ -89,7 +89,8 @@ then
         # debpkg -i /run/tmp/apt-tmp/apt-build-deps_1.8.0\~alpha3-maruska\~1.gbp342225_amd64.deb
     else
         # why not debi --with-depends --tool ?
-        /usr/bin/mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y -f install"
+        # install
+        /usr/bin/mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y -f"
         #"echo --"
         # debpkg -i   -> conflict with -f option
         # -- -f install
