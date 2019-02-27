@@ -18,7 +18,7 @@ check_getopt()
 prepare_hook_name()
 {
     # Support for 2 different versions of gbp:
-    local gbp_version=$(gbp buildpackage --version|cut -d ' '  -f 2)
+    local gbp_version=$(gbp buildpackage --version|cut --delimiter=' ' --fields=2)
 
     if dpkg --compare-versions $gbp_version 'gt' 0.6; then
         PREVERSION_HOOK_NAME=--git-postexport
