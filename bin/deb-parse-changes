@@ -1,0 +1,21 @@
+#! /usr/bin/perl
+
+# https://metacpan.org/pod/Parse::Debian::PackageDesc
+use Parse::Debian::PackageDesc;
+use Data::Dumper;
+
+my $file=shift();
+if ( -d $file ) {
+    $file=$file . "/debian/control" ;
+}
+
+my $changes = Parse::Debian::PackageDesc->new($file);
+# print Dumper($changes);
+
+print $changes->get_line_attr('Distribution'), '/', $changes->get_line_attr('Version'), "\n";
+
+exit 0;
+
+my $source  = Parse::Debian::PackageDesc->new('/path/foo.dsc');
+my $pkg     = Parse::Debian::PackageDesc->new($changes_or_dsc,
+                                              gpg_homedir => '/dir/gnupg'); 
