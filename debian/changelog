@@ -1,3 +1,17 @@
+mmc-build-system (4.2) release; urgency=medium
+
+  * post-tag-hook: push to multiple knows/expected remotes
+  * pre-build-hook: optionally skip the sudo part
+  * snap: speed-up by not checking build-depends
+  * do skip it!
+  * Consider control.in as a fallback
+  * functions: rename to git_reset_changelog()
+  * use --long options for cut(1)
+  * Fix pre-build-hook to use valid apt cmdline for mk-build-deps.
+  * Use new deb-parse-changes to make the git tag when running manually dput-install
+
+ -- Michal Maruska <mmaruska@gmail.com>  Tue, 06 Aug 2019 13:39:18 +0200
+
 mmc-build-system (4.1) release; urgency=medium
 
   * Invoke debuild(1) with correct order of options: first debuild, then dpkg-buildpackage ones.
