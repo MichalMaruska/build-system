@@ -169,9 +169,9 @@ then
     cecho green "installing immediately ${GBP_CHANGES_FILE}"
     if [ -n "${GBP_CHANGES_FILE}" ]; then
         set -x
-        debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
+        sudo debi ${DEBI_OPTIONS-} $GBP_CHANGES_FILE
     else
-        debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
+        sudo debi ${DEBI_OPTIONS-} --debs-dir $BUILD_AREA
     fi
 else
     cecho green "not requested to install immediately"
