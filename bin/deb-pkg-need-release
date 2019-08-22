@@ -31,12 +31,12 @@ sub decide_if_obsolete
     my $file=$dir .  "/debian/control";
     # print $file, "\n";
     unless  (-f $file) {
-	$file=$dir .  "/debian/control.in";
-	unless  (-f $file) {
-	    print "non-existent file $file\n";
-	    # die("non-existent file " + $file);
-	    return;
-	}
+        $file=$dir .  "/debian/control.in";
+        unless  (-f $file) {
+            print "non-existent file $file\n";
+            # die("non-existent file " + $file);
+            return;
+        }
     }
 
 ## testing the Perl API:
@@ -75,59 +75,59 @@ sub decide_if_obsolete
     {
 #    print "next";
 #    print $_;
-	my $name =$_->{Package};
-	#
-	# print "binary: ", $name , "\n";
+        my $name =$_->{Package};
+        #
+        # print "binary: ", $name , "\n";
 
-	# Now what is installed.
-	# foreach  pkg in ..binpkg
-	{
-	    my $pkg=$ac->{$name};
+        # Now what is installed.
+        # foreach  pkg in ..binpkg
+        {
+            my $pkg=$ac->{$name};
 
-	    # print "now from apt DB: ";
-	    #print $pkg->{Name};
-	    #print "\n";
+            # print "now from apt DB: ";
+            #print $pkg->{Name};
+            #print "\n";
 
-	    # print "\n";
-	    my $version=$pkg->{CurrentVer};
-	    my $installed=$version->{VerStr};
-
-
-	    if ($pkg->{CurrentState} ne "Installed")
-	    {
-
-		if ($verbose) {
-		    print <STDERR>, "$name $pkg->{Name} not installed\n";
-		}
-	    }
-	    elsif ($ver ne $installed)
-	    {
-		if ($verbose) {
-		    printf <STDERR>, "$name $pkg->{Name} DIFFERENT version: %s i: %s\n", $ver, $installed;
-		}
-	    }
+            # print "\n";
+            my $version=$pkg->{CurrentVer};
+            my $installed=$version->{VerStr};
 
 
+            if ($pkg->{CurrentState} ne "Installed")
+            {
 
-	    push @obsolete, $name;
+                if ($verbose) {
+                    print <STDERR>, "$name $pkg->{Name} not installed\n";
+                }
+            }
+            elsif ($ver ne $installed)
+            {
+                if ($verbose) {
+                    printf <STDERR>, "$name $pkg->{Name} DIFFERENT version: %s i: %s\n", $ver, $installed;
+                }
+            }
 
-	    # print <STDERR> "binary: ", $name, " ";
 
-	    if ($pkg->{CurrentState} eq "Installed") {
-		# print $ver, " vs. ", $installed, "\n";
-		# print <STDERR> " is obsolete: ", $ver, " vs. ", $installed, "\n";
-	    } else {
-		# print <STDERR> "is NOT installed";
-	    }
-	    # print <STDERR> "\n";
-	    #print $version->{VerStr};
-	}
 
-	#else
-	{
-	    # print $pkg->{CurrentState};
-	    # print "\n";
-	}
+            push @obsolete, $name;
+
+            # print <STDERR> "binary: ", $name, " ";
+
+            if ($pkg->{CurrentState} eq "Installed") {
+                # print $ver, " vs. ", $installed, "\n";
+                # print <STDERR> " is obsolete: ", $ver, " vs. ", $installed, "\n";
+            } else {
+                # print <STDERR> "is NOT installed";
+            }
+            # print <STDERR> "\n";
+            #print $version->{VerStr};
+        }
+
+        #else
+        {
+            # print $pkg->{CurrentState};
+            # print "\n";
+        }
     }
     #
 #if at least 1 -> need to rebuild?
