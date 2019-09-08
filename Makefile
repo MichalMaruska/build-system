@@ -1,5 +1,5 @@
 
-
+ETC_DIR := /etc
 SHAREDIR := /usr/share/build-system/
 INSTALL := install
 BIN_INSTALL_DIR := /usr/bin
@@ -13,11 +13,16 @@ COMPLETION_FILES := $(wildcard zsh/_*)
 all:
 	echo ""
 
-install: install-zsh install-functions
+install: install-zsh install-functions install-configs
 	$(INSTALL) -v -D --directory $(DESTDIR)$(BIN_INSTALL_DIR)
 	for p in $(BINFILES); do \
 	  $(INSTALL) -v -m 555 $$p $(DESTDIR)$(BIN_INSTALL_DIR) ; \
 	done
+
+install-configs:
+	$(INSTALL) -v -D --directory $(DESTDIR)$(ETC_DIR)/tmpfiles.d
+	$(INSTALL) -v -m 444 etc/tmpfiles.d/run-tmp.conf  $(DESTDIR)$(ETC_DIR)/tmpfiles.d/run-tmp.conf
+
 
 
 install-functions:
@@ -39,3 +44,4 @@ clean:
 git-clean:
 	git clean -f -d -x
 
+.PHONY:	install-configs
