@@ -21,7 +21,7 @@ install: install-zsh install-functions install-configs
 
 install-configs:
 	$(INSTALL) -v -D --directory $(DESTDIR)$(ETC_DIR)/tmpfiles.d
-	$(INSTALL) -v -m 444 etc/tmpfiles.d/run-tmp.conf  $(DESTDIR)$(ETC_DIR)/tmpfiles.d/run-tmp.conf
+	$(INSTALL) -v -m 444 etc/tmpfiles.d/gbp.conf  $(DESTDIR)$(ETC_DIR)/tmpfiles.d/gbp.conf
 
 
 
