@@ -229,7 +229,7 @@ if [[ $release = y ]]
 then
     tag=$(deb-parse-changes $GBP_CHANGES_FILE)
 
-    if ! git rev-parse refs/tags/$tag > /dev/null
+    if ! git rev-parse --tags="$tag*" &> /dev/null
     then
         git tag -m 'release' $tag HEAD
     fi
