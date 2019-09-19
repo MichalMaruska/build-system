@@ -286,7 +286,7 @@ if [ "$ARCH" != "" ]; then
     dpkg_buildpackage_flags+=(-B)
     # this receives all args from gbp buildpackage  unless --git- prefix.
     name=$(deb-pkg-name  debian/control)
-    changesfile="/run/tmp/${name+$name-}$ARCH.changes"
+    changesfile="/gbp/${name+$name-}$ARCH.changes"
     BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
     export DEB_HOST_ARCH=$ARCH
     pre_build_hook+=( -a $ARCH)
