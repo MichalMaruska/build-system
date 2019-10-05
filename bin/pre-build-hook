@@ -76,10 +76,10 @@ fi
 
 if [[ $skip_build_depends != y ]]
 then
-    echo GBP_TMP_DIR = $GBP_TMP_DIR
     DISTRO=sid
     if [ -n "$arch" ]
     then
+        echo GBP_TMP_DIR = $GBP_TMP_DIR
         enter-container --distro $DISTRO --arch $arch \
                         --bind $(realpath $GBP_TMP_DIR/..) \
                         --root --chdir $GBP_TMP_DIR \
