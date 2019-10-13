@@ -251,7 +251,7 @@ function decide_git_tag()
 
     # if different &
     local NEWGIT_TAG
-    : ${NEWGIT_TAG:=$DISTRIBUTION/$VERSION}
+    NEWGIT_TAG=$DISTRIBUTION/$VERSION
     NEWGIT_TAG=${NEWGIT_TAG/:/%}
 
     ## fixme: 1/ grep  2/ the tag might have ":" converted to %.
