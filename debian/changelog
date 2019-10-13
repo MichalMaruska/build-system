@@ -1,3 +1,19 @@
+mmc-build-system (4.4) release; urgency=medium
+
+  * spaces
+  * Debian: install systemd tmpfile config for /gbp
+  * limit "git rev-parse" to tags in the official way
+  * Rename to gbp.conf
+  * more change for /gbp
+  * pre-build-hook: don't use GBP_TMP_DIR unless needed.
+  * debian: we need libapt-pkg-perl
+  * release: explain the 2nd generate_commit_changelog
+  * simplify shell
+  * document functions
+  * When increase_version for release, drop the ~suffix.
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 13 Oct 2019 23:59:28 +0200
+
 mmc-build-system (4.3) release; urgency=medium
 
   * Use sudo for debi(1) ... as it invokes apt now.
