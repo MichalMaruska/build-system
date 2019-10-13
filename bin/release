@@ -225,12 +225,14 @@ fi
 #   adds to GBP_OPTIONS
 function decide_git_tag()
 {
-
     # Design considerations:
-    # At this point I have the last commit, but maybe not a tag.
-    # If I stop here, and rerun, I would like to resume.
-    # fixme: But maybe the tag is there already?
 
+    # At this point I have the definitive release commit, but maybe not a tag.
+    # The commit contains the generated changelog! so after`generate_commit_changelog'.
+
+    # If I stop here, and rerun, I would like to resume.
+
+    # fixme: But maybe the tag is there already?
     # if NO tag at all:
     # fatal: No names found, cannot describe anything.
 
@@ -241,10 +243,12 @@ function decide_git_tag()
     # *now* the default value:
     # : ${GIT_TAG:=$DISTRIBUTION/$VERSION}
 
-    # fixme: this only after `generate_commit_changelog' ...
     # DISTRIBUTION, VERSION
-    # notice: without     drop_verbal_suffix
+    # note: without     drop_verbal_suffix
+
+    # mmc: fixme! does this parse a different, updated changelog?
     load_distr_version_from_changelog
+
     # if different &
     local NEWGIT_TAG
     : ${NEWGIT_TAG:=$DISTRIBUTION/$VERSION}
