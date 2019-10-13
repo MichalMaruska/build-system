@@ -169,7 +169,8 @@ changelog_needs_new_section() {
 function _get_new_version()
 {
     local step=$1
-    increase_version $step
+
+    increase_version -r $step
     local git_version=$VERSION
     # git_distro=$DISTRIBUTION
 
@@ -282,16 +283,25 @@ my_own_project()
 # generate_commit_changelog -> _get_new_version -> increase_version
 increase_version()
 {
+    local release="n"
+    if [[ $1 = "-r" ]]; then
+        release=y
+        shift
+    fi
+
     local step=$1
     set -x
     # fixme: it can be: (from git)
     # a.b.c~git-offset
-    if false; then
+
+    # this is for release!
+    if [[ $release = y ]]; then
         if [[ $VERSION =~ "(.*)~.*$" ]]
         then
             VERSION="$match[1]"
         fi
     fi
+
     local prefix
     local major
     local middle
