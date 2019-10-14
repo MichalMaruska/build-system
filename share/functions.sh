@@ -295,11 +295,12 @@ increase_version()
     # a.b.c~git-offset
 
     # this is for release!
-    if [[ $release = y ]]; then
+    if [[ $release = y ]] && my_own_project; then
         if [[ $VERSION =~ "(.*)~.*$" ]]
         then
             VERSION="$match[1]"
         fi
+        return
     fi
 
     local prefix
