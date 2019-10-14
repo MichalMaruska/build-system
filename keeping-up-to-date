@@ -1,0 +1,251 @@
+* How to rebuild automatically
+
+** track the source git repo
+   Populate the Control VCS: field.
+
+grep-available
+
+
+
+grep-status -PX make
+grep-available -PX make
+# the version?
+
+grep-dctrl -PX make /var/lib/dpkg/status
+
+grep-available -F Description Maruska
+grep-available -F Description -i maruska
+grep-available -F Package mmc-
+
+** apt-cache search
+grep-available -F Package -F Description foo
+
+egrep 'Dgit|Package' /var/lib/dpkg/status|grep -B 1 dgit
+
+* bug: this does not show the Dgit field!
+grep-available -F Maintainer  'mmaruska'
+
+* got get the new/git version.
+then...
+grep-status   -s Dgit,Package   -F Maintainer -i mmaruska  --and -F Dgit  -r  '.'
+
+grep-status   -s Dgit,Package   -F Maintainer -i mmaruska  --and -F Dgit   '.' |\
+gawk -e 'BEGIN{dgit="x"}; /Dgit:/ {dgit=$2}; /Package:/ {print dgit, $2}'
+
+
+grep-status -s Dgit,Package -F Maintainer -i mmaruska --and -F Dgit  -r  '.' --and -P -r '.*build-dep'
+
+--and --field Dgit
+
+# remove deb packages:
+grep-status --no-field-names --show-field Package --field Maintainer --ignore-case 'mmaruska@gmail.com' --and -P -r '.*build-dep'|
+\
+xargs sudo apt -o APt::Install::Protect-Maruska=false remove
+
+~/repo/build-system/bin/find-my-deb-sources > ~/my-debian-dirs
+
+
+* old
+/home/michal/git/my/kahua-mmc.:  kahua-mmc
+/home/michal/git/my/postgresql-9.1:  libpq-dev
+/home/michal/git/my/postgresql-9.1:  libpq5
+/home/michal/git/my/postgresql-9.1:  libecpg6
+/home/michal/git/my/postgresql-9.1:  libecpg-dev
+/home/michal/git/my/postgresql-9.1:  libecpg-compat3
+/home/michal/git/my/postgresql-9.1:  libpgtypes3
+/home/michal/git/my/postgresql-9.1:  postgresql-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-9.1-dbg
+/home/michal/git/my/postgresql-9.1:  postgresql-client-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-server-dev-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-doc-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-contrib-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-plperl-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-plpython-9.1
+/home/michal/git/my/postgresql-9.1:  postgresql-pltcl-9.1
+/home/michal/git/my/rxvt-2.6.4:  rxvt
+/home/michal/git/my/rxvt-2.6.4:  rxvt-ml
+/home/michal/git/xorg-debian/no/xserver-xorg-video-ati:  xserver-xorg-video-ati
+/home/michal/git/xorg-debian/no/xserver-xorg-video-ati:  xserver-xorg-video-ati-dbg
+/home/michal/git/xorg-debian/no/xserver-xorg-video-ati:  xserver-xorg-video-radeon
+/home/michal/git/xorg-debian/no/xserver-xorg-video-ati:  xserver-xorg-video-radeon-dbg
+/home/michal/git/xorg-debian/no/xserver-xorg-video-r128:  xserver-xorg-video-r128
+/home/michal/git/xorg-debian/no/xserver-xorg-video-r128:  xserver-xorg-video-r128-dbg
+/home/michal/git/xorg-debian/no/xserver-xorg-video-intel:  xserver-xorg-video-intel
+/home/michal/git/xorg-debian/no/xserver-xorg-video-intel:  xserver-xorg-video-intel-dbg
+/home/michal/git/xorg-debian/no/xserver-xorg-video-mach64:  xserver-xorg-video-mach64
+/home/michal/git/xorg-debian/no/xserver-xorg-video-mach64:  xserver-xorg-video-mach64-dbg
+tests
+/home/michal/git/debhelper/t/buildsystems:  testpackage
+/home/michal/git/debhelper/t/dh_installdocs:  foo
+/home/michal/git/debhelper/t/dh_installdocs:  bar
+/home/michal/git/debhelper/t/dh_installdocs:  baz
+/home/michal/git/debhelper/t/dh_installinit:  foo
+/home/michal/git/debhelper/t/dh_installinit:  bar
+/home/michal/git/debhelper/t/dh_installinit:  baz
+/home/michal/git/debhelper/t/dh_installsystemd:  foo
+/home/michal/git/debhelper/t/dh_installsystemd:  bar
+/home/michal/git/debhelper/t/dh_installsystemd:  baz
+/home/michal/git/debhelper/t/Dh_Lib:  foo-any
+/home/michal/git/debhelper/t/Dh_Lib:  foo-all
+/home/michal/git/debhelper/t/debhelper-compat:  foo
+/home/michal/git/debhelper/t/dh_installsystemduser:  foo
+/home/michal/git/debhelper/t/dh_installgsettings:  has-settings
+/home/michal/git/debhelper/t/dh_installgsettings:  no-settings
+/home/michal/git/devscripts/test/debrepro/reproducible:  reproducible
+/home/michal/git/devscripts/test/debrepro/unreproducible:  reproducible
+/home/michal/git/debhelper/t/dh_missing/template:  foo
+/home/michal/git/debhelper/t/dh_missing/template:  bar
+/home/michal/git/debhelper/t/dh_missing/template:  baz
+/home/michal/git/debhelper/t/dh_installsystemd/simple:  foo
+** notice: /home/michal/git/emacs-snapshot
+** sawfish
+
+/home/michal/git/sf/librep:  rep
+/home/michal/git/sf/librep:  librep16
+/home/michal/git/sf/librep:  librep-dev
+/home/michal/git/sf/librep:  librep-dbg
+/home/michal/git/sf/librep:  rep-doc
+/home/michal/git/sf/rep-gtk:  rep-gtk
+/home/michal/git/sf/sawfish-all:  sawfish
+/home/michal/git/sf/sawfish-all:  sawfish-dbg
+/home/michal/git/sf/sawfish-all:  sawfish-data
+/home/michal/git/sf/sawfish-all:  sawfish-lisp-source
+/home/michal/git/sf/sawfish:  sawfish
+/home/michal/git/sf/sawfish:  sawfish-dbg
+/home/michal/git/sf/sawfish:  sawfish-data
+/home/michal/git/sf/sawfish:  sawfish-lisp-source
+/home/michal/git/test-1.pre/sawfish:  sawfish
+/home/michal/git/test-1.pre/sawfish:  sawfish-dbg
+/home/michal/git/test-1.pre/sawfish:  sawfish-data
+/home/michal/git/test-1.pre/sawfish:  sawfish-lisp-source
+/home/michal/git/test/sawfish:  sawfish
+/home/michal/git/test/sawfish:  sawfish-dbg
+/home/michal/git/test/sawfish:  sawfish-data
+/home/michal/git/test/sawfish:  sawfish-lisp-source
+
+/home/michal/git/test-1.pre:  sawfish
+/home/michal/git/test-1.pre:  sawfish-dbg
+/home/michal/git/test-1.pre:  sawfish-data
+/home/michal/git/test-1.pre:  sawfish-lisp-source
+/home/michal/git/test:  sawfish
+/home/michal/git/test:  sawfish-dbg
+/home/michal/git/test:  sawfish-data
+/home/michal/git/test:  sawfish-lisp-source
+
+* version where I took the debianization from?
+/home/michal/git/sane/sane-backends-1.0.25:  sane-utils
+/home/michal/git/sane/sane-backends-1.0.25:  libsane-common
+/home/michal/git/sane/sane-backends-1.0.25:  libsane
+/home/michal/git/sane/sane-backends-1.0.25:  libsane-dev
+/home/michal/git/sane/sane-backends-1.0.25:  libsane-dbg
+/home/michal/git/dctrl-tools/debian/dctrl-tools-2.24:  dctrl-tools
+
+* unused:
+/home/michal/git/meego/aegis-examples:  aegis-token-server
+/home/michal/git/meego/aegis-examples:  aegis-token-client
+/home/michal/git/meego/aegis-examples:  aegis-token-other
+/home/michal/git/meego/aegis-examples:  aegis-dbus-server
+/home/michal/git/meego/aegis-examples:  aegis-dbus-client
+/home/michal/git/meego/aegis-examples:  aegis-dbus-other
+/home/michal/git/tup/contrib:  tup
+/home/michal/git/pflask-old/most-5.0.0a:  most
+
+/home/michal/repo/emacs/paredit/paredit-el-20:  paredit-el
+
+* check:
+sed -e 's/:  .*//' ~/my-debian-dirs|uniq | while read dir; do  ~/repo/build-system/bin/deb-pkg-need-release $dir; done
+
+
+
+* summary:
+
+** common options (proposal):
+-V  Debian -> git  ...use only Version & tags
+-g  use dgit
+-H dump history
+
+
+see: ../gauche/build-conditionally
+
+
+* ~/repo/build-system/bin/find-my-deb-sources
+~/my-debian-dirs
+
+## shell first:
+* ../mmc-shell/bin/compare-git-deb
+selection: 1, source directory, 1st binary package (must be installed)
+deb<->git: git tag -> deb version (assumed to be released)
+action:  show since last release TAG.
+
+this works on debian side only with Version (not dgit)
+debian version ->
+shell -- uses deb-pkg-installed-version deb-pkg-binary-packages.
+~/repo/build-system/bin/deb-pkg-binary-packages
+~/repo/build-system/bin/deb-pkg-installed-version
+gets the git commit id, then -> it uses Git history to see what has changed!
+
+and git_describe_since_last_release
+
+
+*  ../mmc-shell/bin/compare-snap-git
+selection: source dir
+deb<->git: debian/changelog gpbXXXX -> commit.
+           dpkg-query dgit.
+action:
+
+~/repo/build-system/bin/deb-pkg-version
+deb-pkg-name
+dpkg-query --show --showformat='${Dgit}' $pkgname !!!
+deb-pkg-distribution
+
+uses tools from build-system! bad!
+
+
+*  bin/dpkg-need-rebuild (sh)
+either reprepro or dpkg/status
+selection: deb-source directory. -> source package. -> extract 'available' binary packages.
+deb<->git: dgit from deb!  compare &
+action: report match.
+
+# See if the source package should be recompiled, to produce deb packages.
+# possibly limited to a `reprepro' distro.
+-reprepro
+-grep-available
+
+-vs git HEAD
+
+
+## Perl
+*  bin/deb-pkg-need-release (perl)  .. maybe need `install' ?
+perl!
+selection: dirs on cmdline.
+deb<->git:  perl Api to get ... version.
+action:
+
+# Given source-packages as paths to dirs, output the list of those
+# that are NOT installed at the version in the directory (debian/changelog).
+
+find the Control file & Changelog.
+Queries the installed DB, and checks the version of bin. pckages from the Control file
+& their versions.
+
+# todo:
+***  sync with ~/repo/build-system/bin/deb-pkg-binary-packages
+
+
+***** selection
+by dir
+global -- repre
+only installed!  vs. available!
+
+which distro?
+
+
+***** comparison
+dgit vs HEAD
+version -> tag
+
+
+***** action
+
+list git history

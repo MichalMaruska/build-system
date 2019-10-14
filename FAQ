@@ -1,0 +1,22 @@
+* when it fails on signing:
+
+enter-container
+cd ~/git/..
+$ debsign
+
+* when it fails
+
+* inside
+fmb
+dpkg-genchanges --build=any -O../zsh-x32.changes
+
+* outside:
+dput-install -r -n /run/tmp/zsh-x32.changes
+
+* IIRC gauche build fails.
+   build-arch binary-arch is not enough
+
+* avoid stripping & gdb:
+
+CFLAGS to ./configure "CFLAGS=-O0 -ggdb"
+DEB_BUILD_OPTIONS=nostrip fmb

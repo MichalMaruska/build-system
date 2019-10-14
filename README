@@ -1,13 +1,7 @@
 * Todo:
 
-** avoid stripping & gdb:
 
-CFLAGS to ./configure "CFLAGS=-O0 -ggdb"
-DEB_BUILD_OPTIONS=nostrip fmb
-
-
-
-** `snap' cares about tarbal ! 
+** `snap' cares about tarbal !
 gbp:info: Orig tarball 'gauche_0.9.4.orig.tar.gz' not found at '../tarballs/'
 -> only matter of #tarball-dir = ../tarballs/ in ~/.gbp.conf
 
