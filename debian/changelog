@@ -1,3 +1,10 @@
+mmc-build-system (4.5) release; urgency=medium
+
+  * sq: When increase_version for release, don't bump it!
+  * docs
+
+ -- Michal Maruska <michal@ubuntu>  Wed, 27 Nov 2019 15:01:45 +0100
+
 mmc-build-system (4.4) release; urgency=medium
 
   * spaces
