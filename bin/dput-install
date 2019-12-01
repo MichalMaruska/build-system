@@ -188,7 +188,7 @@ if [ -z "${dput_targets}" ]; then
 else
     for TARGET in ${dput_targets}
     do
-        if [ $TARGET = local -a -n "${REPREPRO_BASE_DIR-}" ]; then
+        if [ $TARGET = local -a -z "${REPREPRO_BASE_DIR-}" ]; then
            continue
         fi
         cecho $REPREPRO_COLOR "Uploading to $TARGET"
