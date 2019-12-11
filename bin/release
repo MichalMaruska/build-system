@@ -36,7 +36,7 @@ EOF
     unsetopt POSIX_ARGZERO
 }
 
-GITSHA=""
+GITSHA=$(git rev-list --max-count=1 HEAD)
 DEBUG=y
 
 # defaults for options:

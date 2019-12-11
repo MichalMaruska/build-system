@@ -20,6 +20,9 @@ grep-available -F Package mmc-
 ** apt-cache search
 grep-available -F Package -F Description foo
 
+
+* dgit is put in by .... my modified debhelper!
+
 egrep 'Dgit|Package' /var/lib/dpkg/status|grep -B 1 dgit
 
 * bug: this does not show the Dgit field!
