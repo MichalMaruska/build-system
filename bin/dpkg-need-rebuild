@@ -78,7 +78,7 @@ DEBUG=n
 #file=()
 typeset -a distros
 distros=()
-while getopts :hir:d OPT; do
+while getopts :adhir: OPT; do
     case $OPT in
         h|+h)
             usage
@@ -93,6 +93,9 @@ while getopts :hir:d OPT; do
         d)
             DEBUG=y
             ;;
+	a)
+	    distros=("available")
+	    ;;
         *)
             usage
             exit 2
@@ -121,6 +124,8 @@ foreach distro ($distros) {
     if [ $distro = "installed" ]; then
         file=/var/lib/dpkg/status
         # /var/lib/dpkg/available
+    elif [ $distro = "available" ]; then
+	file=/var/lib/dpkg/available
     else
             file=$(reprepro-packages $distro $ARCH)
     fi
