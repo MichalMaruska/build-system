@@ -21,6 +21,7 @@ function usage(){
     setopt POSIX_ARGZERO
     cat >&2 <<EOF
 usage: ${0##*/} [+-upbw] [--] ARGS...
+    --mk-build-deps -m  install builddependencies (not checked??)
     --ignore -b  ... ignore branch
     --nosign -u  ... do not sign!
     --version -v  ... new version
@@ -53,6 +54,7 @@ DCH_OPTIONS=()
 ignore_branch=y
 do_sign=n
 build_source=no
+build_dependencies=no
 typeset -a ARGS
 ARGS=($@)
 
@@ -64,14 +66,13 @@ ARGS=($@)
 
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro:,verbose,work,nocheck,keep \
-        --options bd:fhiknpstuVv:w \
+    --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro:,verbose,work,nocheck,keep,mk-build-deps \
+        --options bd:fhikmnpstuVv:w \
         -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
 while (( $# > 0 )) do
     case $1 in
-
         --help | -h)
             usage
             exit 0;;
@@ -80,6 +81,9 @@ while (( $# > 0 )) do
             ignore_branch=n
             ;;
         # useless:
+        --mk-build-deps|  -m)
+            build_dependencies=yes
+            ;;
         --sign | -s)
             do_sign=y
             ;;
@@ -237,11 +241,16 @@ else
     DPUT_TARGETS=${MBS_SNAP_TARGETS-}
 fi
 
+pre_build_hook_args=()
+if [[ ${build_dependencies} = 'no' ]] then
+   pre_build_hook_args=("-s")
+fi
+
 (
 set -x
 gbp buildpackage \
     --git-ignore-new $GBP_OPTIONS \
-    $PREVERSION_HOOK_NAME="pre-build-hook -s"\
+    $PREVERSION_HOOK_NAME="pre-build-hook $pre_build_hook_args"\
     --git-cleaner=/bin/true \
     --git-dist=$DISTRIBUTION \
     --git-arch=$(dpkg-architecture -qDEB_BUILD_ARCH) \
