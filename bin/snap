@@ -25,9 +25,11 @@ usage: ${0##*/} [+-upbw] [--] ARGS...
     --nosign -u  ... do not sign!
     --version -v  ... new version
     --source     ... create sourcd pkg as well (create the (ORIG) tarball)
+
     --install -i ... install immediately
            by default .... update only
     --noinstall
+
     --nocheck
     --keep -k       ... keep the build directory
     --work -w  ... use the work-directory of git.
@@ -63,7 +65,7 @@ ARGS=($@)
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro:,verbose,work,nocheck,keep \
-        --options uspifbhv:d:tVwk \
+        --options bd:fhiknpstuVv:w \
         -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -131,6 +133,10 @@ while (( $# > 0 )) do
             DEB_BUILD_OPTIONS+=nocheck
             export DEB_BUILD_OPTIONS
             ;;
+
+        -- )
+            shift
+            break
     esac
     shift
 done
