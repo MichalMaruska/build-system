@@ -176,6 +176,15 @@ if [ $do_sign = "n" ]; then
 fi
 
 
+if [[ $# -gt 0 ]]; then
+    dir=$1
+    if [[ -d $dir ]]; then
+        cd $dir
+    else
+        usage >&2
+        exit 1
+        fi
+fi
 export GITSHA=$(git rev-list --max-count=1 HEAD)
 
 # The changelog is updated inside the Git repo.
