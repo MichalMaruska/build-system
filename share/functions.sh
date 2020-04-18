@@ -121,7 +121,7 @@ get_current_tag()
 # dubious:
 # todo: but, maybe it WAS committed in the last commit & nothing has changed!
 
-# Return 0 iff last Changelog item is UNRELEASED.
+# Return 0 iff last Changelog item is not commited?
 # ENV: $FORCE
 changelog_needs_new_section() {
     type=$1
@@ -140,7 +140,7 @@ changelog_needs_new_section() {
         fi
     elif [ $(git log --pretty=%P -n 1 |wc -w) -gt 1 ]
     then
-        cecho yellow "$FILE is clean but now we Merged"
+        cecho yellow "$FILE is clean but now we Merged and merge commits need specia attention"
         return 0
 
     elif ! git diff HEAD~1 --name-status $FILE | grep '^[AM]' > /dev/null
@@ -296,6 +296,8 @@ increase_version()
 
     # this is for release!
     if [[ $release = y ]] && my_own_project; then
+        # after a snapshot version: x.y.z~snapshot
+        # just drop the ~suffix:
         if [[ $VERSION =~ "(.*)~.*$" ]]
         then
             VERSION="$match[1]"
