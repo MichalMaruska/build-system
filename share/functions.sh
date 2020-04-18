@@ -143,7 +143,7 @@ changelog_needs_new_section() {
         cecho yellow "$FILE is clean but now we Merged"
         return 0
 
-    elif ! git diff HEAD~1 --name-status $FILE | grep '^M' > /dev/null
+    elif ! git diff HEAD~1 --name-status $FILE | grep '^[AM]' > /dev/null
     then
         cecho yellow "$FILE was not updated during the last commit"
         return 0
