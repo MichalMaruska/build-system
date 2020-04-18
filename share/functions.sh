@@ -301,8 +301,8 @@ increase_version()
         if [[ $VERSION =~ "(.*)~.*$" ]]
         then
             VERSION="$match[1]"
+            return
         fi
-        return
     fi
 
     local prefix
