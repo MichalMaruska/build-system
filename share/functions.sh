@@ -127,7 +127,7 @@ changelog_needs_new_section() {
     type=$1
     local FILE="debian/changelog"
 
-    if [ ${FORCE-n} = "y" ]; then
+    if [[ ${FORCE-n} = "y" ]]; then
         return 0
     elif git status --porcelain $FILE |grep --silent '^ M'; then
         # it's modified already.
