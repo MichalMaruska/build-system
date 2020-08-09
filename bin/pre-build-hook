@@ -62,12 +62,6 @@ else
     copy-snapshot-changelog
 fi
 
-# Generate stuff for  ./configure
-if [ -e auto ]
-then
-    ./auto
-fi
-
 if [ ! -e debian/control ]
 then
     generate-debian-control
@@ -98,6 +92,12 @@ then
         # -- -f install
         #
     fi
+fi
+
+# Generate stuff for  ./configure
+if [ -e auto ]
+then
+    ./auto
 fi
 
 echo "------------------- pre-build-hook finished ----------"
