@@ -94,6 +94,7 @@ then
     fi
 fi
 
+which add-deb-git && add-deb-git $GBP_GIT_DIR/..
 # Generate stuff for  ./configure
 if [ -e auto ]
 then
