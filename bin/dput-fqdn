@@ -1,0 +1,63 @@
+#! /usr/bin/python3
+
+# inspiration from /usr/share/dput/dput/helper
+import configparser
+import os
+import sys
+
+debug = True
+#False
+
+#config = read_configs(config_file, debug)
+
+def open_file():
+    config_file = os.path.expanduser("~/.dput.cf")
+    try:
+        return open(config_file)
+    except IOError as e:
+        if debug:
+            sys.stderr.write("%s: %s, skipping\n" % (e.strerror, config_file))
+            # continue
+        if debug:
+            sys.stdout.write("D: Parsing Configuration File %s\n" % config_file)
+    return None
+
+# if fd is None:
+#     sys.stderr.write("Error: Could not open any configfile, tried %s\n" % (', '.join(config_files)))
+#     sys.exit(1)
+
+def extract_section_value(section_name, item):
+    fd = open_file()
+
+    config = configparser.ConfigParser()
+    try:
+        config.read_file(fd)
+    except configparser.ParsingError as e:
+        sys.stderr.write("Error parsing config file:\n%s\n" % str(e))
+        sys.exit(1)
+
+        fd.close()
+
+    # maruska
+    # config.sections()
+    print (config[section_name][item])
+#    print("no\n")
+
+    # for section in config.sections():
+    #     if config.get(section, item,fallback= None):
+    #             print(section + " fqdn:" + config.get(section, 'fqdn', fallback='unknown'))
+
+                #if config.get(section, 'method') == 'local':
+                #    config.set(section, 'fqdn', 'localhost')
+
+
+
+def main():
+    # print command line arguments
+#    for arg in sys.argv[1:]:
+#        print arg
+    extract_section_value('maruska', 'fqdn')
+    sys.exit(0)
+
+
+main()
