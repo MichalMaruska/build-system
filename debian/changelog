@@ -1,3 +1,25 @@
+mmc-build-system (4.7) release; urgency=medium
+
+  * add dependency for apt-perl
+  * fix the test on REPREPRO_BASE_DIR
+  * dpkg-need-rebuild: operate on available too
+  * mk-build-deps: unset TMPDIR as it does not cope
+  * Calculate (& thus store) GITSHA even for release.
+  * Fix getopts -- forgotten n & reorder
+  * mk-build-deps option to force installing them
+  * Allow building in a given directory
+  * changelog is modified or added!
+  * shell
+  * improve documentation - comments
+  * fix misplaced return -- do increase when no snapshot preceded.
+  * bump debian/compat
+  * (pre-build-hook) Invoke ./auto only after the build dependencies have been installed.
+  * Invoke the hook...
+  * automatically cd into the top of the git repository
+  * Extract the hostname from ~/.dput.cf
+
+ -- Michal Maruska <mmaruska@gmail.com>  Tue, 03 Nov 2020 18:43:43 +0100
+
 mmc-build-system (4.5) release; urgency=medium
 
   * sq: When increase_version for release, don't bump it!
