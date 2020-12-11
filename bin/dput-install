@@ -204,23 +204,6 @@ else
                 cecho yellow "target $TARGET failed, but not fatal!"
             fi
         fi
-
-        ### Invoke remote reprepro:
-        if [ $TARGET = "maruska" ]; then
-            if [ $release = y ]; then
-                cecho green "processing hardwired reprepro (fixme!)"
-
-                # todo: get it from ~/.dput.cf
-                fqdn=$(dput-fqdn "maruska")
-
-                # -t ... PTY allocation: the inside will have a $TERM.
-                ssh -Y -A $fqdn -t -p 1022 "~/reprepro/process-incoming; ls -l reprepro/incoming/"
-
-#                ssh -Y -A michal@www.ruska.it -t  zsh --login -c "./reprepro/schroot-reprepro"\
-                    ## todo: schroot --run-session --chroot $ID
-                    ## "./reprepro/process-incoming; ls -l reprepro/incoming/"
-            fi
-        fi
     done
 fi
 
