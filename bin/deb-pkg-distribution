@@ -3,20 +3,14 @@
 # Given paths to  debian/changelog, output the distribution
 # of the top/most recent entry
 
-use AptPkg::Cache;
-
-use Dpkg::Control::Info;
-use Dpkg::Control::Hash;
-use Dpkg::Control::Changelog;
-use Dpkg::Changelog::Entry;
 use Dpkg::Changelog::Debian;
 
-# use strict;
+use strict;
 
 my $filename=$ARGV[0];
 
 if ( -d $filename ) {
-    $filename=$filename .  "/debian/changelog";
+    $filename = $filename . "/debian/changelog";
 }
 
 my $c = Dpkg::Changelog::Debian->new();

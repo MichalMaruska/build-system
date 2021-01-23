@@ -1,20 +1,11 @@
 #! /usr/bin/perl
 
 # print the version string, out of debian/changelog
-#
-use AptPkg::Cache;
 
-use Dpkg::Control::Info;
-use Dpkg::Control::Hash;
-use Dpkg::Control::Changelog;
-use Dpkg::Changelog::Entry;
 use Dpkg::Changelog::Debian;
 
-
-
-
 #my $dir="."; . "/debian/changelog"
-my $filename=shift();
+my $filename = shift();
 my $c = Dpkg::Changelog::Debian->new();
 $c->load($filename);
 
