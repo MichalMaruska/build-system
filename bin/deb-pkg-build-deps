@@ -9,33 +9,30 @@ use Dpkg::Control::Changelog;
 # /usr/share/perl5/Dpkg/Deps.pm
 use Dpkg::Deps;
 
+use Getopt::Long::Descriptive;
 
-use Getopt::Mixed "nextOption";
+my $build_deps = 1;
+my $deps = 0;
 
-my $build_deps=0;
-my $deps=0;
-
-my $verbose=0;
-my $debug=0;
+my $verbose = 0;
+my $debug = 0;
 
 #### CMD line processsing:
-my @options=("help build-deps deps verbose d>verbose h>help b>build-deps s>deps");
-Getopt::Mixed::init( @options);
-my ($option, $value, $pretty);
+my ($opt, $usage) = describe_options(
+    'my-program %o <some-arg>',
+    [ 'deps|s', "installation dependencies only", {  } ],
+    [],
+    [ 'verbose|v',  "print extra stuff"            ],
+    [ 'help|h',     "print usage message and exit", { shortcircuit => 1 } ],
+    );
 
-while (($option, $value, $pretty) = nextOption()) {
-    if ($option eq "build-deps") {
-	$build_deps=1;
-	print STDERR "build deps\n";
-    } elsif ($option eq "deps") {
-	$deps=1;
-    } elsif ($option eq "verbose") {
-	# print STDERR "I'll be verbose!\n";
-	$debug=1;
-	$verbose=1;
-    };
+print($usage->text), exit if $opt->help;
+
+$verbose = $opt->verbose;
+if ($opt->deps) {
+    $build_deps = 0;
+    $deps = 1;
 }
-Getopt::Mixed::cleanup();
 
 
 my $file=shift();
@@ -47,19 +44,17 @@ unless  (-f $file) {
     die("non-existent file $file");
 }
 
-
 my $control = Dpkg::Control::Info->new($file);
-print STDERR "parsed $file\n";
+if ($verbose) {
+    print STDERR "parsed $file\n";
+}
 
 
 my $fields = $control->get_source();
 my $source_pkg = $fields->{Source};
-# build packages depend on the source package.
-# print "\npkg: ", $source_pkg, "\n";
 
 #   push @bd_list, $fields->{'Build-Depends-Arch'} if not $ignore_bd_arch;
 #   push @bd_list, $fields->{'Build-Depends-Indep'} if not $ignore_bd_indep;
-
 
 sub fun{
     my ($dep) = @_;
@@ -85,8 +80,6 @@ print STDERR "dependency string: $dep_string\n";
 #           rel:  binary -> source.
 # from this reorder.  possibly a cycle!
 
-
-
 my $dep_string ="";
 # fixme:
 if ($deps) {
@@ -99,26 +92,20 @@ if ($deps) {
 
     foreach $_ ($control->get_packages())
     {
-	print $_->{Package}, "\t", $source_pkg, "\n";
+        print $_->{Package}, "\t", $source_pkg, "\n";
 
-	my $depends = $_->{'Depends'};
-	print STDERR $depends, "\n";
+        my $depends = $_->{'Depends'};
+        print STDERR $depends, "\n";
 
-	# my $quoted_name= quotemeta "\${shlibs:Depends}";
-	# print STDERR $quoted_name, "\n";
-	# $depends =~ s/$quoted_name//;
+        # my $quoted_name= quotemeta "\${shlibs:Depends}";
+        # print STDERR $quoted_name, "\n";
+        # $depends =~ s/$quoted_name//;
 
-	$depends =~ s/\$\Q{shlibs:Depends}//;
-	$depends =~ s/\$\Q{misc:Depends}//;
-	# drop ${shlibs:Depends}, ${misc:Depends},
-	# print STDERR $depends, "\n";
-	$dep_string = deps_parse($depends);
-	deps_iterate($dep_string, \&fun);
+        $depends =~ s/\$\Q{shlibs:Depends}//;
+        $depends =~ s/\$\Q{misc:Depends}//;
+        # drop ${shlibs:Depends}, ${misc:Depends},
+        # print STDERR $depends, "\n";
+        $dep_string = deps_parse($depends);
+        deps_iterate($dep_string, \&fun);
     }
 }
-
-# $dep_list->simplify_deps($facts);
-#print $dep;
-    # error(_g('error occurred while parsing %s'),
-    #       'Build-Conflicts/Build-Conflicts-Arch/Build-Conflicts-Indep')
-    #     unless defined $dep;
