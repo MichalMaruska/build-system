@@ -1,3 +1,12 @@
+mmc-build-system (4.8) release; urgency=medium
+
+  [ Michal Maruska ]
+  * remove the functionality of ~/.dput.cf post_upload_command
+  * trim the list of imported perl modules.
+  * Migrate from Getopt::Mixed to Getopt::Long::Descriptive
+
+ --  <mmaruska@gmail.com>  Sun, 24 Jan 2021 02:14:11 +0100
+
 mmc-build-system (4.7) release; urgency=medium
 
   * add dependency for apt-perl
