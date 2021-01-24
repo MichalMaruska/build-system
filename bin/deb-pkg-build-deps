@@ -3,10 +3,7 @@
 # dump the Build-deps of a debian/control file.
 
 use Dpkg::Control::Info;
-use Dpkg::Control::Hash;
-use Dpkg::Control::Changelog;
-# ffap?
-# /usr/share/perl5/Dpkg/Deps.pm
+
 use Dpkg::Deps;
 
 use Getopt::Long::Descriptive;
