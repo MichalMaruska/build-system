@@ -1,3 +1,12 @@
+mmc-build-system (4.9) release; urgency=medium
+
+  [ Michal Maruska ]
+  * trim the list of imported perl modules.
+  * sq migrate
+  * dput-install: use awk to extract the git tag data
+
+ --  <mmaruska@gmail.com>  Mon, 15 Mar 2021 01:08:05 +0100
+
 mmc-build-system (4.8) release; urgency=medium
 
   [ Michal Maruska ]
