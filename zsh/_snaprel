@@ -1,4 +1,4 @@
-#compdef snap
+#compdef snaprel
 _arguments \
     '-b[--ignore]' \
     '{-i,--install}[install all]' \
