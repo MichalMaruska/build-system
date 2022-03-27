@@ -68,6 +68,14 @@ fi
 # fi
 
 
+which add-deb-git && add-deb-git $GBP_GIT_DIR/..
+# Generate stuff for  ./configure
+if [ -e auto ]
+then
+    ./auto
+fi
+
+
 if [[ $skip_build_depends != y ]]
 then
     DISTRO=sid
@@ -92,13 +100,6 @@ then
         # -- -f install
         #
     fi
-fi
-
-which add-deb-git && add-deb-git $GBP_GIT_DIR/..
-# Generate stuff for  ./configure
-if [ -e auto ]
-then
-    ./auto
 fi
 
 echo "------------------- pre-build-hook finished ----------"
