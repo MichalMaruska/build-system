@@ -62,10 +62,10 @@ else
     copy-snapshot-changelog
 fi
 
-if [ ! -e debian/control ]
-then
-    generate-debian-control
-fi
+# if [ ! -e debian/control ]
+# then
+#     generate-debian-control
+# fi
 
 
 if [[ $skip_build_depends != y ]]
