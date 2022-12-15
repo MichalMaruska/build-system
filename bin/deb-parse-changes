@@ -18,4 +18,4 @@ exit 0;
 
 my $source  = Parse::Debian::PackageDesc->new('/path/foo.dsc');
 my $pkg     = Parse::Debian::PackageDesc->new($changes_or_dsc,
-                                              gpg_homedir => '/dir/gnupg'); 
+                                              gpg_homedir => '/dir/gnupg');

@@ -12,7 +12,7 @@ my $debug=0;
 
 my ($opt, $usage) = describe_options(
     'my-program %o <some-arg>',
-    [ 'archonly|a', "only the architecture dependant", {  } ], # required => 0 
+    [ 'archonly|a', "only the architecture dependant", {  } ], # required => 0
     # [ 'archonly', "", {} ],
     [],
     [ 'verbose|v',  "print extra stuff"            ],

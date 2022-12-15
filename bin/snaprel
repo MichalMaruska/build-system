@@ -67,8 +67,8 @@ ARGS=($@)
 cd $(git rev-parse --show-toplevel)
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,ignore,sign,nosign,install,noinstall,pbuilder,version:,force,source,distro:,verbose,work,nocheck,keep,mk-build-deps \
-        --options bd:fhikmnpstuVv:w \
-        -- "$@" ) || { usage && exit 1 }
+    --options bd:fhikmnpstuVv:w \
+    -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
 while (( $# > 0 )) do
