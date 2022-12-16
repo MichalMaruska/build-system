@@ -80,6 +80,7 @@ dput_targets=()
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
 
+pre_build_hook=(pre-build-hook)
 
 if ! my_own_project # This scans the control/control:
 then
@@ -152,6 +153,8 @@ while (( $# > 0 )) do
           --pbuilder )
               # /usr/bin/
               # GBP_OPTIONS+=("--git-builder=git-pbuilder")
+              # skip build-dep by gbp:
+              pre_build_hook+=(-s)
               GBP_OPTIONS+=("--git-builder=debspawn.py build  --only binary --buildflags=-b focal")
               ;;
           --auto | -o)
@@ -305,7 +308,6 @@ export DPUT_TARGETS
 export GITSHA
 
 
-pre_build_hook=(pre-build-hook)
 dpkg_buildpackage_flags=(-nc)
 
 if [ "$ARCH" != "" ]; then
