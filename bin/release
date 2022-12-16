@@ -43,10 +43,25 @@ EOF
     unsetopt POSIX_ARGZERO
 }
 
+#### Setup defaults & initial state:
+
+# We need to invoke dch, and then somehow debuild.
+# So start collecting options for those:
+typeset -a DEBUILD_OPTIONS
+typeset -a DCH_OPTIONS
+DEBUILD_OPTIONS=()
+DCH_OPTIONS=()
+
+
 GITSHA=$(git rev-list --max-count=1 HEAD)
+# I have special make
+DEBUILD_OPTIONS+=(-eMAKEFLAGS -eGITSHA)
+
 DEBUG=y
 
-# defaults for options:
+# where does it come from? $DEB_BUILD_ARCH
+ARCH=""
+# Defaults for options:
 USER_DISTRIBUTION=""
 DISTRIBUTION=""
 
@@ -54,10 +69,10 @@ step=minor
 build_source=no
 FORCE=n
 
-# this is for the (pre/post) hooks
+# this is for the (pre/post) hooks .. for `dput-install'
 POSTBUILD_INSTALL_OPTIONS="-I"
 
-### Dput
+## Dput
 # same what I use in zlogin for MBS_TARGETS!
 typeset -T DPUT_TARGETS dput_targets :
 dput_targets=()
@@ -65,18 +80,15 @@ dput_targets=()
 typeset -a GBP_OPTIONS
 GBP_OPTIONS=()
 
-typeset -a DEBUILD_OPTIONS
-DEBUILD_OPTIONS=(-eMAKEFLAGS -eGITSHA)
-typeset -a DCH_OPTIONS
-DCH_OPTIONS=()
 
-# fixme: will be doubled
-if ! my_own_project;
+if ! my_own_project # This scans the control/control:
 then
     DCH_OPTIONS+=("--ignore-branch")
     GBP_OPTIONS+=("--git-ignore-branch")
 fi
 
+
+### process command line:
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version:,nocheck \
@@ -85,8 +97,6 @@ cmd_options=$(getopt --name $0 --shell bash \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
-# $DEB_BUILD_ARCH
-ARCH=""
 while (( $# > 0 )) do
       case $1 in
           --help | -h)
