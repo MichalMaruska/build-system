@@ -11,27 +11,34 @@ function usage()
 {
     setopt POSIX_ARGZERO
     cat <<EOF
-usage: ${0##*/} [+-r Distro] [+-a arch] [-m] [-p dput-target]* [-v version ] [-s] [-o]
+usage: ${0##*/} [options]
 
-by defaut:
-Distro .... previous from debian/changelog or ??
-Tag ... distro/version
+At the end
+git tag ... "distro/version"
 dput-target ... taken from MBS_TARGETS env variable
+possibly install on HOST
 
--a --arch    architecture
--h --help
+options:
+[+-a arch] [-m] [-p dput-target]* [-v version ] [-s] [-o]
+-r, --distro [distro]		package for that distribution (default host one), ignore debian/changelog?
+-a, --arch   architecture       default Host.
+
+--pbuilder
+
 -b --ignore  ... ignore Git branch
 -f --force ... regenerate & commit even if apparently debian/changelog ...
--i --install ...
--m --minor  ... increase the version only by minor step.
--o --auto  ... don't open the Editor -- Changelog is unverified.    DANGEROUS.
--s --source  ... build the tarball/source package too.
+-m --minor  ... increase the version only by minor step. Hint: semantics/changelog
 
---dput | -p [target] ... add named tput target.
---distr | -r [distro] ... package for that
+-s --source  ... build the tarball/source package too.
+-u         don't sign
+
+-p, --dput  [target] ... add named tput target.
 --tag  [name]  default  {distro}/
 
--u         don't sign
+-i --install ...
+-o --auto  ... don't open the Editor -- Changelog is unverified.    DANGEROUS?
+
+-h --help
 EOF
     unsetopt POSIX_ARGZERO
 }
