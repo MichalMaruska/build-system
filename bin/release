@@ -149,6 +149,11 @@ while (( $# > 0 )) do
               POSTBUILD_INSTALL_OPTIONS="-n"
               ;;
 
+          --pbuilder )
+              # /usr/bin/
+              # GBP_OPTIONS+=("--git-builder=git-pbuilder")
+              GBP_OPTIONS+=("--git-builder=debspawn.py build  --only binary --buildflags=-b focal")
+              ;;
           --auto | -o)
               # non-interactive/offline
               DCH_OPTIONS+=("--spawn-editor=snapshot")
