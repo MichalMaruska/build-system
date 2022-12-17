@@ -15,26 +15,26 @@
 
 copy-snapshot-changelog()
 {
-
     # So, git-xxx checks out from Git.
-    # But, before that, git-dch is run, and possibly  debian/changelog
-    # is not commited to git. -- I need to keep it there, to have increasing
+
+    # But, before that, git-dch is run, and possibly debian/changelog
+    # is `not' commited to git. -- I need to keep it there, to have increasing
     # version number!
-    # So,  git-xxx would retrieve previous version.
+    # So, git-xxx would retrieve previous version.
 
-    # Work-around (?) for git-dch not being able to write to a specific file
+    # This works together with  ./snaprel which creates the changelog!
 
-    # This works together with  ./snap, which creates the changelog!
-
-
-    local_dir=$(pwd)
-    # alternatively: pushd
-    cd $GBP_GIT_DIR/..
-
-    cp debian/changelog $local_dir/debian/changelog
-
-    # popd
-    cd $local_dir
+    # cwd is the build/working copy
+    # GBP_GIT_DIR is the .git directory.
+    # what if it's a worktree ?
+    cp --target-directory=debian $GBP_GIT_DIR/../debian/changelog
+    # this is useless:
+    # DISTRIBUTION=focal
+    if false
+    then
+        sed --regexp-extended -e "1s/([[:alnum:]]+) (\([[:graph:]]+\)) [[:alnum:]]+(;.*)$/\1 \2 $DISTRIBUTION\3/" \
+            $GBP_GIT_DIR/../debian/changelog > $local_dir/debian/changelog
+    fi
 }
 
 arch=""
@@ -55,6 +55,7 @@ done
 shift $(( OPTIND - 1 ))
 OPTIND=1
 
+set -x
 if [ $GBP_GIT_DIR = $(pwd) ]; then
     echo "Your export-dir of git-buildpackage is unset" >&2
     echo "So your build directory is the same as (git) Source dir" >&2
@@ -75,7 +76,6 @@ then
     ./auto
 fi
 
-
 if [[ $skip_build_depends != y ]]
 then
     DISTRO=sid
@@ -93,6 +93,7 @@ then
         # why not debi --with-depends --tool ?
         # install
         (unset TMPDIR;
+         set -x
          /usr/bin/mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y -f"
          )
         #"echo --"
@@ -102,4 +103,4 @@ then
     fi
 fi
 
-echo "------------------- pre-build-hook finished ----------"
+echo "------------------- pre-build-hook finished ----------" >&2
