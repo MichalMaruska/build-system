@@ -1,3 +1,20 @@
+mmc-build-system (4.10) release; urgency=medium
+
+  * Rename to snaprel to avoid conflict with "snapd" package
+  * Disable generate-debian-control
+  * Run ./auto befor running mk-build-deps
+  * format
+  * spacing -- tabs
+  * release: improve usage()
+  * release: reorder, comment
+  * --pbuilder to invoke debspawn (todo: rename)
+  * pbuilder = debspawn -> skip installing build-depends
+  * pre-build-hook: explain why d/changelog is copied over
+  * release: drop tracing
+  * release: formalize use of debspawn for --distribution
+
+ -- Michal Maruska <mmaruska@gmail.com>  Tue, 20 Dec 2022 21:52:34 +0100
+
 mmc-build-system (4.9) release; urgency=medium
 
   [ Michal Maruska ]
