@@ -293,13 +293,11 @@ function decide_git_tag()
 
 if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
 
-{set -x
- if [[ -z "$ARCH" ]]; then
+if [[ -z "$ARCH" ]]; then
     decide_git_tag
- else
-     TAGOPTIONS=()
- fi
-}
+else
+    TAGOPTIONS=()
+fi
 
 
 echo exporting DPUT_TARGETS $DPUT_TARGETS
