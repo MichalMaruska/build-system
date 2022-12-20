@@ -23,8 +23,6 @@ options:
 -r, --distro [distro]		package for that distribution (default host one), ignore debian/changelog?
 -a, --arch   architecture       default Host.
 
---pbuilder
-
 -b --ignore  ... ignore Git branch
 -f --force ... regenerate & commit even if apparently debian/changelog ...
 -m --minor  ... increase the version only by minor step. Hint: semantics/changelog
@@ -92,7 +90,7 @@ fi
 ### process command line:
 
 cmd_options=$(getopt --name $0 --shell bash \
-    --longoptions help,arch,dput,ignore,install,noinstall,pbuilder,tag,version:,nocheck \
+    --longoptions help,arch,dput,ignore,install,noinstall,tag,version:,nocheck \
     --longoptions force,source,distro:minor,major \
     --options ha:bfr:T:p:iIv:ousmM \
     -- "$@" ) || { usage && exit 1 }
@@ -123,8 +121,6 @@ while (( $# > 0 )) do
           --distro | -r)
               shift
               USER_DISTRIBUTION="$1"
-              # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
-              GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
               ;;
           --tag | -T )
               shift
@@ -150,13 +146,6 @@ while (( $# > 0 )) do
               POSTBUILD_INSTALL_OPTIONS="-n"
               ;;
 
-          --pbuilder )
-              # /usr/bin/
-              # GBP_OPTIONS+=("--git-builder=git-pbuilder")
-              # skip build-dep by gbp:
-              pre_build_hook+=(-s)
-              GBP_OPTIONS+=("--git-builder=debspawn.py build  --only binary --buildflags=-b focal")
-              ;;
           --auto | -o)
               # non-interactive/offline
               DCH_OPTIONS+=("--spawn-editor=snapshot")
@@ -213,15 +202,24 @@ fi
 
 
 
-if [ $DEBUG = y ]; then info "guessing distribution";fi
-
 ## Prepare for the debian/changelog entry:
 if [ "$DISTRIBUTION" = "" ]; then
+    if [ $DEBUG = y ]; then info "guessing distribution";fi
     # todo:
     # when archi  ALL -> release
     # otherwise   lsb_release --short --codename
     DISTRIBUTION=${MBS_DISTRO:-release}
 fi
+
+if [[ -n "$USER_DISTRIBUTION" ]]; then
+    # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
+    GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
+
+    # Skip installing build-dep by gbp:
+    pre_build_hook+=(-s)
+    GBP_OPTIONS+=("--git-builder=debspawn build --only binary --buildflags=-b $USER_DISTRIBUTION")
+fi
+
 
 # I want to be able to repeat the run.
 # So, update the changelog and git tag only if needed.
@@ -308,6 +306,7 @@ export GITSHA
 
 dpkg_buildpackage_flags=(-nc)
 
+# fixme: this ignore USER_DISTRIBUTION
 if [ "$ARCH" != "" ]; then
     dpkg_buildpackage_flags+=(-B)
     # this receives all args from gbp buildpackage  unless --git- prefix.
@@ -339,7 +338,6 @@ args=(
     # this could be inside the container, partly
     $PREVERSION_HOOK_NAME="$pre_build_hook"
     # this inside the container:
-    --git-builder="$BUILDER"
     --git-postbuild="$POSTBUILD"
     $TAGOPTIONS
     $GBP_OPTIONS
