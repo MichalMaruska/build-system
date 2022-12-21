@@ -1,0 +1,11 @@
+#compdef release
+
+# '(-e --excluded-after)'{-c,--cool-option}'[explanation what it does]:message:action'
+# message must at least be a space?
+#
+
+_arguments \
+  {-f,--force}'[regenerate a new  commit]' \
+  {-r,--distro}'[build for a distro in container]: :(focal)' \
+  {-b,--ignore}"[don't check Git branch]"
+
