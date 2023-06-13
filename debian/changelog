@@ -1,3 +1,11 @@
+mmc-build-system (4.11) release; urgency=medium
+
+  * add Zsh completion for _release
+  * Improve Zsh completion for _snaprel
+  * Always tell dput-install the changes file: it can be in distro subdirectory
+
+ -- Michal Maruska <mmaruska@gmail.com>  Tue, 13 Jun 2023 15:18:39 +0200
+
 mmc-build-system (4.10) release; urgency=medium
 
   * Rename to snaprel to avoid conflict with "snapd" package
