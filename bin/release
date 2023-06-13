@@ -211,15 +211,18 @@ if [ "$DISTRIBUTION" = "" ]; then
     DISTRIBUTION=${MBS_DISTRO:-release}
 fi
 
+artifacts_dir=/gbp
 if [[ -n "$USER_DISTRIBUTION" ]]; then
     # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
     GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
 
     # Skip installing build-dep by gbp:
     pre_build_hook+=(-s)
-    GBP_OPTIONS+=("--git-builder=debspawn build --only binary --buildflags=-b $USER_DISTRIBUTION")
-fi
+    # all this is ONE argument?
+    GBP_OPTIONS+=("--git-builder=debspawn --config ~/debspawn.toml build --only binary --buildflags=-b $USER_DISTRIBUTION")
 
+    artifacts_dir=/gbp/$USER_DISTRIBUTION
+fi
 
 # I want to be able to repeat the run.
 # So, update the changelog and git tag only if needed.
@@ -306,12 +309,16 @@ export GITSHA
 
 dpkg_buildpackage_flags=(-nc)
 
+name=$(deb-pkg-name debian/control)
+version=$(deb-pkg-version debian/changelog)
+host_architecture=$(dpkg-architecture -q DEB_HOST_ARCH)
+
+changesfile="$artifacts_dir/${name}_${version}_${host_architecture}.changes"
 # fixme: this ignore USER_DISTRIBUTION
 if [ "$ARCH" != "" ]; then
     dpkg_buildpackage_flags+=(-B)
     # this receives all args from gbp buildpackage  unless --git- prefix.
-    name=$(deb-pkg-name  debian/control)
-    changesfile="/gbp/${name+$name-}$ARCH.changes"
+    changesfile="$artifacts_dir/${name+$name-}$ARCH.changes"
     BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
     export DEB_HOST_ARCH=$ARCH
     pre_build_hook+=( -a $ARCH)
@@ -324,7 +331,7 @@ fi
 if [ "$ARCH" != "" ]; then
     POSTBUILD="dput-install -r -n $changesfile"
 else
-    POSTBUILD="dput-install -r $POSTBUILD_INSTALL_OPTIONS"
+    POSTBUILD="dput-install -r -n $changesfile $POSTBUILD_INSTALL_OPTIONS"
 fi
 
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
