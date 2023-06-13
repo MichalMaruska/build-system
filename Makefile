@@ -8,7 +8,7 @@ ZSH_COMPLETION_DIR := /usr/share/zsh/vendor-completions/
 
 BINFILES:=$(wildcard bin/*)
 SHARED_FILES:=$(wildcard share/*)
-COMPLETION_FILES := $(wildcard zsh/_*)
+COMPLETION_FILES := $(wildcard zsh/Completion/_*)
 
 all:
 	echo ""
