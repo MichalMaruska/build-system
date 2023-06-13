@@ -1,7 +1,11 @@
 #compdef snaprel
+
+# see ~/repo/conan-zsh-completion/_conan
+# but I had a better one!
+# ~/repo/git-hierarchy/zsh/creating-new-one
 _arguments \
-    '{--mk-build-deps,-m}[requires root]' \
+    {--mk-build-deps,-m}'[requires root]' \
     '-b[--ignore]' \
-    '{-i,--install}[install all]' \
-    '{--noinstall}[do not install]' \
+    {-i,--install}'[install all]' \
+    --noinstall'[do not install]' \
     '--nocheck[skip signing]'
