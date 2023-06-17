@@ -313,6 +313,8 @@ name=$(deb-pkg-name debian/control)
 version=$(deb-pkg-version debian/changelog)
 host_architecture=$(dpkg-architecture -q DEB_HOST_ARCH)
 
+# fixme:
+version=${version#*:}
 changesfile="$artifacts_dir/${name}_${version}_${host_architecture}.changes"
 # fixme: this ignore USER_DISTRIBUTION
 if [ "$ARCH" != "" ]; then
