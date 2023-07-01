@@ -222,6 +222,10 @@ if [[ -n "$USER_DISTRIBUTION" ]]; then
     GBP_OPTIONS+=("--git-builder=debspawn --config ~/debspawn.toml build --only binary --buildflags=-b $USER_DISTRIBUTION")
 
     artifacts_dir=/gbp/$USER_DISTRIBUTION
+else
+    dpkg_buildpackage_flags=(--no-pre-clean)
+    dpkg_buildpackage_flags+=(-b)
+    GBP_OPTIONS+=("--git-builder=debuild $DEBUILD_OPTIONS $dpkg_buildpackage_flags")
 fi
 
 # I want to be able to repeat the run.
@@ -306,9 +310,6 @@ export DPUT_TARGETS
 
 export GITSHA
 
-
-dpkg_buildpackage_flags=(-nc)
-
 name=$(deb-pkg-name debian/control)
 version=$(deb-pkg-version debian/changelog)
 host_architecture=$(dpkg-architecture -q DEB_HOST_ARCH)
@@ -324,9 +325,6 @@ if [ "$ARCH" != "" ]; then
     BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
     export DEB_HOST_ARCH=$ARCH
     pre_build_hook+=( -a $ARCH)
-else
-    dpkg_buildpackage_flags+=(-b)
-    BUILDER="debuild $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
 fi
 
 # fixme: this install should be done as part of the builder.
