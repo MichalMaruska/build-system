@@ -325,13 +325,10 @@ if [ "$ARCH" != "" ]; then
     BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
     export DEB_HOST_ARCH=$ARCH
     pre_build_hook+=( -a $ARCH)
-fi
 
-# fixme: this install should be done as part of the builder.
-if [ "$ARCH" != "" ]; then
     POSTBUILD="dput-install -r -n $changesfile"
 else
-    POSTBUILD="dput-install -r -n $changesfile $POSTBUILD_INSTALL_OPTIONS"
+    POSTBUILD="dput-install -r -n $POSTBUILD_INSTALL_OPTIONS $changesfile"
 fi
 
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
