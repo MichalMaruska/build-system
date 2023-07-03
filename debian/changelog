@@ -1,3 +1,14 @@
+mmc-build-system (4.12) release; urgency=medium
+
+  [ Michal Maruska ]
+  * fix installing zsh (completion) files
+  * fix completion
+  * adapt: the changesfile filename does not contain the version Epoch
+  * fix: BUILDER calculation is now ignored, so at least one part is shifted (todo:)
+  * pre-build-hook: run ./auto only after installing debian build-dependencies
+
+ --  <mmaruska@gmail.com>  Mon, 03 Jul 2023 12:44:47 +0200
+
 mmc-build-system (4.11) release; urgency=medium
 
   * add Zsh completion for _release
