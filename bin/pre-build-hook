@@ -38,6 +38,7 @@ copy-snapshot-changelog()
 }
 
 arch=""
+# this should be obsolete/deprecated .. use dpkg-checkbuilddeps (to avoid root password if possible)
 skip_build_depends=n
 while getopts :a:s OPT; do
     case $OPT in
@@ -88,19 +89,22 @@ then
                         --verbose -- \
                         /usr/bin/mk-build-deps --install --remove \
                         "--tool=\"apt -o Debug::pkgProblemResolver=yes --no-install-recommends -y\""
-        # debpkg -i /run/tmp/apt-tmp/apt-build-deps_1.8.0\~alpha3-maruska\~1.gbp342225_amd64.deb
     else
         # why not debi --with-depends --tool ?
         # install
-        (unset TMPDIR;
-         set -x
-         /usr/bin/mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y -f"
+        (
+            # One publishes to hardcoded /tmp and then?
+            # or is it permission issue?
+            unset TMPDIR;
+            set -x
+            /usr/bin/mk-build-deps --install --remove --root-cmd=sudo --tool="apt --no-install-recommends -y -f"
          )
-        #"echo --"
         # debpkg -i   -> conflict with -f option
-        # -- -f install
-        #
     fi
+else
+    (set -x
+     dpkg-checkbuilddeps
+     )
 fi
 
 # Generate stuff for  ./configure
