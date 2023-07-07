@@ -200,8 +200,6 @@ if [ "$dput_targets" = "" ]; then
 fi
 
 
-
-
 ## Prepare for the debian/changelog entry:
 if [ "$DISTRIBUTION" = "" ]; then
     if [ $DEBUG = y ]; then info "guessing distribution";fi
@@ -211,6 +209,9 @@ if [ "$DISTRIBUTION" = "" ]; then
     DISTRIBUTION=${MBS_DISTRO:-release}
 fi
 
+
+
+## Decide how to build -- containers:
 artifacts_dir=/gbp
 if [[ -n "$USER_DISTRIBUTION" ]]; then
     # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
@@ -228,7 +229,8 @@ else
     GBP_OPTIONS+=("--git-builder=debuild $DEBUILD_OPTIONS $dpkg_buildpackage_flags")
 fi
 
-# I want to be able to repeat the run.
+
+## I want to be able to repeat the run.
 # So, update the changelog and git tag only if needed.
 
 ## get the current version string.
@@ -314,10 +316,11 @@ name=$(deb-pkg-name debian/control)
 version=$(deb-pkg-version debian/changelog)
 host_architecture=$(dpkg-architecture -q DEB_HOST_ARCH)
 
+
+## What do do with the artifacts:
 # fixme:
 version=${version#*:}
 changesfile="$artifacts_dir/${name}_${version}_${host_architecture}.changes"
-# fixme: this ignore USER_DISTRIBUTION
 if [ "$ARCH" != "" ]; then
     dpkg_buildpackage_flags+=(-B)
     # this receives all args from gbp buildpackage  unless --git- prefix.
@@ -327,8 +330,12 @@ if [ "$ARCH" != "" ]; then
     pre_build_hook+=( -a $ARCH)
 
     POSTBUILD="dput-install -r -n $changesfile"
+elif [[ -n "$USER_DISTRIBUTION" ]]
+then
+    # do not install
+    POSTBUILD="dput-install -r -n $changesfile"
 else
-    POSTBUILD="dput-install -r -n $POSTBUILD_INSTALL_OPTIONS $changesfile"
+    POSTBUILD="dput-install -r $POSTBUILD_INSTALL_OPTIONS $changesfile"
 fi
 
 # -sa dpkg-genchanges: force inclusion of original sources (in the changes file)
