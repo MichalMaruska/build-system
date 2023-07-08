@@ -54,6 +54,8 @@ fi
 
     git log --max-count=1 --compact-summary --stat
 
+    sleep 2
+    ~/reprepro/deploy
 )
 # git push github main
 
