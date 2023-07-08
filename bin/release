@@ -91,7 +91,7 @@ fi
 
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,tag,version:,nocheck \
-    --longoptions force,source,distro:minor,major \
+    --longoptions force,source,distro:,minor,major \
     --options ha:bfr:T:p:iIv:ousmM \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
@@ -220,7 +220,7 @@ if [[ -n "$USER_DISTRIBUTION" ]]; then
     # Skip installing build-dep by gbp:
     pre_build_hook+=(-s)
     # all this is ONE argument?
-    GBP_OPTIONS+=("--git-builder=debspawn --config ~/debspawn.toml build --only binary --buildflags=-b $USER_DISTRIBUTION")
+    GBP_OPTIONS+=("--git-builder=debspawn --config ~/config/debspawn.toml build --only binary --buildflags=-b $USER_DISTRIBUTION")
 
     artifacts_dir=/gbp/$USER_DISTRIBUTION
 else
