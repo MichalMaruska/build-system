@@ -1,0 +1,57 @@
+#!/usr/bin/zsh -feu
+
+# set -x
+# /gbp/xorg-server_21.1.7-3-maruska_amd64.changes
+CHANGESFILE=$1
+
+extract()
+{
+    local KEYWORD=$1
+    # sed -e '/^$KEYWORD: (.*)$/\1/p'
+    sed -n -e "s/^$KEYWORD: \(.*\)$/\1/p" $CHANGESFILE
+}
+
+
+
+# /gbp/xorg-server_21.1.7-3-maruska_amd64.changes
+
+# Version: 2:21.1.7-3-maruska
+# Distribution: unstable
+# how to convert to SID?
+# Source: xorg-server
+# reprepro listfilter    sid 'Source (% xorg-server)'
+# format: ${$identifier} ${package} ${version}\n
+# add to git
+ADD=(git add --force)
+# -f = Allow adding otherwise ignored files.
+
+source=$(extract Source)
+version=$(extract Version)
+distro=$(extract Distribution)
+
+if [[ $distro = unstable ]];
+then
+    distro=sid
+fi
+# go into the GIT:
+(
+    cd ~/reprepro
+    # todo: Ensure nothing is staged
+
+    reprepro --list-format '${$fullfilename}\n'  listfilter sid "Source (% $source)" |\
+        xargs git add
+    # --verbose
+
+    # why Packages and Packages.gz ??
+    git add dists/$distro
+
+
+    # is anything scheduled?
+    if ! git diff --cached --exit-code &> /dev/null
+    then
+        git commit -m "upgrade packages from $source"
+    fi
+)
+# git push github main
+
+# see deploy script
