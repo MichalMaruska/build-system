@@ -1,3 +1,13 @@
+mmc-build-system (4.14) release; urgency=medium
+
+  [ Michal Maruska ]
+  * Use dpkg-checkbuilddeps if mk-build-deps is supressed
+  * release: don't install if for a different DISTRO
+  * add reprepro-git-commit, and invoke it!
+  * fix release: --distro option to use ~/config/debspawn.toml
+
+ --  <mmaruska@gmail.com>  Sat, 08 Jul 2023 22:14:48 +0200
+
 mmc-build-system (4.13) release; urgency=medium
 
   [ Michal Maruska ]
