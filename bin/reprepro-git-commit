@@ -37,8 +37,8 @@ fi
 (
     cd ~/reprepro
     # todo: Ensure nothing is staged
-
-    reprepro --list-format '${$fullfilename}\n'  listfilter sid "Source (% $source)" |\
+    # if the package == Source then Source field is NOT present in the *.deb !
+    reprepro --list-format '${$fullfilename}\n'  listfilter $distro "Source (% $source) | Package (% $source)" |\
         xargs git add
     # --verbose
 
