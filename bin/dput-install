@@ -207,10 +207,11 @@ else
     done
 fi
 
-reprepro-git-commit $GBP_CHANGES_FILE
-
 if [[ $release = y ]]
 then
+    reprepro-git-commit $GBP_CHANGES_FILE
+
+
     # tag=$(deb-parse-changes $GBP_CHANGES_FILE)
     tag=$(awk -F ': '  -e  \
               '/Version: / {version=$2}
