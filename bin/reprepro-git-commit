@@ -1,29 +1,44 @@
 #!/usr/bin/zsh -feu
 
-# set -x
-# /gbp/xorg-server_21.1.7-3-maruska_amd64.changes
+set -x
 CHANGESFILE=$1
 
-extract()
-{
-    local KEYWORD=$1
-    # sed -e '/^$KEYWORD: (.*)$/\1/p'
-    sed -n -e "s/^$KEYWORD: \(.*\)$/\1/p" $CHANGESFILE
-}
-
-
-
-# /gbp/xorg-server_21.1.7-3-maruska_amd64.changes
+# Format of *.changes:
 
 # Version: 2:21.1.7-3-maruska
 # Distribution: unstable
 # how to convert to SID?
 # Source: xorg-server
-# reprepro listfilter    sid 'Source (% xorg-server)'
-# format: ${$identifier} ${package} ${version}\n
-# add to git
-ADD=(git add --force)
-# -f = Allow adding otherwise ignored files.
+
+extract()
+{
+    local KEYWORD=$1
+    sed -n -e "s/^$KEYWORD: \(.*\)$/\1/p" $CHANGESFILE
+}
+
+usage()
+{
+    cat <<EOF
+usage: ${0##*/} [+-h} [--] package-version.changes
+
+Given a debian changes file from a build, assuming
+it has been processed in the reprepro installation,
+update the Git repository of the reprepro.
+EOF
+}
+while getopts :h OPT; do
+    case $OPT in
+        h|+h)
+            usage
+            exit 0
+            ;;
+        *)
+            usage >&2
+            exit 2
+    esac
+done
+shift OPTIND-1
+OPTIND=1
 
 source=$(extract Source)
 version=$(extract Version)
@@ -33,17 +48,19 @@ if [[ $distro = unstable ]];
 then
     distro=sid
 fi
+
+REPREPRO_DIR=~/reprepro
 # go into the GIT:
 (
-    cd ~/reprepro
+    cd $REPREPRO_DIR
     # todo: Ensure nothing is staged
     # if the package == Source then Source field is NOT present in the *.deb !
     reprepro --list-format '${$fullfilename}\n'  listfilter $distro "Source (% $source) | Package (% $source)" |\
         xargs git add
     # --verbose
 
-    # why Packages and Packages.gz ??
-    git add dists/$distro
+    # todo: why Packages and Packages.gz ??
+    git add --force dists/$distro
 
 
     # is anything scheduled?
@@ -54,9 +71,6 @@ fi
 
     git log --max-count=1 --compact-summary --stat
 
-    sleep 2
-    ~/reprepro/deploy
+    sleep 1
+    $REPREPRO_DIR/deploy
 )
-# git push github main
-
-# see deploy script
