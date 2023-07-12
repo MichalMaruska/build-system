@@ -1,3 +1,15 @@
+mmc-build-system (4.15) release; urgency=medium
+
+  [ Michal Maruska ]
+  * fix reprepro query
+  * push reprepro only for 'release'
+  * reprepro-git-commit: show the stat
+  * reprepro-git-commit: deploy automatically
+  * dput-install: store the hierarchy in the release tag
+  * reprepro-git-commit: clean & usage, -h option
+
+ --  <mmaruska@gmail.com>  Thu, 13 Jul 2023 00:18:19 +0200
+
 mmc-build-system (4.14) release; urgency=medium
 
   [ Michal Maruska ]
