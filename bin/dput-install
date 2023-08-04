@@ -222,10 +222,10 @@ END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
         # I make the tag with hierarchy:
         if [[ -z $(git-sum) && -z $(git-segment) ]]
         then
-            # todo: the whole graph or from the current branch?
-           git-store-hierarchy -t $tag HEAD
-        else
             git tag -m 'release' $tag HEAD
+        else
+            # todo: the whole graph or from the current branch?
+            git-store-hierarchy -t $tag HEAD
         fi
     fi
 fi
