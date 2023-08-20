@@ -1,3 +1,11 @@
+mmc-build-system (4.17) release; urgency=medium
+
+  [ Michal Maruska ]
+  * fix the decision to store Hierarchy in the tag
+  * dput-install: fix the hierarchy storing into tag
+
+ --  <mmaruska@gmail.com>  Sun, 20 Aug 2023 17:32:25 +0200
+
 mmc-build-system (4.16) release; urgency=medium
 
   [ Michal Maruska ]
