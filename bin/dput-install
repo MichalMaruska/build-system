@@ -217,7 +217,7 @@ then
               '/Version: / {version=$2}
 /Distribution:/ {distribution=$2}
 END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
-    if ! git rev-parse --tags="$tag*" &> /dev/null
+    if [[ -z $(git rev-parse --tags="$tag*" &> /dev/null) ]]
     then
         # I make the tag with hierarchy:
         if [[ -z $(git-sum) && -z $(git-segment) ]]
@@ -225,7 +225,7 @@ END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
             git tag -m 'release' $tag HEAD
         else
             # todo: the whole graph or from the current branch?
-            git-store-hierarchy -t $tag HEAD
+            git-store-hierarchy -t $tag $(git branch --show-current)
         fi
     fi
 fi
