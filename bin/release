@@ -80,7 +80,8 @@ GBP_OPTIONS=()
 
 pre_build_hook=(pre-build-hook)
 
-if ! my_own_project # This scans the control/control:
+if ! my_own_project || [[ $(git branch --show-current) = main ]]
+# This scans the control/control:
 then
     DCH_OPTIONS+=("--ignore-branch")
     GBP_OPTIONS+=("--git-ignore-branch")
