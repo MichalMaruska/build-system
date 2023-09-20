@@ -302,7 +302,9 @@ function decide_git_tag()
 if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
 
 if [[ -z "$ARCH" ]]; then
-    decide_git_tag
+    : tag is done by dput-install
+    # decide_git_tag
+    TAGOPTIONS=()
 else
     TAGOPTIONS=()
 fi
