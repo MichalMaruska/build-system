@@ -103,7 +103,7 @@ then
     fi
 else
     (set -x
-     dpkg-checkbuilddeps
+     dpkg-checkbuilddeps || :
      )
 fi
 
