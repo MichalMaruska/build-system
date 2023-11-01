@@ -213,10 +213,13 @@ then
 
 
     # tag=$(deb-parse-changes $GBP_CHANGES_FILE)
+    # so convert it somehow!
     tag=$(awk -F ': '  -e  \
               '/Version: / {version=$2}
 /Distribution:/ {distribution=$2}
 END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
+    # bug:  2:version is invalid tag!
+    : ${tag::=${tag/:/_}}
     if [[ -z $(git rev-parse --tags="$tag*" &> /dev/null) ]]
     then
         # I make the tag with hierarchy:
