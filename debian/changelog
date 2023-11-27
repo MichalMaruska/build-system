@@ -1,3 +1,10 @@
+mmc-build-system (4.21) release; urgency=medium
+
+  * dput-install: don't use ":" inside tag name
+  * invoke post-tag-hook `manually' since we handle tag creation
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 27 Nov 2023 12:48:25 +0100
+
 mmc-build-system (4.20) release; urgency=medium
 
   * use debspawn for all builds

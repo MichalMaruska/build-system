@@ -224,8 +224,6 @@ calculate_for_distro()
     # output:
 
     # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
-    # Skip installing build-dep by gbp:
-    pre_build_hook+=(-s)
 
     # all this is one argument!
     GBP_OPTIONS+=("--git-builder=debspawn --config $debspawn_config_toml build --only binary --buildflags=-b $distribution")
@@ -236,6 +234,8 @@ calculate_for_distro()
 if [[ -n "$USER_DISTRIBUTION" ]]; then
     GBP_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
     calculate_for_distro $USER_DISTRIBUTION
+    # Skip installing build-dep by gbp:
+    pre_build_hook+=(-s)
 else
     # I still want to use debspawn:
     if false; then
@@ -292,13 +292,14 @@ host_architecture=$(dpkg-architecture -q DEB_HOST_ARCH)
 # fixme:
 version=${version#*:}
 changesfile="$artifacts_dir/${name}_${version}_${host_architecture}.changes"
+
 if [ "$ARCH" != "" ]; then
     dpkg_buildpackage_flags+=(-B)
     # this receives all args from gbp buildpackage  unless --git- prefix.
     changesfile="$artifacts_dir/${name+$name-}$ARCH.changes"
     BUILDER="nspawn-debuild -a $ARCH -n $changesfile -- $DEBUILD_OPTIONS $dpkg_buildpackage_flags"
     export DEB_HOST_ARCH=$ARCH
-    pre_build_hook+=( -a $ARCH)
+    pre_build_hook+=(-a $ARCH)
 
     POSTBUILD="dput-install -r -n $changesfile"
 elif [[ -n "$USER_DISTRIBUTION" ]]
