@@ -272,10 +272,9 @@ fi
 
 if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
 
-# a tag is created by dput-install
+# note: a tag is created by dput-install
 # so this will not run, since gbp is unaware of the tag!
 TAGOPTIONS=(--git-posttag=post-tag-hook)
-
 
 
 echo exporting DPUT_TARGETS $DPUT_TARGETS

@@ -1,6 +1,9 @@
 #! /usr/bin/zsh -feu
 
+# SHORT:
 # Given a .changes file, upload & install it (partially).
+# Also, create git tag & do the git push to remote
+
 
 # This is just a wrapper around debi & dput (or reprepro)
 
@@ -10,23 +13,21 @@
 # It receives GBP_* vars, though.
 
 # The following `env' variables can specify the behaviour:
-# DPUT_TARGETS & DPUT_OPTIONS ... passed to dput(1) maybe with addition of more options.
 # INSTALL_IMMEDIATELY ...  whether to invoke debi(1).
+# DPUT_TARGETS
+# DPUT_OPTIONS ... is passed to dput(1) maybe with addition of more options.
 
 # todo:
-# could use GBP_CHANGES_FILE even after building with db!
+# could use GBP_CHANGES_FILE even after building with debuild!
 
 # 2/ When invoked manually, we use:
 # MBS_SNAP_TARGETS in place of DPUT_TARGETS
 
+# mmc: is the cwd in the git repo?
 
-
-
-#source @@SHAREDIR@@/functions
+# todo: source @@SHAREDIR@@/functions
 source /usr/share/build-system/functions.sh
 possibly_trace
-
-
 
 function usage(){
     setopt POSIX_ARGZERO
@@ -51,13 +52,11 @@ EOF
 # fixme: this is set in ~/.gbp.conf (by git-buildpackage)
 # DEBRELEASE_DEBS_DIR ?
 
-# fixme: /run/tmp !!!
 if [[ -n ${GBP_BUILD_DIR-} ]]; then
     BUILD_AREA=${GBP_BUILD_DIR%/*}
 else
+    # fixme: $TMPDIR/gbp !!!
     BUILD_AREA=/gbp
-    #echo "don't know where is the build area, .changes file"
-    #exit 1
 fi
 
 # I like these defaults better:
