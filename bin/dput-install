@@ -230,5 +230,6 @@ END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
             # todo: the whole graph or from the current branch?
             git-store-hierarchy -t $tag $(git branch --show-current)
         fi
+        post-tag-hook
     fi
 fi
