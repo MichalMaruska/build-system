@@ -1,3 +1,10 @@
+mmc-build-system (4.22) release; urgency=medium
+
+  * fix getting the current branch
+  * more comments on the git TAG handling
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 27 Nov 2023 13:31:45 +0100
+
 mmc-build-system (4.21) release; urgency=medium
 
   * dput-install: don't use ":" inside tag name
