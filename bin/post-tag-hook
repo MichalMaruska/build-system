@@ -4,7 +4,7 @@
 
 # This can be run manually inside the (git) source tree.
 : ${GBP_TAG=$(git describe --tags)}
-: ${GBP_BRANCH=$(git name-rev --name-only HEAD)}
+: ${GBP_BRANCH=$(git branch --show-current)}
 
 
 possibly_push_into()
