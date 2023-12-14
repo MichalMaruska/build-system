@@ -245,6 +245,9 @@ else
     else
         # host_distro=sid
         calculate_for_distro sid
+        # Skip installing build-dep by gbp:
+        pre_build_hook+=(-s)
+        # but changelog should list: unstable
     fi
 fi
 
