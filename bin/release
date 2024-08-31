@@ -1,5 +1,10 @@
 #! /bin/zsh -euf
 
+# todo: if on `main' ignore, or patch reprepro!
+
+# bug: -r but 'release' (changelog should mention it!)
+
+
 source /usr/share/build-system/functions.sh
 # set -x cannot be done in a functions?
 eval $(possibly_trace)
@@ -13,30 +18,36 @@ function usage()
     cat <<EOF
 usage: ${0##*/} [options]
 
-At the end
-git tag ... "distro/version"
-dput-target ... taken from MBS_TARGETS env variable
-possibly install on HOST
+DESCRIPTION:
+invoke gbp to create Debian binary package, from a git repository.
 
-options:
+- git tag ... "distro/version" only on success.
+- upload (where) ... dput-target ... taken from MBS_TARGETS env variable
+- install (possibly) on HOST
+
+OPTIONS:
 [+-a arch] [-m] [-p dput-target]* [-v version ] [-s] [-o]
--r, --distro [distro]		package for that distribution (default host one), ignore debian/changelog?
--a, --arch   architecture       default Host.
 
+General:
 -b --ignore  ... ignore Git branch
 -f --force ... regenerate & commit even if apparently debian/changelog ...
 -m --minor  ... increase the version only by minor step. Hint: semantics/changelog
+--tag  [name]  default  {distro}/
+-i --install ...
+-o --auto  ... don't open the Editor -- Changelog is unverified.    DANGEROUS?
+-h --help
 
+
+Packaging:
 -s --source  ... build the tarball/source package too.
 -u         don't sign
 
 -p, --dput  [target] ... add named tput target.
---tag  [name]  default  {distro}/
 
--i --install ...
--o --auto  ... don't open the Editor -- Changelog is unverified.    DANGEROUS?
+Build environment:
+-r, --distro [distro]		package for that distribution (default host one), ignore debian/changelog?
+-a, --arch   architecture       default Host.
 
--h --help
 EOF
     unsetopt POSIX_ARGZERO
 }
