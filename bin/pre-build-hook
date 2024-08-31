@@ -1,7 +1,16 @@
 #! /bin/bash -eu
 
-# This is invoked in the Build dir.
-# and has $GBP_GIT_DIR, ...
+# My custom gbp hook:
+# - invoked in the Build directory
+# and has $GBP_GIT_DIR pointing at git sources
+#-----------------------------------------
+
+# - so this updates the Version?
+# - keeps my list of Git repositories from which I build ~/.deb-gits
+
+# - ?? this used to generate the debian/control and hence install dependencies ???
+# - invoke local  ./auto
+
 
 # to-be-generated
 # function debian_control_automatic() {
@@ -10,8 +19,6 @@
 #     count2=$(git ls-files debian/control|wc -c)
 #     test \( $count1 != 0 -a $count2 = 0 \)
 # }
-
-
 
 copy-snapshot-changelog()
 {
@@ -37,6 +44,7 @@ copy-snapshot-changelog()
     fi
 }
 
+echo "------------------- pre-build-hook invoked ----------" >&2
 arch=""
 # this should be obsolete/deprecated .. use dpkg-checkbuilddeps (to avoid root password if possible)
 skip_build_depends=n
@@ -71,6 +79,7 @@ fi
 
 
 which add-deb-git && add-deb-git $GBP_GIT_DIR/..
+
 # Generate stuff for  ./configure
 if [ -e preauto ]
 then
@@ -102,9 +111,8 @@ then
         # debpkg -i   -> conflict with -f option
     fi
 else
-    (set -x
-     dpkg-checkbuilddeps || :
-     )
+    : not_needed
+    # (set -x; dpkg-checkbuilddeps || :)
 fi
 
 # Generate stuff for  ./configure
