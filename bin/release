@@ -63,6 +63,7 @@ DCH_OPTIONS=()
 
 
 GITSHA=$(git rev-list --max-count=1 HEAD)
+export GITSHA
 # I have special make
 DEBUILD_OPTIONS+=(-eMAKEFLAGS -eGITSHA)
 
@@ -236,8 +237,8 @@ calculate_for_distro()
 
     # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
 
-    # all this is one argument!
-    GBP_OPTIONS+=("--git-builder=debspawn --config $debspawn_config_toml build --only binary --buildflags=-b $distribution")
+    # note: all this is one argument!
+    GBP_OPTIONS+=("--git-builder=debspawn --config $debspawn_config_toml build --only binary --buildflags=-b $distribution --setenv GITSHA=$GITSHA")
     artifacts_dir=/gbp/$distribution
 }
 
