@@ -1,3 +1,11 @@
+mmc-build-system (4.24) release; urgency=medium
+
+  * pre-build-hook: document, disable the dpkg-checkbuilddeps
+  * release: improve usage()
+  * propagate GITSHA into debspawn container
+
+ -- Michal Maruska <mmaruska@gmail.com>  Mon, 09 Dec 2024 18:13:19 +0100
+
 mmc-build-system (4.23) release; urgency=medium
 
   * we always build inside debspawn -> skip installing build-deps outside
