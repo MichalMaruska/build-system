@@ -75,7 +75,7 @@ typeset -T DPUT_OPTIONS dput_options
 typeset -T MBS_TARGETS mbs_targets ":"
 typeset -T DPUT_TARGETS dput_targets
 
-# possible input via this variable:
+# possible input via this variable:  why SNAP ?
 [ -z "$DPUT_TARGETS" ] && dput_targets=${MBS_SNAP_TARGETS-}
 
 # make it manually invokable:
@@ -100,7 +100,9 @@ while getopts :ufiIrd:n OPT; do
             DEBI_OPTIONS+=("--upgrade")
             ;;
         r)
-            dput_targets=($mbs_targets)
+            # fixme: here we overwrite!
+            [ -z "$DPUT_TARGETS" ] &&
+                dput_targets=($mbs_targets)
             release=y
             ;;
         d)
