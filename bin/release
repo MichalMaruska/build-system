@@ -238,7 +238,7 @@ calculate_for_distro()
     # DCH_OPTIONS+=("--git-dist=$USER_DISTRIBUTION")
 
     # note: all this is one argument!
-    GBP_OPTIONS+=("--git-builder=debspawn --config $debspawn_config_toml build --only binary --buildflags=-b $distribution --setenv GITSHA=$GITSHA")
+    GBP_OPTIONS+=("--git-builder=debspawn --config $debspawn_config_toml build --only binary --buildflags=-b $distribution --setenv GITSHA=$GITSHA --setenv MAKEFLAGS=$MAKEFLAGS")
     artifacts_dir=/gbp/$distribution
 }
 
