@@ -1,3 +1,10 @@
+mmc-build-system (4.27) release; urgency=medium
+
+  * query git only after processing cmdline options
+  * dput-install: no multiple --upgrade
+
+ -- Michal Maruska <mmaruska@gmail.com>  Fri, 13 Dec 2024 17:59:49 +0100
+
 mmc-build-system (4.26) release; urgency=medium
 
   * respect DPUT_TARGETS env variable -- don't overwrite blindly
