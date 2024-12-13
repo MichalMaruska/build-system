@@ -1,3 +1,9 @@
+mmc-build-system (4.25) release; urgency=medium
+
+  * export the other Env variable too
+
+ -- Michal Maruska <mmaruska@gmail.com>  Fri, 13 Dec 2024 11:12:31 +0100
+
 mmc-build-system (4.24+b) release; urgency=medium
 
   * pre-build-hook: document, disable the dpkg-checkbuilddeps
