@@ -61,7 +61,7 @@ fi
 
 # I like these defaults better:
 : ${INSTALL_IMMEDIATELY=y}
-DEBI_OPTIONS+=("--upgrade")
+DEBI_OPTIONS+=()
 
 
 DISTRO=${MBS_DISTRO-}
