@@ -62,8 +62,6 @@ DEBUILD_OPTIONS=()
 DCH_OPTIONS=()
 
 
-GITSHA=$(git rev-list --max-count=1 HEAD)
-export GITSHA
 # I have special make
 DEBUILD_OPTIONS+=(-eMAKEFLAGS -eGITSHA)
 
@@ -184,6 +182,9 @@ while (( $# > 0 )) do
       esac
       shift
 done
+
+GITSHA=$(git rev-list --max-count=1 HEAD)
+export GITSHA
 
 # No source package -> optimize
 if [ $build_source != yes ]; then
