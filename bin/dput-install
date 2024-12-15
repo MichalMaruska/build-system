@@ -221,7 +221,7 @@ then
 END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
     # bug:  2:version is invalid tag!
     : ${tag::=${tag/:/_}}
-    if [[ -z $(git rev-parse --tags="$tag*" &> /dev/null) ]]
+    if [[ -z $(git rev-parse --tags="$tag*" 2> /dev/null) ]]
     then
         # I make the tag with hierarchy:
         if [[ -z $(git-sum) && -z $(git-segment) ]]
