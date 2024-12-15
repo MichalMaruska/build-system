@@ -1,3 +1,9 @@
+mmc-build-system (4.28) release; urgency=medium
+
+  * fix: find if the git tag exists already
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 15 Dec 2024 15:48:55 +0100
+
 mmc-build-system (4.27) release; urgency=medium
 
   * query git only after processing cmdline options
