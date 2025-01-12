@@ -183,9 +183,6 @@ while (( $# > 0 )) do
       shift
 done
 
-GITSHA=$(git rev-list --max-count=1 HEAD)
-export GITSHA
-
 # No source package -> optimize
 if [ $build_source != yes ]; then
     if [ $DEBUG = y ]; then info "not building source package";fi
@@ -228,6 +225,33 @@ fi
 ## Decide how to build -- containers:
 artifacts_dir=/gbp
 
+
+## I want to be able to repeat the run.
+# So, update the changelog and git tag only if needed.
+
+## get the current version string.
+if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
+
+# todo:
+# if no debian/changelog or not in Git ->
+#  --create
+
+# if status OR not updated!
+if changelog_needs_new_section "release"
+then
+    cecho red "Taking hint on VERSION from the debian/changelog"
+    load_distr_version_from_changelog
+    # drop_verbal_suffix
+
+    # invokes: gbp dch
+    generate_commit_changelog $step
+fi
+
+
+# This must be done AFTER creating the "release" commit!
+GITSHA=$(git rev-list --max-count=1 HEAD)
+export GITSHA
+
 calculate_for_distro()
 {
     local distribution=$1
@@ -264,27 +288,6 @@ else
     fi
 fi
 
-
-## I want to be able to repeat the run.
-# So, update the changelog and git tag only if needed.
-
-## get the current version string.
-if [ $DEBUG = y ]; then info "seeing if new changelog needs to be done";fi
-
-# todo:
-# if no debian/changelog or not in Git ->
-#  --create
-
-# if status OR not updated!
-if changelog_needs_new_section "release"
-then
-    cecho red "Taking hint on VERSION from the debian/changelog"
-    load_distr_version_from_changelog
-    # drop_verbal_suffix
-
-    # invokes: gbp dch
-    generate_commit_changelog $step
-fi
 
 if [ $DEBUG = y ]; then info "Deciding for the Git tag";fi
 
