@@ -185,7 +185,7 @@ done
 
 # No source package -> optimize
 if [ $build_source != yes ]; then
-    if [ $DEBUG = y ]; then info "not building source package";fi
+    if [ $DEBUG = y ]; then info "Not building source package";fi
     GBP_OPTIONS+=(--git-no-create-orig)
 fi
 
@@ -198,7 +198,7 @@ fi
 ## Check all data is ready/consistent. (Before invoking manual interaction).
 # fallback on env-var value:
 if [ "$dput_targets" = "" ]; then
-    if [ $DEBUG = y ]; then info "checking dput targets";fi
+    if [ $DEBUG = y ]; then info "checking fallback dput targets from Env";fi
     if [ -z "${MBS_TARGETS-}" ];
     then
         cecho red "No targets, only local then"
