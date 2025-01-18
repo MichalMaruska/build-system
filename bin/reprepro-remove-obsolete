@@ -8,7 +8,7 @@ usage()
 {
     setopt POSIX_ARGZERO
     cat <<EOF
-usage: ${0##*/} [+-h] [--] {REPO} {CHANGES-file}
+usage: ${0##*/} [+-h] [--] {distribution} {CHANGES-file}
 EOF
     unsetopt POSIX_ARGZERO
 }
@@ -33,18 +33,18 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
-REPO=$1
+distribution=$1
 CHANGES_FILE=$2
 
 if false;
 then
     packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $CHANGES_FILE))
     foreach package ($packages) {
-        reprepro remove $REPO $package
+        reprepro remove $distribution $package
     }
 else
     # remove by source pkg name:
     source=($(sed --quiet -e '/^Source:/{s/Source: //;p}' $CHANGES_FILE))
     # if DEBUG reprepro listfilter UNRELEASED '$Source (==apt)'
-    reprepro removefilter $REPO "\$Source (==$source)"
+    reprepro removefilter $distribution "\$Source (==$source)"
 fi
