@@ -1,3 +1,11 @@
+mmc-build-system (4.29) release; urgency=medium
+
+  * postpone GITSHA after the release commit
+  * release: improve debug messages
+  * reprepro-remove-obsolete: refactor: rename repo->distribution
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 18 Jan 2025 17:10:00 +0100
+
 mmc-build-system (4.28) release; urgency=medium
 
   * fix: find if the git tag exists already
