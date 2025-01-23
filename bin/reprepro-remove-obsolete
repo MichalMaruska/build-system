@@ -36,6 +36,8 @@ fi
 distribution=$1
 CHANGES_FILE=$2
 
+source=($(sed --quiet -e '/^Source:/{s/Source: //;p}' $CHANGES_FILE))
+
 if false;
 then
     packages=($(sed --quiet -e '/^Binary:/{s/Binary://;p}' $CHANGES_FILE))
@@ -44,7 +46,13 @@ then
     }
 else
     # remove by source pkg name:
-    source=($(sed --quiet -e '/^Source:/{s/Source: //;p}' $CHANGES_FILE))
     # if DEBUG reprepro listfilter UNRELEASED '$Source (==apt)'
     reprepro removefilter $distribution "\$Source (==$source)"
+
+    # --export=never
+    # but: if you do not want some of the files pointed to by the untouched index files to vanish.
 fi
+
+git add pool distr
+git commit -m "drop old $source"
+# --export=never
