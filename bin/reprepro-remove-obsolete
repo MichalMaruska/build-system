@@ -53,9 +53,13 @@ else
     # but: if you do not want some of the files pointed to by the untouched index files to vanish.
 fi
 
-if ! git diff --exit-code &> /dev/null;
-then
-    git add pool dists
-    git commit -m "drop old $source"
-fi
+
+(
+    cd $REPREPRO_BASE_DIR
+    if ! git diff --exit-code &> /dev/null;
+    then
+        git add pool dists
+        git commit -m "drop old $source"
+    fi
+)
 # --export=never
