@@ -189,10 +189,13 @@ if [ -z "${dput_targets}" ]; then
 else
     for TARGET in ${dput_targets}
     do
-        if [ $TARGET = local -a -z "${REPREPRO_BASE_DIR-}" ]; then
-           continue
+        if [[ $TARGET = local  &&
+                  -z "${REPREPRO_BASE_DIR-}" ]]; then
+            # echo "sorry, where is reprepro?"
+            continue
         fi
-        cecho $REPREPRO_COLOR "Uploading to $TARGET"
+
+        cecho blue "Uploading to $TARGET"
 
         if [ -z ${GBP_CHANGES_FILE-} ]; then
             if ! debrelease --debs-dir=$BUILD_AREA --dput $TARGET; then
@@ -208,10 +211,11 @@ else
     done
 fi
 
+
+# post-action:
 if [[ $release = y ]]
 then
     reprepro-git-commit $GBP_CHANGES_FILE
-
 
     # tag=$(deb-parse-changes $GBP_CHANGES_FILE)
     # so convert it somehow!
