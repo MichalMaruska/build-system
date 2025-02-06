@@ -26,6 +26,7 @@ it has been processed in the reprepro installation,
 update the Git repository of the reprepro.
 EOF
 }
+
 while getopts :h OPT; do
     case $OPT in
         h|+h)
@@ -49,18 +50,23 @@ then
     distro=sid
 fi
 
-REPREPRO_DIR=~/reprepro
+REPREPRO_DIR=$REPREPRO_BASE_DIR
+
 # go into the GIT:
 (
     cd $REPREPRO_DIR
     # todo: Ensure nothing is staged
     # if the package == Source then Source field is NOT present in the *.deb !
-    reprepro --list-format '${$fullfilename}\n'  listfilter $distro "Source (% $source) | Package (% $source)" |\
+    reprepro listfilter --list-format '${$fullfilename}\n' $distro "Source (% $source) | Package (% $source)" |\
         xargs git add
     # --verbose
 
     # todo: why Packages and Packages.gz ??
     git add --force dists/$distro
+
+    # I need to stage all removed files!
+    git add pool
+    # git commit -m "drop old $source"
 
 
     # is anything scheduled?
