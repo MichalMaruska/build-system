@@ -53,6 +53,9 @@ else
     # but: if you do not want some of the files pointed to by the untouched index files to vanish.
 fi
 
-git add pool distr
-git commit -m "drop old $source"
+if ! git diff --exit-code &> /dev/null;
+then
+    git add pool dists
+    git commit -m "drop old $source"
+fi
 # --export=never
