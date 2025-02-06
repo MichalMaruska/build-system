@@ -1,3 +1,9 @@
+mmc-build-system (4.32) release; urgency=medium
+
+  * reprepro-remove-obsolete: invoke git in the correct dir
+
+ -- Michal Maruska <mmaruska@gmail.com>  Thu, 06 Feb 2025 14:04:31 +0100
+
 mmc-build-system (4.31) release; urgency=medium
 
   * reprepro-remove-obsolete: correct path
