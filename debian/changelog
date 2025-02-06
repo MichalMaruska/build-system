@@ -1,3 +1,9 @@
+mmc-build-system (4.31) release; urgency=medium
+
+  * reprepro-remove-obsolete: correct path
+
+ -- Michal Maruska <mmaruska@gmail.com>  Thu, 06 Feb 2025 14:01:47 +0100
+
 mmc-build-system (4.30) release; urgency=medium
 
   * reprepro-remove-obsolete: git commit pool dist changes
