@@ -1,3 +1,11 @@
+mmc-build-system (4.30) release; urgency=medium
+
+  * reprepro-remove-obsolete: git commit pool dist changes
+  * reprepro: git stage all removed files during "r include"
+  * dput-install: comment on reprepro -- only removes from subordinate
+
+ -- Michal Maruska <mmaruska@gmail.com>  Thu, 06 Feb 2025 13:15:44 +0100
+
 mmc-build-system (4.29) release; urgency=medium
 
   * postpone GITSHA after the release commit
