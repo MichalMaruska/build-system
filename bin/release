@@ -31,6 +31,8 @@ OPTIONS:
 General:
 -b --ignore  ... ignore Git branch
 -f --force ... regenerate & commit even if apparently debian/changelog ...
+-q --quiet ... use the generated commit msg without editing in an editor
+
 -m --minor  ... increase the version only by minor step. Hint: semantics/changelog
 --tag  [name]  default  {distro}/
 -i --install ...
@@ -100,10 +102,11 @@ fi
 
 ### process command line:
 
+# must be in the same order? no!
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,tag,version:,nocheck \
-    --longoptions force,source,distro:,minor,major \
-    --options ha:bfr:T:p:iIv:ousmM \
+    --longoptions force,quiet,source,distro:,minor,major \
+    --options ha:bfr:T:p:qiIv:ousmM \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -123,6 +126,9 @@ while (( $# > 0 )) do
               ;;
           --force | -f)
               FORCE=y
+              ;;
+          --quiet | -q)
+              QUIET=y
               ;;
           --dput | -p)
               shift
@@ -244,7 +250,11 @@ then
     # drop_verbal_suffix
 
     # invokes: gbp dch
-    generate_commit_changelog $step
+    if [[ $QUIET == y ]]; then
+        generate_commit_changelog -q $step
+    else
+        generate_commit_changelog  $step
+    fi
 fi
 
 
