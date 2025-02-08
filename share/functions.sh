@@ -214,8 +214,15 @@ function git_reset_changelog()
 # That obviously implies the Git-Tag, then, on the new commit.
 # input: USER_VERSION, USER_DISTRIBUTION, DCH_OPTIONS
 # modifies/output: VERSION, DISTRIBUTION,
+# usage: f increase_step
 function generate_commit_changelog()
 {
+    local opts=()
+    if [[ $1 = "-q" ]] then
+       opts+=(--spawn-editor=never)
+       shift
+    fi
+
     local step=$1
     if [ -n "${USER_VERSION:-}" ]
     then
@@ -242,7 +249,7 @@ function generate_commit_changelog()
         fi
     fi
 
-    gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION"
+    gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION" $opts
 
     # Do the commit:
 
