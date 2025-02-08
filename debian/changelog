@@ -1,3 +1,10 @@
+mmc-build-system (4.33) release; urgency=medium
+
+  * possibly don't invoke the editor to double-check generated commit msg
+  * release: indeed suppress the editor
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 08 Feb 2025 11:03:04 +0100
+
 mmc-build-system (4.32) release; urgency=medium
 
   * reprepro-remove-obsolete: invoke git in the correct dir
