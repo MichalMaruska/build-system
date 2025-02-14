@@ -54,11 +54,12 @@ else
 fi
 
 
+dirs=(pool dists)
 (
     cd $REPREPRO_BASE_DIR
-    if ! git diff --exit-code &> /dev/null;
+    if ! git diff --exit-code -- $dirs &> /dev/null;
     then
-        git add pool dists
+        git add $dirs
         git commit -m "drop old $source"
     fi
 )
