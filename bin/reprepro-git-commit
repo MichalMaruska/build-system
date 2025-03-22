@@ -57,7 +57,7 @@ REPREPRO_DIR=$REPREPRO_BASE_DIR
     cd $REPREPRO_DIR
     # todo: Ensure nothing is staged
     # if the package == Source then Source field is NOT present in the *.deb !
-    reprepro listfilter --list-format '${$fullfilename}\n' $distro "Source (% $source) | Package (% $source)" |\
+    reprepro --list-format '${$fullfilename}\n' listfilter $distro "Source (% $source) | Package (% $source)" |\
         xargs git add
     # --verbose
 
