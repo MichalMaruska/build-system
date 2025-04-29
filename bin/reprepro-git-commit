@@ -75,7 +75,7 @@ REPREPRO_DIR=$REPREPRO_BASE_DIR
         git commit -m "upgrade packages from $source to $version ($distro)"
     fi
 
-    git log --max-count=1 --compact-summary --stat
+    git --no-pager log --max-count=1 --compact-summary --stat
 
     sleep 1
     $REPREPRO_DIR/deploy
