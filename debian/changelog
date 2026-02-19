@@ -1,3 +1,9 @@
+mmc-build-system (4.37) unstable; urgency=medium
+
+  * tag first, then proceed to uploading reprepro
+
+ -- Michal Maruska <mmaruska@gmail.com>  Thu, 19 Feb 2026 08:47:48 +0100
+
 mmc-build-system (4.36) unstable; urgency=medium
 
   * don't block on pager while showing logs -- todo
