@@ -215,7 +215,6 @@ fi
 # post-action:
 if [[ $release = y ]]
 then
-    reprepro-git-commit $GBP_CHANGES_FILE
 
     # tag=$(deb-parse-changes $GBP_CHANGES_FILE)
     # so convert it somehow!
@@ -233,8 +232,12 @@ END {printf "%s/%s", distribution, version}' $GBP_CHANGES_FILE)
             git tag -m 'release' $tag HEAD
         else
             # todo: the whole graph or from the current branch?
-            git-store-hierarchy -t $tag $(git branch --show-current)
+            git-store-hierarchy -t $tag HEAD
+            # $(git branch --show-current)
         fi
         post-tag-hook
     fi
+
+    # now transition to `reprepro'
+    reprepro-git-commit $GBP_CHANGES_FILE
 fi
