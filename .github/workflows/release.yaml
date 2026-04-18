@@ -6,6 +6,10 @@ on:
       - 'sid/*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write # Optional, but good if you use GHCR
+
 jobs:
   publish:
     uses: michalmaruska/workflows/.github/workflows/build-and-publish-deb.yml@main
