@@ -1,0 +1,15 @@
+name: Publish Debian Package
+
+on:
+  push:
+    tags:
+      - 'sid/*'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: michalmaruska/workflows/.github/workflows/build-and-publish-deb.yml@main
+    with:
+      apt_repo: michalmaruska/michalmaruska.github.io
+    secrets:
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
