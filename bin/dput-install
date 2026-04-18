@@ -152,6 +152,8 @@ upload_to_reprepro()
         reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
                  include "$DISTRO" $GBP_CHANGES_FILE
     fi
+
+    return 0;
 }
 
 # dput/install into (local) reprepro:
