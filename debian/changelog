@@ -1,3 +1,10 @@
+mmc-build-system (4.37) UNRELEASED; urgency=medium
+
+  * shell: if .... then....fi at end of function can report failure
+  * ci: release debian package files
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sat, 18 Apr 2026 19:33:15 +0200
+
 mmc-build-system (4.36) unstable; urgency=medium
 
   * don't block on pager while showing logs -- todo
