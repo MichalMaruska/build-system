@@ -39,6 +39,7 @@ General:
 -o --auto  ... don't open the Editor -- Changelog is unverified.    DANGEROUS?
 -h --help
 
+-G  just push to GitHub
 
 Packaging:
 -s --source  ... build the tarball/source package too.
@@ -100,14 +101,15 @@ then
     GBP_OPTIONS+=("--git-ignore-branch")
 fi
 
+just_push_to_github=0
 
 ### process command line:
 
 # must be in the same order? no!
 cmd_options=$(getopt --name $0 --shell bash \
     --longoptions help,arch,dput,ignore,install,noinstall,tag,version:,nocheck \
-    --longoptions force,quiet,source,distro:,minor,major \
-    --options ha:bfr:T:p:qiIv:ousmM \
+    --longoptions force,quiet,source,distro:,minor,major,github \
+    --options ha:bfGr:T:p:qiIv:ousmM \
     -- "$@" ) || { usage && exit 1 }
 eval set -- "$cmd_options"
 
@@ -135,7 +137,9 @@ while (( $# > 0 )) do
               shift
               dput_targets+=($1)
               ;;
-
+          --github | -G )
+              just_push_to_github=1
+              ;;
           --distro | -r)
               shift
               USER_DISTRIBUTION="$1"
@@ -277,6 +281,38 @@ calculate_for_distro()
     GBP_OPTIONS+=("--git-builder=debspawn --config $debspawn_config_toml build --only binary --buildflags=-b $distribution --setenv GITSHA=$GITSHA --setenv MAKEFLAGS=$MAKEFLAGS")
     artifacts_dir=/gbp/$distribution
 }
+
+
+if [[ $just_push_to_github == 1 ]]
+then
+    # update/reload:
+    load_distr_version_from_changelog
+    tag="$DISTRIBUTION/$VERSION"
+    echo "Creating tag $tag" >&2
+    # bug:  2:version is invalid tag!
+    : ${tag::=${tag/:/_}}
+    set -x
+    if [[ -z $(git rev-parse --tags="$tag*" 2> /dev/null) ]]
+    then
+
+        if [[ -z $(git-sum) && -z $(git-segment) ]]
+        then
+            git tag -m 'release' $tag HEAD
+        else
+            # todo: the whole graph or from the current branch?
+            # fixme:  sid/ not unstable/ ?
+            git-store-hierarchy -t $tag $(git rev-parse HEAD)
+            # git branch --show-current
+            ## git-store-hierarchy -t unstable/1.31.2-1-maruska mmc-all
+
+        fi
+    fi
+
+    # remote name:
+    git push github $tag
+    # open in browser?
+    exit 0
+fi
 
 
 if [[ -n "$USER_DISTRIBUTION" ]]; then
