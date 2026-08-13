@@ -144,9 +144,10 @@ upload_to_reprepro()
     DISTRO=$(sed -n -e '/^Distribution: /{s/Distribution: //;p}' $GBP_CHANGES_FILE)
 
     # fixme: if the distro is not local?
+    # acceptable in reprepro: resolves Codename, Suite and AlsoAcceptFor
     if test -n "$DISTRO"  &&
-        ## acceptable in reprepro
-        grep "Codename: *$DISTRO" $REPREPRO_BASE_DIR/conf/distributions;
+        reprepro --basedir "$REPREPRO_BASE_DIR" \
+            listfilter "$DISTRO" 'Package (= zzz_none_matches)' >/dev/null 2>&1;
     then
         cecho $REPREPRO_COLOR "Putting into Reprepro: ${GBP_CHANGES_FILE}"
         reprepro --basedir "$REPREPRO_BASE_DIR" -V --ignore=surprisingbinary \
