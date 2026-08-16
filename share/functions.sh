@@ -249,7 +249,8 @@ function generate_commit_changelog()
         fi
     fi
 
-    gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION" $opts
+    # todo: this function should take option to suppress the editor:
+    gbp dch $DCH_OPTIONS --release --auto --new-version="$VERSION" $opts --spawn-editor=never
 
     # Do the commit:
 
