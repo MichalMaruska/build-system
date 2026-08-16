@@ -1,3 +1,9 @@
+mmc-build-system (4.40) unstable; urgency=medium
+
+  * ci: limit to amd64
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 16 Aug 2026 20:40:56 +0200
+
 mmc-build-system (4.39) unstable; urgency=medium
 
   * ci/gh: adapt to organization
