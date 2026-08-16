@@ -1,3 +1,13 @@
+mmc-build-system (4.39) unstable; urgency=medium
+
+  * ci/gh: adapt to organization
+  * ci: drop gpg, and correct the apt repo
+  * -G --github option to upload to github CI instead.
+  * dput-install: validate distro via reprepro listfilter
+  * generate_commit_changelog: don't open editor
+
+ -- Michal Maruska <mmaruska@gmail.com>  Sun, 16 Aug 2026 19:56:50 +0200
+
 mmc-build-system (4.38) unstable; urgency=medium
 
   * shell: if .... then....fi at end of function can report failure
