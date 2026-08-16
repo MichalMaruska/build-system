@@ -23,6 +23,6 @@ jobs:
     uses: michal-maruska/workflows/.github/workflows/build-and-publish-deb.yml@main
     with:
       ref: ${{ inputs.ref || github.ref }}
-      architectures: ${{ inputs.architectures || vars.DEFAULT_ARCHITECTURES || '["amd64","arm64"]' }}
+      architectures: ${{ inputs.architectures || vars.DEFAULT_ARCHITECTURES || '["amd64"]' }}
     # xorg is a fork, so I need to store the token locally, and pass is explicitly:
     secrets: inherit
